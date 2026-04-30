@@ -5,6 +5,7 @@ import { db, Lead, SiteSettings } from '@/data/db';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import { useLanguage } from '@/contexts/LanguageContext';
+import * as XLSX from 'xlsx';
 
 interface Question {
   id: string;
@@ -87,6 +88,45 @@ export default function AdminDashboard() {
       setIsAuthenticated(true);
     } else {
       alert('Invalid password');
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      const { data: leadsData } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+      const { data: answersData } = await supabase.from('lead_answers').select('*').order('created_at', { ascending: false });
+
+      const workbook = XLSX.utils.book_new();
+      
+      // Sheet 1: Students Summary
+      const summaryData = (leadsData || []).map(l => ({
+        'Student Name': l.name,
+        'Email': l.email,
+        'Phone': l.phone || 'N/A',
+        'Score': `${l.score}/${l.total_questions}`,
+        'CEFR Level': l.level,
+        'Age Range': l.age_range || 'N/A',
+        'Date': l.created_at.split('T')[0]
+      }));
+      const leadsSheet = XLSX.utils.json_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(workbook, leadsSheet, "Students Summary");
+
+      // Sheet 2: Detailed Answers
+      const detailData = (answersData || []).map(a => ({
+        'Student Name': a.student_name,
+        'Question': a.question_text,
+        'Student Answer': a.student_answer,
+        'Correct Answer': a.correct_answer,
+        'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
+        'Date': a.created_at.split('T')[0]
+      }));
+      const answersSheet = XLSX.utils.json_to_sheet(detailData);
+      XLSX.utils.book_append_sheet(workbook, answersSheet, "Detailed Answers");
+
+      XLSX.writeFile(workbook, `Linguaplanet_Master_Export_${new Date().toISOString().split('T')[0]}.xlsx`);
+    } catch (error) {
+      console.error("Excel export failed:", error);
+      alert("Failed to generate Excel file.");
     }
   };
 
@@ -231,6 +271,13 @@ export default function AdminDashboard() {
             }}>
               ADD QUESTION <i className="fa-solid fa-plus" style={{ marginLeft: '1rem' }}></i>
             </button>
+          )}
+          {activeTab === 'leads' && (
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button className="btn-master btn-gold" style={{ padding: '0.8rem 2rem', fontSize: '0.7rem' }} onClick={handleExportExcel}>
+                MASTER EXCEL <i className="fa-solid fa-file-excel" style={{ marginLeft: '0.5rem' }}></i>
+              </button>
+            </div>
           )}
         </header>
 

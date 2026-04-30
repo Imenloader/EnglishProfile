@@ -18,9 +18,10 @@ export default function PlacementTest() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState('');
   const [showLeadForm, setShowLeadForm] = useState(false);
-  const [leadData, setLeadData] = useState({ name: '', email: '' });
+  const [leadData, setLeadData] = useState({ name: '', email: '', phone: '' });
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
+  const [detailedAnswers, setDetailedAnswers] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -29,8 +30,15 @@ export default function PlacementTest() {
   const currentQuestions = placementQuestions.filter(q => q.part === (currentPart === 1 ? 1 : 2));
 
   const handleAnswer = (answer: string) => {
-    const isCorrect = answer === currentQuestions[currentQuestion].correctAnswer;
+    const isCorrect = answer === q.correctAnswer;
     if (isCorrect) setScore(prev => prev + 1);
+
+    setDetailedAnswers(prev => [...prev, {
+      question_text: q.question,
+      student_answer: answer,
+      correct_answer: q.correctAnswer,
+      is_correct: isCorrect
+    }]);
     
     if (currentQuestion < currentQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -58,14 +66,32 @@ export default function PlacementTest() {
     e.preventDefault();
     const { data: { user } } = await supabase.auth.getUser();
     
-    await db.saveLead({
-      name: leadData.name,
-      email: leadData.email,
-      score: score,
-      totalQuestions: placementQuestions.length,
-      level: currentLevel,
-      user_id: user?.id
-    });
+    const { data: lead, error: leadError } = await supabase
+      .from('leads')
+      .insert([{
+        name: leadData.name,
+        email: leadData.email,
+        phone: leadData.phone,
+        score: score,
+        total_questions: placementQuestions.length,
+        level: currentLevel,
+        writing_response: writingResponse,
+        age_range: ageRange,
+        user_id: user?.id
+      }])
+      .select()
+      .single();
+    
+    if (!leadError && lead) {
+      // Save detailed answers
+      const answersToSave = detailedAnswers.map(ans => ({
+        lead_id: lead.id,
+        student_name: leadData.name,
+        ...ans
+      }));
+      await supabase.from('lead_answers').insert(answersToSave);
+    }
+
     setShowLeadForm(false);
     setLevel(currentLevel);
     setIsFinished(true);
@@ -162,6 +188,16 @@ export default function PlacementTest() {
                     className="immortal-input" 
                     value={leadData.email}
                     onChange={(e) => setLeadData({ ...leadData, email: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="immortal-label">{isRtl ? 'رقم الهاتف' : 'PHONE NUMBER'}</label>
+                  <input 
+                    type="tel" 
+                    required 
+                    className="immortal-input" 
+                    value={leadData.phone}
+                    onChange={(e) => setLeadData({ ...leadData, phone: e.target.value })}
                   />
                 </div>
                 <div className="form-group" style={{ position: 'relative' }}>
