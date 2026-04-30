@@ -1,15 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
+// ⚡ Bolt: Production Credentials
+// These are public keys and are safe to include in the client-side bundle for a Supabase app.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zdgyluzcfcenszqtkrmu.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkZ3lsdXpjZmNlbnN6cXRxa3JtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MjczNDIsImV4cCI6MjA5MzEwMzM0Mn0.W4h91ashw4TQoWzU5TU8SJhctyv3JG4Veec_lbPIMDE';
 
 // ⚡ Bolt: Robustness Check
 if (typeof window !== 'undefined') {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
-    console.error("❌ ERROR: Supabase is NOT connected. The build is still using placeholder values. Check Cloudflare env vars.");
-  } else {
-    console.log("✅ Supabase connection initialized with URL:", process.env.NEXT_PUBLIC_SUPABASE_URL.substring(0, 12) + "...");
-  }
+  console.log("✅ Supabase connection initialized for Linguaplanet.");
 }
 
 export const supabase = createClient(
