@@ -42,82 +42,161 @@ export default function Signup() {
   };
 
   return (
-    <main className="marble-bg" style={{ minHeight: '100vh', direction: isRtl ? 'rtl' : 'ltr' }}>
-      <Navbar />
-      <div className="container flex-center" style={{ paddingTop: '10rem', paddingBottom: '5rem' }}>
+    <main className="marble-pattern" style={{ 
+      minHeight: '100vh', 
+      direction: isRtl ? 'rtl' : 'ltr',
+      background: 'var(--primary-navy)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      <Navbar isDarkPage={true} />
+      
+      {/* Decorative Orbs */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-10%',
+        left: '-5%',
+        width: '600px',
+        height: '600px',
+        background: 'radial-gradient(circle, rgba(197, 160, 89, 0.08) 0%, transparent 70%)',
+        zIndex: 1,
+        pointerEvents: 'none'
+      }}></div>
+      
+      <div className="container flex-center" style={{ position: 'relative', zIndex: 10, paddingTop: '10rem', paddingBottom: '5rem' }}>
         <div className="glass animate-reveal" style={{ 
           width: '100%', 
-          maxWidth: '450px', 
-          padding: '3.5rem',
-          borderTop: '4px solid var(--accent-gold)'
+          maxWidth: '480px', 
+          padding: '4rem',
+          background: 'rgba(255, 255, 255, 0.03)',
+          backdropFilter: 'blur(40px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 40px 100px rgba(0,0,0,0.3)',
+          borderRadius: '0'
         }}>
-          <div className="text-center" style={{ marginBottom: '2.5rem' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{t('joinAcademy')}</h1>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem', letterSpacing: '1px' }}>{t('startJourney')}</p>
+          <div className="text-center" style={{ marginBottom: '3.5rem' }}>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '5px', display: 'block', marginBottom: '1.5rem' }}>
+              {t('joinAcademy').toUpperCase()}
+            </span>
+            <h1 style={{ 
+              fontSize: '3rem', 
+              color: 'white', 
+              marginBottom: '1rem',
+              fontFamily: 'var(--font-serif)'
+            }}>
+              {t('createProfile')}
+            </h1>
+            <p style={{ color: 'white', opacity: 0.5, fontSize: '0.9rem', letterSpacing: '1px' }}>{t('startJourney')}</p>
           </div>
 
           {error && (
             <div style={{ 
-              padding: '1rem', 
-              backgroundColor: 'rgba(255,0,0,0.05)', 
-              color: '#d32f2f', 
-              borderRadius: '4px', 
-              marginBottom: '1.5rem',
+              padding: '1.2rem', 
+              backgroundColor: 'rgba(216, 37, 72, 0.1)', 
+              color: '#ff4d4d', 
+              borderRadius: '0', 
+              marginBottom: '2rem',
               fontSize: '0.85rem',
-              borderLeft: isRtl ? 'none' : '3px solid #d32f2f',
-              borderRight: isRtl ? '3px solid #d32f2f' : 'none'
+              borderLeft: isRtl ? 'none' : '2px solid var(--accent-red)',
+              borderRight: isRtl ? '2px solid var(--accent-red)' : 'none'
             }}>
+              <i className="fa-solid fa-circle-exclamation" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '0.8rem' }}></i>
               {error}
             </div>
           )}
 
           <form onSubmit={handleSignup}>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('yourName').toUpperCase()}</label>
+              <label style={{ display: 'block', marginBottom: '0.8rem', fontSize: '0.7rem', fontWeight: 700, color: 'var(--accent-gold)', letterSpacing: '2px' }}>
+                {t('yourName').toUpperCase()}
+              </label>
               <input 
                 type="text" 
                 required 
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                style={{ width: '100%', padding: '1rem', borderRadius: '2px', border: '1px solid var(--gray-light)', outline: 'none' }}
+                style={{ 
+                  width: '100%', 
+                  padding: '1.2rem', 
+                  background: 'rgba(255,255,255,0.05)', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  color: 'white',
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => e.target.style.border = '1px solid var(--accent-gold)'}
+                onBlur={(e) => e.target.style.border = '1px solid rgba(255,255,255,0.1)'}
                 placeholder="John Doe"
               />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('emailAddress').toUpperCase()}</label>
+              <label style={{ display: 'block', marginBottom: '0.8rem', fontSize: '0.7rem', fontWeight: 700, color: 'var(--accent-gold)', letterSpacing: '2px' }}>
+                {t('emailAddress').toUpperCase()}
+              </label>
               <input 
                 type="email" 
                 required 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ width: '100%', padding: '1rem', borderRadius: '2px', border: '1px solid var(--gray-light)', outline: 'none' }}
-                placeholder="your@email.com"
+                style={{ 
+                  width: '100%', 
+                  padding: '1.2rem', 
+                  background: 'rgba(255,255,255,0.05)', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  color: 'white',
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => e.target.style.border = '1px solid var(--accent-gold)'}
+                onBlur={(e) => e.target.style.border = '1px solid rgba(255,255,255,0.1)'}
+                placeholder="email@example.com"
               />
             </div>
-            <div style={{ marginBottom: '2rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('password').toUpperCase()}</label>
+            <div style={{ marginBottom: '3rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.8rem', fontSize: '0.7rem', fontWeight: 700, color: 'var(--accent-gold)', letterSpacing: '2px' }}>
+                {t('password').toUpperCase()}
+              </label>
               <input 
                 type="password" 
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ width: '100%', padding: '1rem', borderRadius: '2px', border: '1px solid var(--gray-light)', outline: 'none' }}
+                style={{ 
+                  width: '100%', 
+                  padding: '1.2rem', 
+                  background: 'rgba(255,255,255,0.05)', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  color: 'white',
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => e.target.style.border = '1px solid var(--accent-gold)'}
+                onBlur={(e) => e.target.style.border = '1px solid rgba(255,255,255,0.1)'}
                 placeholder={t('minCharacters')}
               />
             </div>
             <button 
               type="submit" 
-              className="btn btn-primary" 
-              style={{ width: '100%', marginBottom: '1.5rem' }}
+              className="btn-master btn-gold" 
+              style={{ width: '100%', marginBottom: '2.5rem', justifyContent: 'center' }}
               disabled={loading}
             >
               {loading ? t('creatingProfile') : t('signUp').toUpperCase()}
             </button>
           </form>
 
-          <div className="text-center" style={{ fontSize: '0.9rem' }}>
-            <p style={{ opacity: 0.7 }}>{t('alreadyHaveAccount')}</p>
-            <Link href="/login" style={{ color: 'var(--accent-gold)', fontWeight: 600, marginTop: '0.5rem', display: 'inline-block' }}>{t('signInToDashboard')}</Link>
+          <div className="text-center" style={{ fontSize: '0.9rem', color: 'white' }}>
+            <p style={{ opacity: 0.5, marginBottom: '0.5rem' }}>{t('alreadyHaveAccount')}</p>
+            <Link href="/login" style={{ 
+              color: 'var(--accent-gold)', 
+              fontWeight: 700, 
+              textDecoration: 'none',
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              fontSize: '0.8rem'
+            }}>
+              {t('signInToDashboard')} <i className={`fa-solid fa-arrow-${isRtl ? 'left' : 'right'}`} style={{ [isRtl ? 'marginRight' : 'marginLeft']: '0.5rem' }}></i>
+            </Link>
           </div>
         </div>
       </div>
