@@ -103,12 +103,14 @@ export const db = {
       if (error) throw error;
       
       return {
+        id: data.id,
         heroHeadlineEn: data.hero_headline_en,
         heroHeadlineAr: data.hero_headline_ar,
         heroSubheadlineEn: data.hero_subheadline_en,
         heroSubheadlineAr: data.hero_subheadline_ar,
         whatsappNumber: data.whatsapp_number,
-        contactEmail: data.contact_email
+        contactEmail: data.contact_email,
+        updatedAt: data.updated_at
       };
     } catch (error) {
       console.warn('⚠️ Fetching settings failed. Using Masterpiece fallback data.', error);

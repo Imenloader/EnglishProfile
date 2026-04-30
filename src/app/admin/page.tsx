@@ -9,12 +9,14 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({
+    id: '',
     heroHeadlineEn: '',
     heroHeadlineAr: '',
     heroSubheadlineEn: '',
     heroSubheadlineAr: '',
     whatsappNumber: '',
-    contactEmail: ''
+    contactEmail: '',
+    updatedAt: new Date()
   });
 
   useEffect(() => {
