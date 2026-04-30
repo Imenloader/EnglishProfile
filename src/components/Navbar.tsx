@@ -206,18 +206,19 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
       {isOpen && (
         <div style={{
           position: 'fixed',
-          top: '100%',
+          top: 0,
           left: 0,
           width: '100%',
           height: '100vh',
           background: isDarkPage ? 'var(--primary-navy)' : 'white',
-          padding: '4rem 2rem',
+          padding: '8rem 2.5rem 4rem',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '2.5rem',
-          zIndex: 999,
-          animation: 'slideDown 0.4s ease-out forwards'
+          zIndex: 20000,
+          overflowY: 'auto',
+          animation: 'slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards'
         }}>
           {[
             { name: t('about'), href: '/about' },
@@ -280,8 +281,8 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
       )}
 
       <style jsx>{`
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-20px); }
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateY(-50px); }
           to { opacity: 1; transform: translateY(0); }
         }
         @media (max-width: 1024px) {
