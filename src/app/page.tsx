@@ -364,79 +364,114 @@ export default function Home() {
       <CTASection />
 
       {/* WhatsApp Floating Action Button */}
-      <a
-        href="https://wa.me/201270068237"
+      <a 
+        href={`https://wa.me/${settings?.whatsappNumber || '201270068237'}`}
         target="_blank"
         rel="noopener noreferrer"
         style={{
           position: 'fixed',
-          bottom: '3rem',
-          right: '3rem',
+          bottom: '40px',
+          right: isRtl ? 'auto' : '40px',
+          left: isRtl ? '40px' : 'auto',
           width: '70px',
           height: '70px',
-          backgroundColor: '#25D366',
-          borderRadius: '20px',
+          background: '#25D366',
+          borderRadius: '22px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'white',
           fontSize: '2.5rem',
-          boxShadow: '0 20px 40px rgba(37, 211, 102, 0.3)',
+          boxShadow: '0 20px 40px rgba(37, 211, 102, 0.4)',
           zIndex: 9999,
-          transition: 'var(--transition-master)'
+          transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+          animation: 'whatsapp-pulse 2s infinite'
         }}
-        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1) rotate(10deg)'}
-        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1) rotate(0)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1) translateY(-5px)';
+          e.currentTarget.style.boxShadow = '0 30px 60px rgba(37, 211, 102, 0.5)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1) translateY(0)';
+          e.currentTarget.style.boxShadow = '0 20px 40px rgba(37, 211, 102, 0.4)';
+        }}
       >
-        <i className="fa-brands fa-whatsapp"></i>
+        <svg viewBox="0 0 448 512" style={{ width: '35px', fill: 'white' }}>
+          <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.1-3.2-5.5-.3-8.5 2.4-11.2 2.5-2.4 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.5 5.5-9.2 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
+
+        <style jsx>{`
+          @keyframes whatsapp-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+          }
+        `}</style>
       </a>
 
-      {/* 06: Premium Footer */}
-      <footer style={{ padding: '6rem 0 3rem', background: 'var(--primary-navy)', color: 'white' }}>
+      {/* 06: Enterprise Institutional Footer */}
+      <footer style={{ padding: '8rem 0 4rem', background: 'var(--primary-navy)', color: 'white', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '5rem' }}>
-            <div>
-              <div style={{ width: '60px', height: '60px', background: 'white', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
-                <svg viewBox="0 0 2272.86 1775.34" style={{ width: '40px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '5rem', paddingBottom: '6rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+            
+            {/* Column 1: Brand & Identity */}
+            <div style={{ gridColumn: 'span 1.5' }}>
+              <div style={{ width: '60px', height: '60px', background: 'white', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2.5rem' }}>
+                <svg viewBox="0 0 2272.86 1775.34" style={{ width: '38px' }}>
                   <path fill="#012169" d="M1782.58,1279.59c-201.86,148.03-411.38,220.51-628.43,217.17v-212.36c-17.78,12.22-35.43,24.32-53.09,36.05v173.71c-66.67-10-128.65-27.9-185.69-53.83-97.17,60.13-190.14,113.34-276.56,158.65,131,93.46,282.49,140.01,454.72,140.01,144.7,0,281.87-40.37,411.38-121.12,117.78-77.41,216.19-183.47,295.45-318.04l-17.78-20.25ZM735.97,1319.84c-23.33-22.35-45.43-46.67-66.42-72.97,132.97-112.85,201.99-171.62,207.05-176.68,62.1-68.89,93.22-154.82,93.22-257.42V297.92l131.24-108.65v1021.91c17.66-12.1,35.31-24.45,53.09-36.92v-419.53l408.91,12.47,133.59-232.11-290.14-7.41,197.54-198.9,7.16-7.28,151.12-152.23-9.14-21.48-5.93-13.95c-3.33,0-5.93.86-7.66,2.59h-27.78c-79.14,0-154.82-10.12-227.05-30.37-106.06-28.52-192.73-63.96-260.02-106.06l-494.6,393.85v585.47c0,18.52-.49,35.31-1.36,50.5-.74,15.19-2.1,28.64-3.7,40.37-8.4,45.31-37.9,90.87-88.4,136.3-29.38-43.95-54.2-89.88-74.33-137.91-12.47-29.88-23.21-60.5-31.98-91.98-21.73-76.79-32.59-158.28-32.59-244.58,0-68.89,12.22-135.32,36.42-199.39,52.1-138.03,160.26-264.95,324.59-381.01l-22.59-38.03c-178.41,96.05-309.65,202.98-393.73,320.51-38.52,52.23-69.51,108.15-92.97,167.91-37.41,94.45-56.05,198.28-56.05,311.62,0,89.02,11.36,172.73,34.32,251.13,9.14,31.85,20.37,62.84,33.46,92.97,9.38,21.85,19.75,43.09,31.11,63.95v.12c34.45,63.21,78.15,122.35,130.75,177.29,12.96,13.46,26.3,26.3,39.76,38.52,81.73-42.1,169.52-91.49,261.5-147.42-31.24-20.49-60.62-44.08-88.4-70.37ZM1154.15,219.52c82.97,48.64,171.86,84.82,266.68,107.91,15.93,4.07,31.98,7.53,48.15,10.74,14.32,2.96,29.01,5.31,43.58,7.65l-78.52,79.02-279.89,281.99V219.52Z" />
                 </svg>
               </div>
-              <p style={{ opacity: 0.4, lineHeight: 1.8 }}>Where success becomes a habit. Empowering language learners in Egypt since 2015.</p>
+              <p style={{ opacity: 0.5, lineHeight: 1.8, fontSize: '0.95rem', maxWidth: '300px' }}>
+                Where success becomes a habit. Empowering language learners in Egypt through institutional excellence since 2015.
+              </p>
             </div>
-            
+
+            {/* Column 2: Academic Programs */}
             <div>
-              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '2px' }}>QUICK LINKS</h5>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1rem' }}>
-                <li><Link href="/#about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none' }}>About Linguaplanet</Link></li>
-                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none' }}>Academic Programs</Link></li>
-                <li><Link href="/#team" style={{ color: 'white', opacity: 0.6, textDecoration: 'none' }}>Leadership Team</Link></li>
-                <li><Link href="/placement-test" style={{ color: 'white', opacity: 0.6, textDecoration: 'none' }}>Placement Assessment</Link></li>
+              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>ACADEMIC TRACKS</h5>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem' }}>
+                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>General English</Link></li>
+                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Business Communication</Link></li>
+                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Soft Skills Mastery</Link></li>
+                <li><Link href="/placement-test" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Placement Assessment</Link></li>
               </ul>
             </div>
 
+            {/* Column 3: Corporate Identity */}
             <div>
-              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '2px' }}>CONTACT</h5>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1rem', opacity: 0.6 }}>
+              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>CORPORATE</h5>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem' }}>
+                <li><Link href="/about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>About the Academy</Link></li>
+                <li><Link href="/#team" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Leadership Team</Link></li>
+                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>TAX ID: 416-241-177</span></li>
+                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>EST. 2015</span></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Connectivity */}
+            <div>
+              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>CONNECTIVITY</h5>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem', opacity: 0.6, fontSize: '0.9rem', marginBottom: '2rem' }}>
                 <li>{settings?.contactEmail || 'hello@linguaplanet.eg'}</li>
                 <li>+20 127 006 8237</li>
                 <li>Cairo, Egypt</li>
               </ul>
-            </div>
-
-            <div>
-              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '2px' }}>SOCIAL</h5>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
-                <a href={settings?.facebookLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.6 }}><i className="fa-brands fa-facebook-f" style={{ fontSize: '1.2rem' }}></i></a>
-                <a href={settings?.instagramLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.6 }}><i className="fa-brands fa-instagram" style={{ fontSize: '1.2rem' }}></i></a>
-                <a href={settings?.linkedinLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.6 }}><i className="fa-brands fa-linkedin-in" style={{ fontSize: '1.2rem' }}></i></a>
-                <a href={settings?.tiktokLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.6 }}><i className="fa-brands fa-tiktok" style={{ fontSize: '1.2rem' }}></i></a>
+                <a href={settings?.facebookLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-facebook-f" style={{ fontSize: '1.1rem' }}></i></a>
+                <a href={settings?.instagramLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-instagram" style={{ fontSize: '1.1rem' }}></i></a>
+                <a href={settings?.linkedinLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-linkedin-in" style={{ fontSize: '1.1rem' }}></i></a>
+                <a href={settings?.tiktokLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-tiktok" style={{ fontSize: '1.1rem' }}></i></a>
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.2, fontSize: '0.7rem' }}>
-            <p>© 2025 LINGUAPLANET. ALL RIGHTS RESERVED.</p>
-            <p>PRIVACY POLICY / TERMS OF SERVICE</p>
+          {/* Bottom Bar */}
+          <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.2, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '2px' }}>
+            <p>© 2025 LINGUAPLANET ACADEMY. ALL RIGHTS RESERVED.</p>
+            <div style={{ display: 'flex', gap: '2rem' }}>
+              <span>PRIVACY POLICY</span>
+              <span>TERMS OF SERVICE</span>
+            </div>
           </div>
         </div>
       </footer>

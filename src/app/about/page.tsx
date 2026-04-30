@@ -20,7 +20,7 @@ export default function AboutPage() {
 
   return (
     <main className="marble-pattern" style={{ background: 'var(--primary-navy)', minHeight: '100vh' }}>
-      <Navbar />
+      <Navbar isDarkPage={true} />
       
       {/* 01: Hero / Vision Header */}
       <section style={{ padding: '12rem 0 6rem', textAlign: 'center' }}>

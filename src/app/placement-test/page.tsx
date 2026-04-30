@@ -76,7 +76,7 @@ export default function PlacementTest() {
   if (isFinished) {
     return (
       <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
-        <Navbar />
+        <Navbar isDarkPage={true} />
         <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: '8rem 2rem' }}>
           <div className="glass-dark animate-reveal" style={{ padding: '5rem', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
             <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>EVALUATION COMPLETE</span>
@@ -115,7 +115,7 @@ export default function PlacementTest() {
 
   return (
     <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
-      <Navbar />
+      <Navbar isDarkPage={true} />
       
       {/* Progress Orbit */}
       <div style={{ position: 'fixed', top: '80px', left: 0, width: '100%', zIndex: 100 }}>
@@ -185,18 +185,20 @@ export default function PlacementTest() {
             </div>
           ) : currentPart < 3 ? (
             <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)' }}>
-              <h2 style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500 }}>
+              <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'left' }}>
                 {q.question}
               </h2>
               <div style={{ display: 'grid', gap: '1.5rem' }}>
                 {q.options.map((opt, i) => (
                   <button
                     key={opt}
+                    dir="ltr"
                     onClick={() => handleAnswer(opt)}
                     className="choice-card"
+                    style={{ textAlign: 'left' }}
                   >
-                    <span className="choice-index">0{i+1}</span>
-                    <span className="choice-text">{opt}</span>
+                    <span className="choice-index" style={{ order: isRtl ? 2 : 0 }}>0{i+1}</span>
+                    <span className="choice-text" style={{ flex: 1 }}>{opt}</span>
                   </button>
                 ))}
               </div>
