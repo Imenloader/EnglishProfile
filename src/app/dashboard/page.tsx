@@ -2,15 +2,37 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { Lead } from '@/data/db';
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  const fetchResults = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('leads')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (!error) {
+      setLeads(data.map((l) => ({
+        id: l.id,
+        name: l.name,
+        email: l.email,
+        score: l.score,
+        totalQuestions: l.total_questions,
+        level: l.level,
+        date: l.created_at.split('T')[0]
+      })));
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     const checkUser = async () => {
@@ -23,28 +45,7 @@ export default function Dashboard() {
       }
     };
     checkUser();
-  }, []);
-
-  const fetchResults = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('leads')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (!error) {
-      setLeads(data.map((l: any) => ({
-        id: l.id,
-        name: l.name,
-        email: l.email,
-        score: l.score,
-        totalQuestions: l.total_questions,
-        level: l.level,
-        date: l.created_at.split('T')[0]
-      })));
-    }
-    setLoading(false);
-  };
+  }, [router]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/lib/supabase';
+import { User } from '@supabase/supabase-js';
 
 interface NavbarProps {
   isDarkPage?: boolean;
@@ -13,7 +14,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   const { language, setLanguage, t, isRtl } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {

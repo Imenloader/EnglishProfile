@@ -23,7 +23,10 @@ export default function PlacementTest() {
   const [ageRange, setAgeRange] = useState('');
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const currentQuestions = placementQuestions.filter(q => q.part === (currentPart === 1 ? 1 : 2));
@@ -125,7 +128,10 @@ export default function PlacementTest() {
             height: '100%', 
             background: 'var(--accent-gold)', 
             boxShadow: '0 0 20px var(--accent-gold)',
-            transition: 'width 0.8        <div className="container" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px' }}>
+            transition: 'width 0.8s ease'
+          }}></div>
+        </div>
+        <div className="container" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px' }}>
           <span>{t('part')} 0{currentPart} / {currentQuestion + 1}</span>
           <span>{progress}% {t('complete')}</span>
         </div>
