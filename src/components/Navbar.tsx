@@ -211,15 +211,17 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           top: 0,
           left: 0,
           width: '100%',
-          height: '100vh',
+          height: 'auto',
+          maxHeight: '100vh',
           background: isDarkPage ? 'var(--primary-navy)' : 'white',
-          padding: '8rem 2.5rem 4rem',
+          padding: '6rem 2.5rem 3rem',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '2.5rem',
+          gap: '2rem',
           zIndex: 20000,
           overflowY: 'auto',
+          boxShadow: '0 30px 60px rgba(0,0,0,0.15)',
           animation: 'slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards'
         }}>
           {[
