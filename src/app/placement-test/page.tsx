@@ -23,7 +23,10 @@ export default function PlacementTest() {
   const [ageRange, setAgeRange] = useState('');
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const currentQuestions = placementQuestions.filter(q => q.part === (currentPart === 1 ? 1 : 2));

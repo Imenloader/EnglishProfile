@@ -16,10 +16,10 @@ export default function Hero() {
   });
 
   useEffect(() => {
-    setMounted(true);
     const fetchSettings = async () => {
       const s = await db.getSettings();
       if (s) setSettings(s);
+      setMounted(true);
     };
     fetchSettings();
   }, []);
