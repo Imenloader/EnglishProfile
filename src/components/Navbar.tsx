@@ -204,90 +204,138 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
         </button>
       </div>
 
-      {/* Responsive Mobile Overlay */}
+      {/* Responsive Mobile Drawer */}
       {isOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: 'auto',
-          maxHeight: '100vh',
-          background: isDarkPage ? 'var(--primary-navy)' : 'white',
-          padding: '6rem 2.5rem 3rem',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '2rem',
-          zIndex: 20000,
-          overflowY: 'auto',
-          boxShadow: '0 30px 60px rgba(0,0,0,0.15)',
-          animation: 'slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards'
-        }}>
-          {[
-            { name: t('about'), href: '/about' },
-            { name: t('programs'), href: '/#services' },
-            { name: t('team'), href: '/#team' },
-            { name: t('placementTest'), href: '/placement-test' }
-          ].map((item) => (
-            <Link 
-              key={item.href} 
-              href={item.href} 
+        <>
+          {/* Backdrop */}
+          <div 
+            onClick={() => setIsOpen(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              background: 'rgba(10, 17, 40, 0.6)',
+              backdropFilter: 'blur(10px)',
+              zIndex: 19999,
+              animation: 'fadeIn 0.4s ease-out'
+            }}
+          />
+          
+          {/* Drawer */}
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            right: isRtl ? 'auto' : 0,
+            left: isRtl ? 0 : 'auto',
+            width: '85%',
+            maxWidth: '350px',
+            height: '100vh',
+            background: isDarkPage ? 'var(--primary-navy)' : 'white',
+            padding: '6rem 2.5rem 3rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            zIndex: 20000,
+            overflowY: 'auto',
+            boxShadow: `-20px 0 60px rgba(0,0,0,0.3)`,
+            animation: `drawerSlide${isRtl ? 'Left' : 'Right'} 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards`
+          }}>
+            {/* Dedicated Close Button */}
+            <button 
               onClick={() => setIsOpen(false)}
               style={{
-                textDecoration: 'none',
+                position: 'absolute',
+                top: '2rem',
+                right: isRtl ? 'auto' : '2rem',
+                left: isRtl ? '2rem' : 'auto',
+                background: 'none',
+                border: 'none',
                 color: isDarkPage ? 'white' : 'var(--primary-navy)',
-                fontSize: '1.4rem',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '4px'
+                fontSize: '2rem',
+                cursor: 'pointer'
               }}
             >
-              {item.name}
-            </Link>
-          ))}
-          <button
-            onClick={() => {
-              setLanguage(language === 'en' ? 'ar' : 'en');
-              setIsOpen(false);
-            }}
-            style={{
-              marginTop: '2rem',
-              padding: '1.2rem 3rem',
-              background: isDarkPage ? 'var(--accent-gold)' : 'var(--primary-navy)',
-              color: isDarkPage ? 'var(--primary-navy)' : 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontWeight: 800,
-              fontSize: '1rem',
-              letterSpacing: '2px',
-              width: '100%'
-            }}
-          >
-            {language === 'en' ? t('arabicInterface') : t('englishInterface')}
-          </button>
-
-          {!user ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%', marginTop: '1rem' }}>
-              <Link href="/login" onClick={() => setIsOpen(false)} className="btn-master btn-white" style={{ textAlign: 'center', width: '100%', color: 'var(--primary-navy)', border: '1px solid var(--primary-navy)' }}>
-                {t('signIn').toUpperCase()}
-              </Link>
-              <Link href="/signup" onClick={() => setIsOpen(false)} className="btn-master btn-gold" style={{ textAlign: 'center', width: '100%' }}>
-                {t('signUp').toUpperCase()}
-              </Link>
-            </div>
-          ) : (
-            <button onClick={handleSignOut} className="btn-master btn-gold" style={{ width: '100%', marginTop: '1rem' }}>
-              {t('signOut').toUpperCase()}
+              <i className="fa-solid fa-xmark"></i>
             </button>
-          )}
-        </div>
+
+            {[
+              { name: t('about'), href: '/about' },
+              { name: t('programs'), href: '/#services' },
+              { name: t('team'), href: '/#team' },
+              { name: t('placementTest'), href: '/placement-test' }
+            ].map((item) => (
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                onClick={() => setIsOpen(false)}
+                style={{
+                  textDecoration: 'none',
+                  color: isDarkPage ? 'white' : 'var(--primary-navy)',
+                  fontSize: '1.2rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '3px',
+                  borderBottom: '1px solid rgba(0,0,0,0.05)',
+                  paddingBottom: '1rem'
+                }}
+              >
+                {item.name}
+              </Link>
+            ))}
+            
+            <button
+              onClick={() => {
+                setLanguage(language === 'en' ? 'ar' : 'en');
+                setIsOpen(false);
+              }}
+              style={{
+                marginTop: '1rem',
+                padding: '1.2rem 2rem',
+                background: 'var(--primary-navy)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: 800,
+                fontSize: '0.9rem',
+                letterSpacing: '2px',
+                width: '100%'
+              }}
+            >
+              {language === 'en' ? t('arabicInterface') : t('englishInterface')}
+            </button>
+
+            {!user ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', marginTop: 'auto' }}>
+                <Link href="/login" onClick={() => setIsOpen(false)} className="btn-master btn-white" style={{ textAlign: 'center', width: '100%', color: 'var(--primary-navy)', border: '1px solid var(--primary-navy)' }}>
+                  {t('signIn').toUpperCase()}
+                </Link>
+                <Link href="/signup" onClick={() => setIsOpen(false)} className="btn-master btn-gold" style={{ textAlign: 'center', width: '100%', justifyContent: 'center' }}>
+                  {t('signUp').toUpperCase()}
+                </Link>
+              </div>
+            ) : (
+              <button onClick={handleSignOut} className="btn-master btn-gold" style={{ width: '100%', marginTop: 'auto', justifyContent: 'center' }}>
+                {t('signOut').toUpperCase()}
+              </button>
+            )}
+          </div>
+        </>
       )}
 
       <style jsx>{`
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateY(-50px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes drawerSlideRight {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        @keyframes drawerSlideLeft {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(0); }
         }
         .nav-indicator {
           position: absolute;
