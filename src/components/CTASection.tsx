@@ -47,7 +47,7 @@ export default function CTASection() {
             <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>02 / {t('whatsappChat').toUpperCase()}</span>
             <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('whatsappChat')}</h3>
             <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px', margin: '0 auto 2.5rem' }}>{t('whatsappDesc')}</p>
-            <a href={`https://wa.me/${settings.whatsappNumber.replace(/\+/g, '')}?text=Hello, I'm interested in your English and Soft Skills courses.`} className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem', margin: '0 auto' }}>
+            <a href={`https://wa.me/${settings.whatsappNumber.replace(/\+/g, '')}?text=${encodeURIComponent(t('whatsappMessage'))}`} className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem', margin: '0 auto' }}>
               {t('chatWhatsapp').toUpperCase()}
             </a>
           </div>
@@ -79,7 +79,7 @@ export default function CTASection() {
         pointerEvents: 'none',
         userSelect: 'none'
       }}>
-        EXCELLENCE
+        {t('excellence').toUpperCase()}
       </div>
     </section>
   );

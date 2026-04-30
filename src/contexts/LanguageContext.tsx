@@ -127,7 +127,8 @@ const translations: Record<Language, Record<string, string>> = {
     signInToDashboard: 'SIGN IN TO YOUR DASHBOARD',
     checkEmail: 'Check your email for the confirmation link!',
     password: 'PASSWORD',
-    minCharacters: 'Minimum 6 characters'
+    minCharacters: 'Minimum 6 characters',
+    whatsappMessage: "Hello, I'm interested in your English and Soft Skills courses."
   },
   ar: {
     about: 'عن الأكاديمية',
@@ -242,7 +243,8 @@ const translations: Record<Language, Record<string, string>> = {
     signInToDashboard: 'تسجيل الدخول إلى لوحة التحكم الخاصة بك',
     checkEmail: 'تحقق من بريدك الإلكتروني للحصول على رابط التأكيد!',
     password: 'كلمة المرور',
-    minCharacters: '6 أحرف على الأقل'
+    minCharacters: '6 أحرف على الأقل',
+    whatsappMessage: 'مرحباً، أنا مهتم بدورات اللغة الإنجليزية والمهارات الشخصية الخاصة بكم.'
   }
 };
 
