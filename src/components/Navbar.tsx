@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { supabase } from '@/lib/supabase';
 
 interface NavbarProps {
   isDarkPage?: boolean;
@@ -12,6 +13,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   const { language, setLanguage, t, isRtl } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,8 +21,26 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
     };
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initial check
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Auth State
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      subscription.unsubscribe();
+    };
   }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setIsOpen(false);
+  };
 
   // Theme Logic
   const isDarkTheme = isDarkPage || (isOpen && !scrolled);
@@ -138,6 +158,25 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           >
             {language === 'en' ? 'AR' : 'EN'}
           </button>
+
+          {!user ? (
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <Link href="/login" style={{ 
+                color: textColor, 
+                textDecoration: 'none', 
+                fontSize: '0.7rem', 
+                fontWeight: 800, 
+                letterSpacing: '1px' 
+              }}>{t('signIn').toUpperCase()}</Link>
+              <Link href="/signup" className="btn-master btn-gold" style={{ padding: '0.6rem 1.2rem', fontSize: '0.65rem' }}>
+                {t('signUp').toUpperCase()}
+              </Link>
+            </div>
+          ) : (
+            <button onClick={handleSignOut} className="btn-master btn-white" style={{ padding: '0.6rem 1.2rem', fontSize: '0.65rem', background: 'transparent', border: `1px solid ${textColor}`, color: textColor }}>
+              {t('signOut').toUpperCase()}
+            </button>
+          )}
         </div>
 
         {/* Mobile Command Toggle */}
@@ -210,11 +249,27 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               borderRadius: '12px',
               fontWeight: 800,
               fontSize: '1rem',
-              letterSpacing: '2px'
+              letterSpacing: '2px',
+              width: '100%'
             }}
           >
-            {language === 'en' ? 'ARABIC INTERFACE' : 'ENGLISH INTERFACE'}
+            {language === 'en' ? t('arabicInterface') : t('englishInterface')}
           </button>
+
+          {!user ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%', marginTop: '1rem' }}>
+              <Link href="/login" onClick={() => setIsOpen(false)} className="btn-master btn-white" style={{ textAlign: 'center', width: '100%', color: 'var(--primary-navy)', border: '1px solid var(--primary-navy)' }}>
+                {t('signIn').toUpperCase()}
+              </Link>
+              <Link href="/signup" onClick={() => setIsOpen(false)} className="btn-master btn-gold" style={{ textAlign: 'center', width: '100%' }}>
+                {t('signUp').toUpperCase()}
+              </Link>
+            </div>
+          ) : (
+            <button onClick={handleSignOut} className="btn-master btn-gold" style={{ width: '100%', marginTop: '1rem' }}>
+              {t('signOut').toUpperCase()}
+            </button>
+          )}
         </div>
       )}
 

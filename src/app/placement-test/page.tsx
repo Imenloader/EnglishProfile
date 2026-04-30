@@ -79,28 +79,28 @@ export default function PlacementTest() {
         <Navbar isDarkPage={true} />
         <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: '8rem 2rem' }}>
           <div className="glass-dark animate-reveal" style={{ padding: '5rem', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
-            <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>EVALUATION COMPLETE</span>
+            <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>{t('evaluationComplete')}</span>
             <h1 style={{ color: 'white', fontSize: 'clamp(4rem, 15vw, 10rem)', margin: '2rem 0', fontFamily: 'var(--font-serif)', fontWeight: 700 }} className="gold-text">
               {level}
             </h1>
-            <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '2rem' }}>{isRtl ? 'مستوى كفاءتك التنبؤي' : 'Your Predicted Level'}</h2>
+            <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '2rem' }}>{t('predictedLevel')}</h2>
             
             <div style={{ background: 'rgba(255,255,255,0.03)', padding: '3rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '3rem' }}>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', lineHeight: 1.8 }}>
-                {isRtl 
+                {t('congrats') ? t('congrats').replace('{name}', leadData.name).replace('{score}', score.toString()).replace('{total}', placementQuestions.length.toString()) : (isRtl 
                   ? `تهانينا ${leadData.name}! لقد أظهرت كفاءة استثنائية. درجتك هي ${score} من ${placementQuestions.length}. بناءً على أدائك، نوصي بالمسار التالي:`
                   : `Congratulations ${leadData.name}! You have demonstrated exceptional proficiency. Your score is ${score}/${placementQuestions.length}. Based on your performance, we recommend the following track:`
-                }
+                )}
               </p>
               <h3 style={{ color: 'var(--accent-gold)', marginTop: '2rem', fontSize: '1.8rem' }}>
-                {level === 'A1' || level === 'A2' ? (isRtl ? 'أساسيات اللغة الإنجليزية' : 'Foundations of English') : 
-                 level === 'B1' || level === 'B2' ? (isRtl ? 'اتصالات مهنية للمحترفين' : 'Professional Communication Pro') : 
-                 (isRtl ? 'القيادة التنفيذية والبلاغة المتقدمة' : 'Executive Leadership & Advanced Rhetoric')}
+                {level === 'A1' || level === 'A2' ? t('foundationTrack') : 
+                 level === 'B1' || level === 'B2' ? t('professionalTrack') : 
+                 t('executiveTrack')}
               </h3>
             </div>
 
             <Link href="/" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
-              {isRtl ? 'العودة للرئيسية' : 'RETURN TO PORTAL'}
+              {t('returnToPortal')}
             </Link>
           </div>
         </div>
@@ -125,12 +125,9 @@ export default function PlacementTest() {
             height: '100%', 
             background: 'var(--accent-gold)', 
             boxShadow: '0 0 20px var(--accent-gold)',
-            transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)' 
-          }}></div>
-        </div>
-        <div className="container" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px' }}>
-          <span>PART 0{currentPart} / {currentQuestion + 1}</span>
-          <span>{progress}% COMPLETE</span>
+            transition: 'width 0.8        <div className="container" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px' }}>
+          <span>{t('part')} 0{currentPart} / {currentQuestion + 1}</span>
+          <span>{progress}% {t('complete')}</span>
         </div>
       </div>
 
@@ -139,12 +136,12 @@ export default function PlacementTest() {
           {showLeadForm ? (
             <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px' }}>
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>SECURE YOUR RESULTS</span>
-                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>Final Step</h2>
+                <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('secureResults')}</span>
+                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('finalStep')}</h2>
               </div>
               <form onSubmit={handleLeadSubmit} style={{ display: 'grid', gap: '2.5rem' }}>
                 <div className="form-group">
-                  <label className="immortal-label">FULL NAME</label>
+                  <label className="immortal-label">{t('yourName').toUpperCase()}</label>
                   <input 
                     type="text" 
                     required 
@@ -154,7 +151,7 @@ export default function PlacementTest() {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="immortal-label">EMAIL ADDRESS</label>
+                  <label className="immortal-label">{t('emailAddress').toUpperCase()}</label>
                   <input 
                     type="email" 
                     required 
@@ -164,7 +161,7 @@ export default function PlacementTest() {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="immortal-label">AGE RANGE</label>
+                  <label className="immortal-label">{t('flexibilityTitle').toUpperCase()}</label>
                   <select 
                     required 
                     className="immortal-input"
@@ -172,14 +169,14 @@ export default function PlacementTest() {
                     onChange={(e) => setAgeRange(e.target.value)}
                     style={{ appearance: 'none' }}
                   >
-                    <option value="">Select range...</option>
-                    <option value="kids">Kids (6-12)</option>
-                    <option value="teens">Teens (13-17)</option>
-                    <option value="adults">Adults (18+)</option>
+                    <option value="">{t('selectRange')}</option>
+                    <option value="kids">{t('kids')}</option>
+                    <option value="teens">{t('teens')}</option>
+                    <option value="adults">{t('adults')}</option>
                   </select>
                 </div>
                 <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
-                  GENERATE MASTERY REPORT <i className="fa-solid fa-bolt" style={{ marginLeft: '1rem' }}></i>
+                  {t('generateReport')} <i className="fa-solid fa-bolt" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
                 </button>
               </form>
             </div>
@@ -206,20 +203,20 @@ export default function PlacementTest() {
           ) : (
             <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px' }}>
               <div style={{ marginBottom: '4rem' }}>
-                <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>FINAL ASSESSMENT</span>
-                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>Writing Evaluation</h2>
+                <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('finalAssessment')}</span>
+                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('writingEvaluation')}</h2>
               </div>
-              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '2rem', borderRadius: '15px', borderLeft: '4px solid var(--accent-gold)', marginBottom: '3rem', color: 'rgba(255,255,255,0.8)' }}>
-                <p style={{ marginBottom: '1rem' }}>Choose ONE of the following topics (100-150 words):</p>
-                <ol style={{ paddingLeft: '1.5rem', display: 'grid', gap: '1rem' }}>
-                  <li>Your first job and daily routine.</li>
-                  <li>A country you visited on your last vacation.</li>
+              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '2rem', borderRadius: '15px', borderLeft: isRtl ? 'none' : '4px solid var(--accent-gold)', borderRight: isRtl ? '4px solid var(--accent-gold)' : 'none', marginBottom: '3rem', color: 'rgba(255,255,255,0.8)' }}>
+                <p style={{ marginBottom: '1rem' }}>{t('writingPrompt')}</p>
+                <ol style={{ [isRtl ? 'paddingRight' : 'paddingLeft']: '1.5rem', display: 'grid', gap: '1rem' }}>
+                  <li>{t('writingTopic1')}</li>
+                  <li>{t('writingTopic2')}</li>
                 </ol>
               </div>
               <textarea 
                 value={writingResponse}
                 onChange={(e) => setWritingResponse(e.target.value)}
-                placeholder="Type your response here..."
+                placeholder="..."
                 className="immortal-textarea"
               />
               <button 
@@ -227,7 +224,7 @@ export default function PlacementTest() {
                 style={{ width: '100%', justifyContent: 'center' }}
                 onClick={() => setShowLeadForm(true)}
               >
-                SUBMIT ASSESSMENT <i className="fa-solid fa-paper-plane" style={{ marginLeft: '1rem' }}></i>
+                {t('submitAssessment')} <i className="fa-solid fa-paper-plane" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
               </button>
             </div>
           )}

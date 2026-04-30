@@ -34,32 +34,32 @@ export default function CTASection() {
           
           {/* Card 1: The Assessment */}
           <div className="card-premium" data-aos="fade-up" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
-            <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>01 / EVALUATION</span>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>The Placement <br/><span className="gold-text">Test</span></h3>
+            <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>01 / {t('placementTest').toUpperCase()}</span>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('placementTest')}</h3>
             <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px', margin: '0 auto 2.5rem' }}>{t('testDesc')}</p>
             <Link href="/placement-test" className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem', margin: '0 auto' }}>
-              {t('startTest')}
+              {t('startTest').toUpperCase()}
             </Link>
           </div>
 
           {/* Card 2: Direct Dialogue */}
           <div className="card-premium" data-aos="fade-up" data-aos-delay="200" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
-            <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>02 / DIALOGUE</span>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>Direct <br/><span className="gold-text">Consultation</span></h3>
+            <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>02 / {t('whatsappChat').toUpperCase()}</span>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('whatsappChat')}</h3>
             <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px', margin: '0 auto 2.5rem' }}>{t('whatsappDesc')}</p>
             <a href={`https://wa.me/${settings.whatsappNumber.replace(/\+/g, '')}?text=Hello, I'm interested in your English and Soft Skills courses.`} className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem', margin: '0 auto' }}>
-              {t('chatWhatsapp')}
+              {t('chatWhatsapp').toUpperCase()}
             </a>
           </div>
 
           {/* Card 3: Formal Inquiries */}
           <div className="card-premium" data-aos="fade-up" data-aos-delay="400" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
-            <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>03 / INQUIRY</span>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>Formal <br/><span className="gold-text">Request</span></h3>
+            <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>03 / {t('contact').toUpperCase()}</span>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('emailInquiries')}</h3>
             <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px', margin: '0 auto 2.5rem' }}>{t('emailDesc')}</p>
-            <a href={`mailto:${settings.contactEmail}?subject=Course Inquiry`} className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem', margin: '0 auto' }}>
-              {t('sendEmail')}
-            </a>
+            <Link href="/about#contact" className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem', margin: '0 auto' }}>
+              {t('sendEmail').toUpperCase()}
+            </Link>
           </div>
 
         </div>

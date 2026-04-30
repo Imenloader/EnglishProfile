@@ -79,7 +79,7 @@ export default function Hero() {
               display: 'block',
               marginBottom: '2rem'
             }}>
-              {language === 'en' ? 'WORLD CLASS LANGUAGE ACADEMY' : 'أكاديمية لغات عالمية المستوى'}
+              {t('worldClassAcademy')}
             </span>
             <h1 style={{ 
               fontSize: 'clamp(3.5rem, 8vw, 6.5rem)', 
@@ -103,7 +103,7 @@ export default function Hero() {
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
               <Link href="/placement-test" className="btn-master btn-gold">
                 {t('startAssessment')}
-                <i className="fa-solid fa-arrow-right-long" style={{ fontSize: '1.2rem' }}></i>
+                <i className="fa-solid fa-arrow-right-long" style={{ fontSize: '1.2rem', transform: isRtl ? 'rotate(180deg)' : 'none', [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
               </Link>
               <a href="/about" className="btn-master btn-white" style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'transparent', color: 'white' }}>
                 {t('learnMore')}

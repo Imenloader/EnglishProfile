@@ -131,27 +131,22 @@ export default function Home() {
 
       {/* 01: Mastery Pillars (Bento Grid) - Responsive */}
       <section id="standards" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
-        {/* Subtle Background Ornament */}
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.05, pointerEvents: 'none' }}>
-          <div className="marble-pattern" style={{ width: '100%', height: '100%' }}></div>
-        </div>
-
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
-            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>Operational Excellence</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginTop: '1.5rem', color: 'white', fontFamily: 'var(--font-serif)' }}>The Linguaplanet Standard</h2>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>{t('operationalExcellence')}</span>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginTop: '1.5rem', color: 'white', fontFamily: 'var(--font-serif)' }}>{t('standardsTitle')}</h2>
           </div>
 
           <div className="bento-grid-container">
             {/* 01: Quality Assurance */}
             <div className="bento-item span-8 glass-dark" data-aos="fade-up">
               <div className="bento-content">
-                <span className="pillar-tag">01 / PILLAR</span>
-                <h3 style={{ fontSize: '2.5rem', fontWeight: 600 }}>Quality Assurance</h3>
-                <ul className="pillar-list" style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.8)' }}>
-                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> Ground-breaking and top-notch approaches.</li>
-                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> Universal standards of assessment.</li>
-                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> Measurable quick results.</li>
+                <span className="pillar-tag">01 / {t('qualityAssurance')}</span>
+                <h3 style={{ fontSize: '2.5rem', fontWeight: 600 }}>{t('eliteAcademicRigor')}</h3>
+                <ul className="pillar-list" style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.8)' }}>
+                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> {t('qa1')}</li>
+                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> {t('qa2')}</li>
+                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> {t('qa3')}</li>
                 </ul>
               </div>
             </div>
@@ -159,36 +154,44 @@ export default function Home() {
             {/* 02: Flexible Scheduling */}
             <div className="bento-item span-4 gold-pillar" data-aos="fade-up" data-aos-delay="100">
               <div className="bento-content dark-text">
-                <span className="pillar-tag-dark" style={{ color: 'var(--primary-navy)', opacity: 0.4 }}>02 / PILLAR</span>
-                <h3 style={{ color: 'var(--primary-navy)', fontSize: '2rem' }}>Flexible Scheduling</h3>
-                <p style={{ color: 'var(--primary-navy)', opacity: 0.9 }}>Face-to-Face or Online delivery at our premises or yours, tailored to your elite schedule.</p>
+                <span className="pillar-tag-dark" style={{ color: 'var(--primary-navy)', opacity: 0.4 }}>02 / {t('flexibilityTitle')}</span>
+                <h3 style={{ color: 'var(--primary-navy)', fontSize: '2rem' }}>{t('adaptiveDelivery')}</h3>
+                <p style={{ color: 'var(--primary-navy)', opacity: 0.9, fontWeight: 500 }}>
+                  {t('flexibilityDesc')}
+                </p>
               </div>
             </div>
 
             {/* 03: Transparent Pricing */}
             <div className="bento-item span-4 glass-dark" data-aos="fade-up" data-aos-delay="200">
               <div className="bento-content">
-                <span className="pillar-tag">03 / PILLAR</span>
-                <h3 style={{ fontSize: '2rem' }}>Transparent Pricing</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>Competitive pricing plans and payment options designed to suit your professional needs.</p>
+                <span className="pillar-tag">03 / {t('pricingTitle')}</span>
+                <h3 style={{ fontSize: '2rem' }}>{t('transparentInvestment')}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)' }}>
+                  {t('pricingDesc')}
+                </p>
               </div>
             </div>
 
             {/* 04: Reporting & Follow-up */}
             <div className="bento-item span-5 glass-dark" data-aos="fade-up" data-aos-delay="300">
               <div className="bento-content">
-                <span className="pillar-tag">04 / PILLAR</span>
-                <h3 style={{ fontSize: '2rem' }}>Reporting & Follow-up</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>Detailed performance accounts, punctuality notifications, and continuous progress tracking.</p>
+                <span className="pillar-tag">04 / {t('trackingTitle')}</span>
+                <h3 style={{ fontSize: '2rem' }}>{t('reportingFollowup')}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)' }}>
+                  {t('trackingDesc')}
+                </p>
               </div>
             </div>
 
             {/* 05: Guarantees */}
             <div className="bento-item span-3 glass-dark" data-aos="fade-up" data-aos-delay="400">
               <div className="bento-content">
-                <span className="pillar-tag">05 / PILLAR</span>
-                <h3 style={{ fontSize: '1.8rem' }}>Guarantees</h3>
-                <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.6)' }}>Extra support for learners and free review classes for failing students.</p>
+                <span className="pillar-tag">05 / {t('guaranteesTitle')}</span>
+                <h3 style={{ fontSize: '1.8rem' }}>{t('institutionalSupport')}</h3>
+                <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.6)' }}>
+                  {t('guaranteesDesc')}
+                </p>
               </div>
             </div>
           </div>
@@ -214,7 +217,7 @@ export default function Home() {
           .span-3 { grid-column: span 3; }
           .pillar-tag { color: var(--accent-gold); font-size: 0.7rem; font-weight: 800; letter-spacing: 4px; }
           .pillar-list { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; gap: 1.5rem; color: white; }
-          .pillar-list i { margin-right: 1.2rem; }
+          .pillar-list i { ${isRtl ? 'margin-left' : 'margin-right'}: 1.2rem; }
 
           @media (max-width: 991px) {
             .bento-grid-container { grid-template-columns: 1fr; }
@@ -224,12 +227,53 @@ export default function Home() {
         `}</style>
       </section>
 
+      {/* Trust & Challenges Nodes */}
+      <section style={{ padding: '8rem 0', background: 'white' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem' }}>
+            
+            {/* Facing Challenges Box */}
+            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
+              <div className="flex items-center gap-4 mb-6">
+                <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-bridge" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
+                </div>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('facingChallenges')}</h3>
+              </div>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem', opacity: 0.7, lineHeight: 1.7 }}>
+                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges1')}</li>
+                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges2')}</li>
+                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges3')}</li>
+              </ul>
+            </div>
+
+            {/* Safe Hands Box */}
+            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-left">
+              <div className="flex items-center gap-4 mb-6">
+                <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-hands-holding" style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
+                </div>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('safeHands')}</h3>
+              </div>
+              <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
+                {t('safeHandsDesc')}
+              </p>
+              <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <i className="fa-solid fa-shield-check" style={{ color: 'var(--primary-navy)' }}></i>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--primary-navy)' }}>{t('institutionalGuarantee')}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* 02: Our Values - From Snippet */}
       <section id="values" style={{ padding: '8rem 0', background: '#fdfcfb' }}>
         <div className="container text-center">
           <div data-aos="fade-up">
-            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>CORE PRINCIPLES</span>
-            <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--primary-navy)' }}>What Drives Us Forward</h2>
+            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('pillars').toUpperCase()}</span>
+            <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--primary-navy)' }}>{t('valuesTitle')}</h2>
           </div>
           
           <div style={{ 
@@ -239,9 +283,9 @@ export default function Home() {
             marginTop: '5rem' 
           }}>
             {[
-              { icon: 'fa-medal', title: 'Quality', text: 'We strive to provide excellence in every lesson and assessment.' },
-              { icon: 'fa-sliders', title: 'Flexibility', text: 'Providing a variety of options and solutions tailored to your needs.' },
-              { icon: 'fa-hand-holding-heart', title: 'Social Responsibility', text: 'Giving back to the community through scholarships and outreach.' }
+              { icon: 'fa-medal', title: t('excellence'), text: t('excellenceDesc') },
+              { icon: 'fa-shield-halved', title: t('integrity'), text: t('integrityDesc') },
+              { icon: 'fa-lightbulb', title: t('innovation'), text: t('innovationDesc') }
             ].map((value, i) => (
               <div key={i} className="value-card" data-aos="fade-up" data-aos-delay={i * 100} style={{
                 padding: '3.5rem',
@@ -467,10 +511,10 @@ export default function Home() {
 
           {/* Bottom Bar */}
           <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.2, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '2px' }}>
-            <p>© 2025 LINGUAPLANET ACADEMY. ALL RIGHTS RESERVED.</p>
+            <p>© 2026 LINGUAPLANET ACADEMY. ALL RIGHTS RESERVED.</p>
             <div style={{ display: 'flex', gap: '2rem' }}>
-              <span>PRIVACY POLICY</span>
-              <span>TERMS OF SERVICE</span>
+              <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>PRIVACY POLICY</Link>
+              <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>TERMS OF SERVICE</Link>
             </div>
           </div>
         </div>

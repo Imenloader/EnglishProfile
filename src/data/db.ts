@@ -134,5 +134,26 @@ export const db = {
     } catch (error) {
       console.error('❌ Updating settings failed:', error);
     }
+  },
+
+  saveInquiry: async (inquiry: { name: string, email: string, message: string }) => {
+    try {
+      const { data, error } = await supabase
+        .from('leads')
+        .insert([{
+          name: inquiry.name,
+          email: inquiry.email,
+          score: 0,
+          total_questions: 0,
+          level: `INQUIRY: ${inquiry.message}`,
+        }])
+        .select();
+      
+      if (error) throw error;
+      return data?.[0];
+    } catch (error) {
+      console.error('❌ Saving inquiry failed:', error);
+      return null;
+    }
   }
 };

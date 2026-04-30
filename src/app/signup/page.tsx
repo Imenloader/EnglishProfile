@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 export default function Signup() {
+  const { t, isRtl } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -33,13 +36,13 @@ export default function Signup() {
       setError(error.message);
       setLoading(false);
     } else {
-      alert('Check your email for the confirmation link!');
+      alert(t('checkEmail'));
       router.push('/login');
     }
   };
 
   return (
-    <main className="marble-bg" style={{ minHeight: '100vh' }}>
+    <main className="marble-bg" style={{ minHeight: '100vh', direction: isRtl ? 'rtl' : 'ltr' }}>
       <Navbar />
       <div className="container flex-center" style={{ paddingTop: '10rem', paddingBottom: '5rem' }}>
         <div className="glass animate-reveal" style={{ 
@@ -49,8 +52,8 @@ export default function Signup() {
           borderTop: '4px solid var(--accent-gold)'
         }}>
           <div className="text-center" style={{ marginBottom: '2.5rem' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Join Linguaplanet</h1>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem', letterSpacing: '1px' }}>START YOUR PROFESSIONAL JOURNEY</p>
+            <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{t('joinAcademy')}</h1>
+            <p style={{ opacity: 0.6, fontSize: '0.9rem', letterSpacing: '1px' }}>{t('startJourney')}</p>
           </div>
 
           {error && (
@@ -61,7 +64,8 @@ export default function Signup() {
               borderRadius: '4px', 
               marginBottom: '1.5rem',
               fontSize: '0.85rem',
-              borderLeft: '3px solid #d32f2f'
+              borderLeft: isRtl ? 'none' : '3px solid #d32f2f',
+              borderRight: isRtl ? '3px solid #d32f2f' : 'none'
             }}>
               {error}
             </div>
@@ -69,7 +73,7 @@ export default function Signup() {
 
           <form onSubmit={handleSignup}>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>FULL NAME</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('yourName').toUpperCase()}</label>
               <input 
                 type="text" 
                 required 
@@ -80,7 +84,7 @@ export default function Signup() {
               />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>EMAIL ADDRESS</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('emailAddress').toUpperCase()}</label>
               <input 
                 type="email" 
                 required 
@@ -91,14 +95,14 @@ export default function Signup() {
               />
             </div>
             <div style={{ marginBottom: '2rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>PASSWORD</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('password').toUpperCase()}</label>
               <input 
                 type="password" 
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ width: '100%', padding: '1rem', borderRadius: '2px', border: '1px solid var(--gray-light)', outline: 'none' }}
-                placeholder="Minimum 6 characters"
+                placeholder={t('minCharacters')}
               />
             </div>
             <button 
@@ -107,13 +111,13 @@ export default function Signup() {
               style={{ width: '100%', marginBottom: '1.5rem' }}
               disabled={loading}
             >
-              {loading ? 'CREATING PROFILE...' : 'SIGN UP'}
+              {loading ? t('creatingProfile') : t('signUp').toUpperCase()}
             </button>
           </form>
 
           <div className="text-center" style={{ fontSize: '0.9rem' }}>
-            <p style={{ opacity: 0.7 }}>Already have an account?</p>
-            <Link href="/login" style={{ color: 'var(--accent-gold)', fontWeight: 600, marginTop: '0.5rem', display: 'inline-block' }}>SIGN IN TO YOUR DASHBOARD</Link>
+            <p style={{ opacity: 0.7 }}>{t('alreadyHaveAccount')}</p>
+            <Link href="/login" style={{ color: 'var(--accent-gold)', fontWeight: 600, marginTop: '0.5rem', display: 'inline-block' }}>{t('signInToDashboard')}</Link>
           </div>
         </div>
       </div>

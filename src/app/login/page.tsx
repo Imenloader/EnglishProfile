@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 export default function Login() {
+  const { t, isRtl } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,7 +35,7 @@ export default function Login() {
   };
 
   return (
-    <main className="marble-bg" style={{ minHeight: '100vh' }}>
+    <main className="marble-bg" style={{ minHeight: '100vh', direction: isRtl ? 'rtl' : 'ltr' }}>
       <Navbar />
       <div className="container flex-center" style={{ paddingTop: '10rem', paddingBottom: '5rem' }}>
         <div className="glass animate-reveal" style={{ 
@@ -42,8 +45,8 @@ export default function Login() {
           borderTop: '4px solid var(--accent-gold)'
         }}>
           <div className="text-center" style={{ marginBottom: '2.5rem' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Welcome Back</h1>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem', letterSpacing: '1px' }}>ENTER YOUR CREDENTIALS</p>
+            <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{t('welcomeBack')}</h1>
+            <p style={{ opacity: 0.6, fontSize: '0.9rem', letterSpacing: '1px' }}>{t('enterCredentials')}</p>
           </div>
 
           {error && (
@@ -54,7 +57,8 @@ export default function Login() {
               borderRadius: '4px', 
               marginBottom: '1.5rem',
               fontSize: '0.85rem',
-              borderLeft: '3px solid #d32f2f'
+              borderLeft: isRtl ? 'none' : '3px solid #d32f2f',
+              borderRight: isRtl ? '3px solid #d32f2f' : 'none'
             }}>
               {error}
             </div>
@@ -62,7 +66,7 @@ export default function Login() {
 
           <form onSubmit={handleLogin}>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>EMAIL ADDRESS</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('emailAddress').toUpperCase()}</label>
               <input 
                 type="email" 
                 required 
@@ -73,7 +77,7 @@ export default function Login() {
               />
             </div>
             <div style={{ marginBottom: '2rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>PASSWORD</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px' }}>{t('password').toUpperCase()}</label>
               <input 
                 type="password" 
                 required 
@@ -89,13 +93,13 @@ export default function Login() {
               style={{ width: '100%', marginBottom: '1.5rem' }}
               disabled={loading}
             >
-              {loading ? 'AUTHENTICATING...' : 'SIGN IN'}
+              {loading ? t('authenticating') : t('signIn').toUpperCase()}
             </button>
           </form>
 
           <div className="text-center" style={{ fontSize: '0.9rem' }}>
-            <p style={{ opacity: 0.7 }}>Don't have an account?</p>
-            <Link href="/signup" style={{ color: 'var(--accent-gold)', fontWeight: 600, marginTop: '0.5rem', display: 'inline-block' }}>CREATE A STUDENT PROFILE</Link>
+            <p style={{ opacity: 0.7 }}>{t('dontHaveAccount')}</p>
+            <Link href="/signup" style={{ color: 'var(--accent-gold)', fontWeight: 600, marginTop: '0.5rem', display: 'inline-block' }}>{t('createProfile')}</Link>
           </div>
         </div>
       </div>

@@ -97,78 +97,15 @@ export default function AboutPage() {
         <div className="container">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div className="glass-dark" style={{ padding: '5rem', borderRadius: '40px' }} data-aos="fade-up">
-              <h2 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '3.5rem', textAlign: 'center' }}>Send us a message</h2>
+              <h2 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '3.5rem', textAlign: 'center' }}>{t('sendMessage')}</h2>
               
-              <form style={{ display: 'grid', gap: '2.5rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                  <div className="form-group">
-                    <label style={{ fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 800, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', display: 'block' }}>FIRST NAME</label>
-                    <input type="text" placeholder="Ahmed" className="form-input" />
-                  </div>
-                  <div className="form-group">
-                    <label style={{ fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 800, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', display: 'block' }}>LAST NAME</label>
-                    <input type="text" placeholder="Ali" className="form-input" />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label style={{ fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 800, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', display: 'block' }}>EMAIL</label>
-                  <input type="email" placeholder="ahmed@example.com" className="form-input" />
-                </div>
-
-                <div className="form-group">
-                  <label style={{ fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 800, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', display: 'block' }}>PHONE</label>
-                  <input type="text" placeholder="+20 100 000 0000" className="form-input" />
-                </div>
-
-                <div className="form-group">
-                  <label style={{ fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 800, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', display: 'block' }}>PROGRAM OF INTEREST</label>
-                  <select className="form-input" style={{ appearance: 'none' }}>
-                    <option>Select a program...</option>
-                    <option>General English</option>
-                    <option>Business English</option>
-                    <option>Conversation</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label style={{ fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 800, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', display: 'block' }}>MESSAGE</label>
-                  <textarea rows={4} placeholder="Tell us about your goals..." className="form-input" style={{ resize: 'none' }}></textarea>
-                </div>
-
-                <button className="btn-master" style={{ 
-                  background: 'var(--accent-blue)', 
-                  color: 'white', 
-                  width: '100%', 
-                  justifyContent: 'center', 
-                  borderRadius: '15px',
-                  padding: '1.5rem',
-                  fontSize: '1rem'
-                }}>
-                  Send Message <i className="fa-solid fa-paper-plane" style={{ marginLeft: '1rem' }}></i>
-                </button>
-              </form>
+              <AboutContactForm onSave={db.saveInquiry} t={t} />
             </div>
           </div>
         </div>
       </section>
 
       <style jsx>{`
-        .form-input {
-          width: 100%;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.1);
-          padding: 1.2rem 1.5rem;
-          border-radius: 12px;
-          color: white;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-        }
-        .form-input:focus {
-          outline: none;
-          border-color: var(--accent-gold);
-          background: rgba(255,255,255,0.05);
-        }
         .journey-path {
           animation: path-reveal 3s ease-out forwards;
         }
@@ -215,6 +152,152 @@ export default function AboutPage() {
           transform: translateX(-50%) translateY(0);
         }
       `}</style>
+
+      {/* Corporate Copyright Footer */}
+      <footer style={{ padding: '4rem 0', textAlign: 'center', opacity: 0.2, color: 'white', fontSize: '0.7rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="container">
+          <p>© 2026 LINGUAPLANET ACADEMY. {t('allRights').toUpperCase()}</p>
+          <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+            <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>{t('privacyPolicy').toUpperCase()}</Link>
+            <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>{t('termsOfService').toUpperCase()}</Link>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
+
+function AboutContactForm({ onSave, t }: { onSave: any, t: any }) {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', program: 'General English', message: '' });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    const result = await onSave({ 
+      name: formData.name, 
+      email: formData.email, 
+      message: `[Program: ${formData.program}] [Phone: ${formData.phone}] ${formData.message}` 
+    });
+    if (result) {
+      setStatus('success');
+      setFormData({ name: '', email: '', phone: '', program: 'General English', message: '' });
+      setTimeout(() => setStatus('idle'), 5000);
+    } else {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '2.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+        <div className="form-group">
+          <label className="form-label">{t('yourName')}</label>
+          <input 
+            required
+            type="text" 
+            placeholder="Ahmed Ali" 
+            className="form-input" 
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">{t('emailAddress')}</label>
+          <input 
+            required
+            type="email" 
+            placeholder="ahmed@example.com" 
+            className="form-input" 
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
+          />
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+        <div className="form-group">
+          <label className="form-label">{t('phone') || 'PHONE'}</label>
+          <input 
+            type="text" 
+            placeholder="+20 100 000 0000" 
+            className="form-input" 
+            value={formData.phone}
+            onChange={(e) => setFormData({...formData, phone: e.target.value})}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">{t('flexibilityTitle').toUpperCase()}</label>
+          <select 
+            className="form-input" 
+            style={{ appearance: 'none' }}
+            value={formData.program}
+            onChange={(e) => setFormData({...formData, program: e.target.value})}
+          >
+            <option>{t('home')}</option>
+            <option>General English</option>
+            <option>Business English</option>
+            <option>IELTS Preparation</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">{t('message')}</label>
+        <textarea 
+          required
+          rows={4} 
+          placeholder={t('chooseStart')} 
+          className="form-input" 
+          style={{ resize: 'none' }}
+          value={formData.message}
+          onChange={(e) => setFormData({...formData, message: e.target.value})}
+        ></textarea>
+      </div>
+
+      <button 
+        disabled={status === 'loading' || status === 'success'}
+        className="btn-master" 
+        style={{ 
+          background: status === 'success' ? '#25D366' : 'var(--accent-blue)', 
+          color: 'white', 
+          width: '100%', 
+          justifyContent: 'center', 
+          borderRadius: '15px',
+          padding: '1.5rem',
+          fontSize: '1rem'
+        }}>
+        {status === 'loading' ? t('sending') : status === 'success' ? t('messageSent') : t('sendMessage')} 
+        <i className="fa-solid fa-paper-plane" style={{ [t('language') === 'ar' ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
+      </button>
+
+      <style jsx>{`
+        .form-label {
+          font-size: 0.7rem; 
+          letter-spacing: 2px; 
+          font-weight: 800; 
+          color: rgba(255,255,255,0.4); 
+          marginBottom: 1rem; 
+          display: block;
+        }
+        .form-input {
+          width: 100%;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.1);
+          padding: 1.2rem 1.5rem;
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+        .form-input:focus {
+          outline: none;
+          border-color: var(--accent-gold);
+          background: rgba(255,255,255,0.05);
+        }
+      `}</style>
+    </form>
+  );
+}
+
