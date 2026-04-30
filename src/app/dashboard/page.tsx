@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { Lead } from '@/data/db';
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function Dashboard() {
       .order('created_at', { ascending: false });
 
     if (!error) {
-      setLeads(data.map((l: any) => ({
+      setLeads(data.map((l) => ({
         id: l.id,
         name: l.name,
         email: l.email,

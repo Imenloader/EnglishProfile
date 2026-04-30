@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { db } from '@/data/db';
+import { db, SiteSettings } from '@/data/db';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 export default function AboutPage() {
-  const { language, t, isRtl } = useLanguage();
-  const [settings, setSettings] = useState<any>(null);
+  const { t, isRtl } = useLanguage();
+  const [, setSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -167,7 +167,7 @@ export default function AboutPage() {
   );
 }
 
-function AboutContactForm({ onSave, t }: { onSave: any, t: any }) {
+function AboutContactForm({ onSave, t }: { onSave: (data: { name: string, email: string, message: string }) => Promise<unknown>, t: (key: string) => string }) {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', program: 'General English', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 

@@ -8,7 +8,11 @@ import Link from 'next/link';
 export default function Hero() {
   const { language, t, isRtl } = useLanguage();
   const [mounted, setMounted] = useState(false);
-  const [settings, setSettings] = useState<any>({
+  const [settings, setSettings] = useState<SiteSettings | null>({
+    id: '1',
+    whatsappNumber: '',
+    contactEmail: '',
+    updatedAt: new Date(),
     heroHeadlineEn: 'Experience Educational Magnificence',
     heroHeadlineAr: 'اختبر الروعة التعليمية',
     heroSubheadlineEn: "Elevate your professional profile with Linguaplanet's world-class English training.",
@@ -25,7 +29,7 @@ export default function Hero() {
   }, []);
 
   // Prevent hydration mismatch by returning a stable skeleton/base if not mounted
-  if (!mounted) {
+  if (!mounted || !settings) {
     return <section style={{ minHeight: '100vh', backgroundColor: 'var(--primary-navy)' }}></section>;
   }
 
