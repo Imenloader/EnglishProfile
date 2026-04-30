@@ -8,6 +8,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOi
 // ⚡ Bolt: Robustness Check
 if (typeof window !== 'undefined') {
   console.log("✅ Supabase connection initialized for Linguaplanet.");
+  console.log("📍 Supabase URL:", supabaseUrl);
 }
 
 export const supabase = createClient(
