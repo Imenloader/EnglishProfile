@@ -126,14 +126,45 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           alignItems: 'center',
           flexDirection: isRtl ? 'row-reverse' : 'row'
         }}>
-                e.currentTarget.style.color = textColor;
-                e.currentTarget.style.opacity = scrolled ? '1' : '0.85';
-              }}
-            >
-              {item.name}
-              <span className="nav-indicator"></span>
-            </Link>
-          ))}
+          {(() => {
+            const navItems = [
+              { name: t('about'), href: '/about' },
+              { name: t('programs'), href: '/#services' },
+              { name: t('team'), href: '/#team' },
+              { name: t('placementTest'), href: '/placement-test' }
+            ];
+
+            const isAdmin = user?.email === 'admin@linguaplanet.com';
+            if (user) {
+              navItems.push({ name: t('dashboard').toUpperCase(), href: '/dashboard' });
+            }
+            if (isAdmin) {
+              navItems.push({ name: 'ADMIN', href: '/admin' });
+            }
+
+            return navItems.map((item) => (
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                style={{
+                  textDecoration: 'none',
+                  color: textColor,
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  letterSpacing: '3px',
+                  textTransform: 'uppercase',
+                  transition: 'all 0.4s ease',
+                  opacity: scrolled ? 1 : 0.85,
+                  position: 'relative',
+                  padding: '0.5rem 0'
+                }}
+                className="nav-link-premium"
+              >
+                {item.name}
+                <span className="nav-indicator"></span>
+              </Link>
+            ));
+          })()}
           
           <button
             onClick={toggleTheme}
