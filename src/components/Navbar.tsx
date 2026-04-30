@@ -126,33 +126,6 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           alignItems: 'center',
           flexDirection: isRtl ? 'row-reverse' : 'row'
         }}>
-          {[
-            { name: t('about'), href: '/about' },
-            { name: t('programs'), href: '/#services' },
-            { name: t('team'), href: '/#team' },
-            { name: t('placementTest'), href: '/placement-test' }
-          ].map((item) => (
-            <Link 
-              key={item.href} 
-              href={item.href} 
-              style={{
-                textDecoration: 'none',
-                color: textColor,
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                letterSpacing: '3px',
-                textTransform: 'uppercase',
-                transition: 'all 0.4s ease',
-                opacity: scrolled ? 1 : 0.85,
-                position: 'relative',
-                padding: '0.5rem 0'
-              }}
-              className="nav-link-premium"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--accent-gold)';
-                e.currentTarget.style.opacity = '1';
-              }}
-              onMouseLeave={(e) => {
                 e.currentTarget.style.color = textColor;
                 e.currentTarget.style.opacity = scrolled ? '1' : '0.85';
               }}
@@ -291,6 +264,27 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
+
+            {/* ⚡ Bolt: Smart Drawer Links */}
+            {(user || user?.email === 'admin@linguaplanet.com') && (
+              <div style={{ padding: '1rem', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '12px', marginBottom: '1rem' }}>
+                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--accent-gold)', letterSpacing: '2px' }}>
+                  {isRtl ? 'حسابك' : 'YOUR ACCOUNT'}
+                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
+                  <Link href="/dashboard" onClick={() => setIsOpen(false)} style={{ color: isDarkPage ? 'white' : 'var(--primary-navy)', textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem' }}>
+                    <i className="fa-solid fa-gauge-high" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem' }}></i>
+                    {t('dashboard').toUpperCase()}
+                  </Link>
+                  {user?.email === 'admin@linguaplanet.com' && (
+                    <Link href="/admin" onClick={() => setIsOpen(false)} style={{ color: 'var(--accent-gold)', textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem' }}>
+                      <i className="fa-solid fa-user-shield" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem' }}></i>
+                      ADMIN PORTAL
+                    </Link>
+                  )}
+                </div>
+              </div>
+            )}
 
             {[
               { name: t('about'), href: '/about' },
