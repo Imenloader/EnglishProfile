@@ -12,19 +12,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push('/login');
-      } else {
-        setUser(user);
-        fetchResults(user.id);
-      }
-    };
-    checkUser();
-  }, []);
-
   const fetchResults = async (userId: string) => {
     const { data, error } = await supabase
       .from('leads')
@@ -45,6 +32,19 @@ export default function Dashboard() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/login');
+      } else {
+        setUser(user);
+        fetchResults(user.id);
+      }
+    };
+    checkUser();
+  }, [router]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

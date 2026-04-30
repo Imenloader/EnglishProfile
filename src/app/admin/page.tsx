@@ -48,7 +48,7 @@ export default function AdminDashboard() {
     const headers = ['Name', 'Email', 'Score', 'Total Questions', 'Level', 'Date'];
     const rows = leads.map(l => [l.name, l.email, l.score, l.totalQuestions, l.level, l.date]);
     
-    let csvContent = "data:text/csv;charset=utf-8," 
+    const csvContent = "data:text/csv;charset=utf-8,"
       + headers.join(",") + "\n" 
       + rows.map(e => e.join(",")).join("\n");
 
