@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 export default function Hero() {
   const { language, t, isRtl } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [settings, setSettings] = useState<any>({
     heroHeadlineEn: 'Experience Educational Magnificence',
     heroHeadlineAr: 'اختبر الروعة التعليمية',
@@ -15,6 +16,7 @@ export default function Hero() {
   });
 
   useEffect(() => {
+    setMounted(true);
     const fetchSettings = async () => {
       const s = await db.getSettings();
       if (s) setSettings(s);
@@ -22,7 +24,10 @@ export default function Hero() {
     fetchSettings();
   }, []);
 
-
+  // Prevent hydration mismatch by returning a stable skeleton/base if not mounted
+  if (!mounted) {
+    return <section style={{ minHeight: '100vh', backgroundColor: 'var(--primary-navy)' }}></section>;
+  }
 
   const headline = language === 'en' ? settings.heroHeadlineEn : settings.heroHeadlineAr;
   const subheadline = language === 'en' ? settings.heroSubheadlineEn : settings.heroSubheadlineAr;
@@ -83,11 +88,7 @@ export default function Hero() {
               marginBottom: '2.5rem',
               fontFamily: 'var(--font-serif)'
             }}>
-              {headline.split(' ').map((word, i) => (
-                <span key={i} style={{ display: 'inline-block', marginRight: '0.3em' }} className={word === 'Magnificence' || word === 'الروعة' ? 'gold-text' : ''}>
-                  {word}
-                </span>
-              ))}
+              {headline}
             </h1>
             <p style={{ 
               color: 'rgba(255,255,255,0.7)', 
@@ -104,7 +105,7 @@ export default function Hero() {
                 {t('startAssessment')}
                 <i className="fa-solid fa-arrow-right-long" style={{ fontSize: '1.2rem' }}></i>
               </Link>
-              <a href="#about" className="btn-master btn-white" style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'transparent', color: 'white' }}>
+              <a href="/about" className="btn-master btn-white" style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'transparent', color: 'white' }}>
                 {t('learnMore')}
               </a>
             </div>
