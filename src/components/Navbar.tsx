@@ -36,9 +36,11 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
       setUser(session?.user ?? null);
     });
 
-    // Theme Check
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Theme Check (SSR Safe)
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
