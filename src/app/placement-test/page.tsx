@@ -10,6 +10,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function PlacementTest() {
   const { language, t, isRtl } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentPart, setCurrentPart] = useState<1 | 2 | 3>(1);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -21,11 +22,15 @@ export default function PlacementTest() {
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const currentQuestions = placementQuestions.filter(q => q.part === (currentPart === 1 ? 1 : 2));
 
   const handleAnswer = (answer: string) => {
     const isCorrect = answer === currentQuestions[currentQuestion].correctAnswer;
-    if (isCorrect) setScore(score + 1);
+    if (isCorrect) setScore(prev => prev + 1);
     
     if (currentQuestion < currentQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -66,154 +71,240 @@ export default function PlacementTest() {
     setIsFinished(true);
   };
 
+  if (!mounted) return <div style={{ background: 'var(--primary-navy)', minHeight: '100vh' }}></div>;
+
   if (isFinished) {
     return (
-      <main style={{ direction: isRtl ? 'rtl' : 'ltr' }}>
+      <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
         <Navbar />
-        <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: '2rem' }}>
-          {showLeadForm ? (
-            <div className="glass animate-reveal" style={{ padding: '3.5rem', width: '100%', maxWidth: '500px', borderTop: '4px solid var(--accent-gold)' }}>
-              <h2 style={{ marginBottom: '1rem', color: 'var(--accent-gold)', textAlign: 'center' }}>{isRtl ? 'احفظ نتائجك' : 'Save Your Results'}</h2>
-              <p style={{ marginBottom: '2.5rem', textAlign: 'center', opacity: 0.7 }}>{isRtl ? 'أدخل بياناتك للحصول على تقريرك المفصل وتوصيات الدورة التدريبية.' : 'Enter your details to receive your detailed report and course recommendations.'}</p>
-              <form onSubmit={handleLeadSubmit}>
-                <div style={{ marginBottom: '1.2rem' }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600 }}>{isRtl ? 'الاسم بالكامل' : 'FULL NAME'}</label>
-                  <input 
-                    type="text" 
-                    placeholder={isRtl ? 'الاسم بالكامل' : 'Full Name'} 
-                    required 
-                    value={leadData.name}
-                    onChange={(e) => setLeadData({ ...leadData, name: e.target.value })}
-                    style={{ width: '100%', padding: '1rem', borderRadius: '4px', border: '1px solid var(--gray-light)', textAlign: isRtl ? 'right' : 'left' }} 
-                  />
-                </div>
-                <div style={{ marginBottom: '1.2rem' }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600 }}>{isRtl ? 'البريد الإلكتروني' : 'EMAIL ADDRESS'}</label>
-                  <input 
-                    type="email" 
-                    placeholder={isRtl ? 'البريد الإلكتروني' : 'Email Address'} 
-                    required 
-                    value={leadData.email}
-                    onChange={(e) => setLeadData({ ...leadData, email: e.target.value })}
-                    style={{ width: '100%', padding: '1rem', borderRadius: '4px', border: '1px solid var(--gray-light)', textAlign: isRtl ? 'right' : 'left' }} 
-                  />
-                </div>
-                <div style={{ marginBottom: '2rem' }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 600 }}>{isRtl ? 'الفئة العمرية' : 'AGE RANGE'}</label>
-                  <select 
-                    required 
-                    value={ageRange}
-                    onChange={(e) => setAgeRange(e.target.value)}
-                    style={{ width: '100%', padding: '1rem', borderRadius: '4px', border: '1px solid var(--gray-light)', background: 'white', textAlign: isRtl ? 'right' : 'left' }}
-                  >
-                    <option value="">Select Age Range</option>
-                    <option value="kids">Kids (6-12)</option>
-                    <option value="teens">Teens (13-17)</option>
-                    <option value="adults">Adults (18+)</option>
-                  </select>
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>{isRtl ? 'إرسال وعرض النتيجة' : 'Submit & View Result'}</button>
-              </form>
-            </div>
-          ) : (
-            <div className="glass text-center animate-fade-in" style={{ padding: '4rem', maxWidth: '600px' }}>
-              <h1 style={{ color: 'var(--accent-gold)', fontSize: '4rem', marginBottom: '1rem' }}>{level}</h1>
-              <h2 style={{ marginBottom: '1.5rem' }}>{isRtl ? 'مستوى كفاءتك' : 'Your Proficiency Level'}</h2>
-              <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>
-                {isRtl ? `تهانينا ${leadData.name}! لقد أكملت التقييم. نتيجتك هي ${score}/${placementQuestions.length}.` : `Congratulations ${leadData.name}! You've completed the assessment. Your score is ${score}/${placementQuestions.length}.`}
+        <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: '8rem 2rem' }}>
+          <div className="glass-dark animate-reveal" style={{ padding: '5rem', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
+            <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>EVALUATION COMPLETE</span>
+            <h1 style={{ color: 'white', fontSize: 'clamp(4rem, 15vw, 10rem)', margin: '2rem 0', fontFamily: 'var(--font-serif)', fontWeight: 700 }} className="gold-text">
+              {level}
+            </h1>
+            <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '2rem' }}>{isRtl ? 'مستوى كفاءتك التنبؤي' : 'Your Predicted Level'}</h2>
+            
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '3rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '3rem' }}>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', lineHeight: 1.8 }}>
+                {isRtl 
+                  ? `تهانينا ${leadData.name}! لقد أظهرت كفاءة استثنائية. درجتك هي ${score} من ${placementQuestions.length}. بناءً على أدائك، نوصي بالمسار التالي:`
+                  : `Congratulations ${leadData.name}! You have demonstrated exceptional proficiency. Your score is ${score}/${placementQuestions.length}. Based on your performance, we recommend the following track:`
+                }
               </p>
-              <div style={{ backgroundColor: 'var(--primary-bg)', padding: '2rem', borderRadius: '12px', marginBottom: '2rem' }}>
-                <h4 style={{ marginBottom: '0.5rem' }}>{isRtl ? 'الدورة الموصى بها:' : 'Recommended Course:'}</h4>
-                <p style={{ fontWeight: 'bold', color: 'var(--accent-blue)' }}>
-                  {level === 'A1' || level === 'A2' ? (isRtl ? 'أساسيات اللغة الإنجليزية' : 'Foundations of English') : 
-                   level === 'B1' || level === 'B2' ? (isRtl ? 'اتصالات مهنية للمحترفين' : 'Professional Communication Pro') : 
-                   (isRtl ? 'القيادة التنفيذية والبلاغة المتقدمة' : 'Executive Leadership & Advanced Rhetoric')}
-                </p>
-              </div>
-              <Link href="/" className="btn btn-primary" style={{ width: '100%' }}>{t('home')}</Link>
+              <h3 style={{ color: 'var(--accent-gold)', marginTop: '2rem', fontSize: '1.8rem' }}>
+                {level === 'A1' || level === 'A2' ? (isRtl ? 'أساسيات اللغة الإنجليزية' : 'Foundations of English') : 
+                 level === 'B1' || level === 'B2' ? (isRtl ? 'اتصالات مهنية للمحترفين' : 'Professional Communication Pro') : 
+                 (isRtl ? 'القيادة التنفيذية والبلاغة المتقدمة' : 'Executive Leadership & Advanced Rhetoric')}
+              </h3>
             </div>
-          )}
+
+            <Link href="/" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
+              {isRtl ? 'العودة للرئيسية' : 'RETURN TO PORTAL'}
+            </Link>
+          </div>
         </div>
       </main>
     );
   }
 
   const q = currentQuestions[currentQuestion];
+  const totalSteps = 60;
+  const currentStep = (currentPart === 3 ? 55 : (currentPart === 2 ? 30 + currentQuestion : currentQuestion));
+  const progress = Math.round((currentStep / totalSteps) * 100);
 
   return (
-    <main style={{ direction: isRtl ? 'rtl' : 'ltr' }}>
+    <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
       <Navbar />
-      <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column' }}>
-        <div style={{ width: '100%', maxWidth: '700px', marginBottom: '2rem', marginTop: '5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem', opacity: 0.7, flexDirection: isRtl ? 'row-reverse' : 'row' }}>
-            <span>{isRtl ? `الجزء ${currentPart} - السؤال ${currentQuestion + 1}` : `Part ${currentPart} - Question ${currentQuestion + 1}`}</span>
-            <span>{Math.round(((currentPart === 3 ? 60 : (currentPart === 2 ? 40 + currentQuestion : currentQuestion)) / 60) * 100)}% {isRtl ? 'مكتمل' : 'Complete'}</span>
-          </div>
-          <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--gray-light)', borderRadius: '2px' }}>
-            <div style={{ 
-              width: `${((currentPart === 3 ? 60 : (currentPart === 2 ? 40 + currentQuestion : currentQuestion)) / 60) * 100}%`, 
-              height: '100%', 
-              backgroundColor: 'var(--accent-gold)', 
-              borderRadius: '2px',
-              transition: 'width 0.5s ease',
-              float: isRtl ? 'right' : 'left'
-            }}></div>
-          </div>
+      
+      {/* Progress Orbit */}
+      <div style={{ position: 'fixed', top: '80px', left: 0, width: '100%', zIndex: 100 }}>
+        <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.05)' }}>
+          <div style={{ 
+            width: `${progress}%`, 
+            height: '100%', 
+            background: 'var(--accent-gold)', 
+            boxShadow: '0 0 20px var(--accent-gold)',
+            transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)' 
+          }}></div>
         </div>
+        <div className="container" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px' }}>
+          <span>PART 0{currentPart} / {currentQuestion + 1}</span>
+          <span>{progress}% COMPLETE</span>
+        </div>
+      </div>
 
-        <div className="glass animate-reveal" style={{ padding: '3.5rem', width: '100%', maxWidth: '750px', borderTop: '4px solid var(--accent-gold)' }}>
-          {currentPart < 3 ? (
-            <>
-              <h2 style={{ marginBottom: '2.5rem', fontSize: '1.6rem', fontFamily: 'var(--font-sans)', fontWeight: 500, textAlign: isRtl ? 'right' : 'left', lineHeight: 1.5 }}>
+      <div className="container flex-center" style={{ minHeight: '100vh', padding: '10rem 2rem' }}>
+        <div style={{ width: '100%', maxWidth: '850px' }}>
+          {showLeadForm ? (
+            <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px' }}>
+              <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>SECURE YOUR RESULTS</span>
+                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>Final Step</h2>
+              </div>
+              <form onSubmit={handleLeadSubmit} style={{ display: 'grid', gap: '2.5rem' }}>
+                <div className="form-group">
+                  <label className="immortal-label">FULL NAME</label>
+                  <input 
+                    type="text" 
+                    required 
+                    className="immortal-input" 
+                    value={leadData.name}
+                    onChange={(e) => setLeadData({ ...leadData, name: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="immortal-label">EMAIL ADDRESS</label>
+                  <input 
+                    type="email" 
+                    required 
+                    className="immortal-input" 
+                    value={leadData.email}
+                    onChange={(e) => setLeadData({ ...leadData, email: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="immortal-label">AGE RANGE</label>
+                  <select 
+                    required 
+                    className="immortal-input"
+                    value={ageRange}
+                    onChange={(e) => setAgeRange(e.target.value)}
+                    style={{ appearance: 'none' }}
+                  >
+                    <option value="">Select range...</option>
+                    <option value="kids">Kids (6-12)</option>
+                    <option value="teens">Teens (13-17)</option>
+                    <option value="adults">Adults (18+)</option>
+                  </select>
+                </div>
+                <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
+                  GENERATE MASTERY REPORT <i className="fa-solid fa-bolt" style={{ marginLeft: '1rem' }}></i>
+                </button>
+              </form>
+            </div>
+          ) : currentPart < 3 ? (
+            <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)' }}>
+              <h2 style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500 }}>
                 {q.question}
               </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {q.options.map((opt) => (
+              <div style={{ display: 'grid', gap: '1.5rem' }}>
+                {q.options.map((opt, i) => (
                   <button
                     key={opt}
                     onClick={() => handleAnswer(opt)}
-                    style={{
-                      textAlign: isRtl ? 'right' : 'left',
-                      padding: '1.2rem',
-                      borderRadius: '8px',
-                      border: `2px solid var(--gray-light)`,
-                      backgroundColor: 'transparent',
-                      fontSize: '1rem',
-                      transition: 'var(--transition-smooth)'
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--accent-gold)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--gray-light)')}
+                    className="choice-card"
                   >
-                    {opt}
+                    <span className="choice-index">0{i+1}</span>
+                    <span className="choice-text">{opt}</span>
                   </button>
                 ))}
               </div>
-            </>
+            </div>
           ) : (
-            <div>
-              <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-gold)' }}>Part Three: Writing Assessment</h2>
-              <p style={{ marginBottom: '2rem', opacity: 0.8 }}>{isRtl ? 'اختر أحد المواضيع التالية واكتب بين 100-150 كلمة:' : 'Choose ONE of the following topics and write between 100-150 words:'}</p>
-              <div style={{ backgroundColor: 'rgba(212, 175, 55, 0.05)', padding: '2rem', borderRadius: '8px', marginBottom: '2.5rem', borderLeft: '4px solid var(--accent-gold)' }}>
-                <p style={{ marginBottom: '1rem', fontWeight: 600 }}>1. Write an email to your friend telling him about your first job and your daily work routine.</p>
-                <p style={{ fontWeight: 600 }}>2. Describe a country you have been to on your last vacation.</p>
+            <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px' }}>
+              <div style={{ marginBottom: '4rem' }}>
+                <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>FINAL ASSESSMENT</span>
+                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>Writing Evaluation</h2>
+              </div>
+              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '2rem', borderRadius: '15px', borderLeft: '4px solid var(--accent-gold)', marginBottom: '3rem', color: 'rgba(255,255,255,0.8)' }}>
+                <p style={{ marginBottom: '1rem' }}>Choose ONE of the following topics (100-150 words):</p>
+                <ol style={{ paddingLeft: '1.5rem', display: 'grid', gap: '1rem' }}>
+                  <li>Your first job and daily routine.</li>
+                  <li>A country you visited on your last vacation.</li>
+                </ol>
               </div>
               <textarea 
                 value={writingResponse}
                 onChange={(e) => setWritingResponse(e.target.value)}
-                placeholder={isRtl ? 'اكتب إجابتك هنا...' : 'Type your response here...'}
-                style={{ width: '100%', height: '300px', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--gray-light)', marginBottom: '2.5rem', fontFamily: 'var(--font-sans)', fontSize: '1rem' }}
+                placeholder="Type your response here..."
+                className="immortal-textarea"
               />
               <button 
-                className="btn btn-primary" 
-                style={{ width: '100%' }}
+                className="btn-master btn-gold" 
+                style={{ width: '100%', justifyContent: 'center' }}
                 onClick={() => setShowLeadForm(true)}
               >
-                {isRtl ? 'إرسال التقييم' : 'Submit Assessment'}
+                SUBMIT ASSESSMENT <i className="fa-solid fa-paper-plane" style={{ marginLeft: '1rem' }}></i>
               </button>
             </div>
           )}
         </div>
       </div>
+
+      <style jsx>{`
+        .immortal-label {
+          display: block;
+          font-size: 0.65rem;
+          letter-spacing: 3px;
+          font-weight: 800;
+          color: rgba(255,255,255,0.3);
+          margin-bottom: 1.2rem;
+        }
+        .immortal-input {
+          width: 100%;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          padding: 1.2rem 1.5rem;
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+        .immortal-input:focus {
+          outline: none;
+          border-color: var(--accent-gold);
+          background: rgba(255,255,255,0.06);
+        }
+        .immortal-textarea {
+          width: 100%;
+          height: 300px;
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.08);
+          padding: 2rem;
+          border-radius: 15px;
+          color: white;
+          font-size: 1.1rem;
+          line-height: 1.8;
+          margin-bottom: 3rem;
+          resize: none;
+        }
+        .immortal-textarea:focus {
+          outline: none;
+          border-color: var(--accent-gold);
+        }
+        .choice-card {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+          padding: 1.8rem 2.5rem;
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.05);
+          border-radius: 20px;
+          cursor: pointer;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          text-align: left;
+          color: rgba(255,255,255,0.8);
+        }
+        .choice-card:hover {
+          background: rgba(255,255,255,0.05);
+          border-color: var(--accent-gold);
+          transform: translateX(10px);
+          color: white;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .choice-index {
+          font-size: 0.7rem;
+          font-weight: 800;
+          color: var(--accent-gold);
+          opacity: 0.4;
+        }
+        .choice-text {
+          font-size: 1.1rem;
+          font-weight: 400;
+        }
+      `}</style>
     </main>
   );
 }
