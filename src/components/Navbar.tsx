@@ -36,12 +36,23 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
       setUser(session?.user ?? null);
     });
 
+    // Theme Check
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(rafId);
       subscription.unsubscribe();
     };
   }, []);
+
+  const toggleTheme = () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -149,6 +160,25 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             </Link>
           ))}
           
+          <button
+            onClick={toggleTheme}
+            style={{
+              background: 'none',
+              border: `1px solid ${scrolled ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)'}`,
+              color: textColor,
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <i className="fa-solid fa-moon"></i>
+          </button>
+
           <button
             onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
             style={{
@@ -291,10 +321,10 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 setIsOpen(false);
               }}
               style={{
-                marginTop: '1rem',
+                marginTop: '0.5rem',
                 padding: '1.2rem 2rem',
-                background: 'var(--primary-navy)',
-                color: 'white',
+                background: isDarkPage ? 'var(--accent-gold)' : 'var(--primary-navy)',
+                color: isDarkPage ? 'var(--primary-navy)' : 'white',
                 border: 'none',
                 borderRadius: '8px',
                 fontWeight: 800,
@@ -305,6 +335,13 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             >
               {language === 'en' ? t('arabicInterface') : t('englishInterface')}
             </button>
+
+            {/* Social Links to fill space */}
+            <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', margin: '1rem 0' }}>
+              <i className="fa-brands fa-whatsapp" style={{ fontSize: '1.5rem', opacity: 0.5 }}></i>
+              <i className="fa-brands fa-instagram" style={{ fontSize: '1.5rem', opacity: 0.5 }}></i>
+              <i className="fa-brands fa-facebook" style={{ fontSize: '1.5rem', opacity: 0.5 }}></i>
+            </div>
 
             {!user ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', marginTop: 'auto' }}>
