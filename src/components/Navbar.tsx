@@ -65,12 +65,12 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
       left: 0,
       width: '100%',
       zIndex: 1000,
-      padding: scrolled ? '1rem 0' : '2.2rem 0',
-      transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+      padding: scrolled ? '0.8rem 0' : '1.8rem 0',
+      transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
       background: navBg,
-      backdropFilter: (scrolled || isOpen) ? 'blur(20px)' : 'none',
-      borderBottom: scrolled ? (isDarkPage ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)') : 'none',
-      boxShadow: scrolled ? '0 10px 40px rgba(0,0,0,0.03)' : 'none'
+      backdropFilter: (scrolled || isOpen) ? 'blur(30px)' : 'none',
+      borderBottom: scrolled ? (isDarkPage ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.05)') : '1px solid rgba(255,255,255,0.03)',
+      boxShadow: scrolled ? '0 20px 60px rgba(0,0,0,0.08)' : 'none'
     }}>
       <div className="container" style={{
         display: 'flex',
@@ -126,24 +126,26 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 textDecoration: 'none',
                 color: textColor,
                 fontSize: '0.75rem',
-                fontWeight: 800,
-                letterSpacing: '2.5px',
+                fontWeight: 700,
+                letterSpacing: '3px',
                 textTransform: 'uppercase',
-                transition: 'all 0.3s ease',
-                opacity: scrolled ? 1 : 0.8
+                transition: 'all 0.4s ease',
+                opacity: scrolled ? 1 : 0.85,
+                position: 'relative',
+                padding: '0.5rem 0'
               }}
+              className="nav-link-premium"
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = 'var(--accent-gold)';
                 e.currentTarget.style.opacity = '1';
-                e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = textColor;
-                e.currentTarget.style.opacity = scrolled ? '1' : '0.8';
-                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.opacity = scrolled ? '1' : '0.85';
               }}
             >
               {item.name}
+              <span className="nav-indicator"></span>
             </Link>
           ))}
           
@@ -284,6 +286,19 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(-50px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-indicator {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background: var(--accent-gold);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateX(-50%);
+        }
+        .nav-link-premium:hover .nav-indicator {
+          width: 20px;
         }
         @media (max-width: 1024px) {
           .hidden-mobile { display: none !important; }
