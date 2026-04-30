@@ -4,10 +4,12 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
 
 // ⚡ Bolt: Robustness Check
-// We use placeholders above to prevent the build from crashing if env vars are missing.
-// This is common on CI/CD platforms like Cloudflare Pages if vars aren't set yet.
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  console.warn("⚠️ [BOLT WARNING] Supabase environment variables are missing. Building with placeholders.");
+if (typeof window !== 'undefined') {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+    console.error("❌ ERROR: Supabase is NOT connected. The build is still using placeholder values. Check Cloudflare env vars.");
+  } else {
+    console.log("✅ Supabase connection initialized with URL:", process.env.NEXT_PUBLIC_SUPABASE_URL.substring(0, 12) + "...");
+  }
 }
 
 export const supabase = createClient(
