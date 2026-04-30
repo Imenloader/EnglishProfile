@@ -164,20 +164,29 @@ export default function PlacementTest() {
                     onChange={(e) => setLeadData({ ...leadData, email: e.target.value })}
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group" style={{ position: 'relative' }}>
                   <label className="immortal-label">{t('flexibilityTitle').toUpperCase()}</label>
                   <select 
                     required 
                     className="immortal-input"
                     value={ageRange}
                     onChange={(e) => setAgeRange(e.target.value)}
-                    style={{ appearance: 'none' }}
+                    style={{ appearance: 'none', cursor: 'pointer' }}
                   >
-                    <option value="">{t('selectRange')}</option>
-                    <option value="kids">{t('kids')}</option>
-                    <option value="teens">{t('teens')}</option>
-                    <option value="adults">{t('adults')}</option>
+                    <option value="" style={{ background: '#0a1128', color: 'white' }}>{t('selectRange')}</option>
+                    <option value="kids" style={{ background: '#0a1128', color: 'white' }}>{t('kids')}</option>
+                    <option value="teens" style={{ background: '#0a1128', color: 'white' }}>{t('teens')}</option>
+                    <option value="adults" style={{ background: '#0a1128', color: 'white' }}>{t('adults')}</option>
                   </select>
+                  <i className="fa-solid fa-chevron-down" style={{ 
+                    position: 'absolute', 
+                    right: isRtl ? 'auto' : '1.5rem', 
+                    left: isRtl ? '1.5rem' : 'auto', 
+                    top: '4.2rem', 
+                    color: 'var(--accent-gold)', 
+                    pointerEvents: 'none',
+                    fontSize: '0.8rem'
+                  }}></i>
                 </div>
                 <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
                   {t('generateReport')} <i className="fa-solid fa-bolt" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
