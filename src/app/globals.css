@@ -230,13 +230,23 @@ p {
 .marquee-track {
   display: flex;
   gap: 3rem;
-  animation: marquee-scroll 22s linear infinite;
+  animation: marquee-scroll 35s linear infinite;
   width: max-content;
+  will-change: transform;
 }
 
 @keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-33.33%, 0, 0); }
+}
+
+[dir="rtl"] .marquee-track {
+  animation: marquee-scroll-rtl 35s linear infinite;
+}
+
+@keyframes marquee-scroll-rtl {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(33.33%, 0, 0); }
 }
 
 .marquee-wrap:hover .marquee-track {

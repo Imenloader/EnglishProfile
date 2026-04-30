@@ -75,12 +75,12 @@ export default function Home() {
             <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{t('companiesTrust')}</h2>
           </div>
           
-          <div className="marquee-wrap" data-aos="fade-up" data-aos-delay="100">
+          <div className="marquee-wrap" style={{ marginTop: '2rem' }}>
             <div className="marquee-track">
               {[
                 'Vodafone EG', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alamenda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
               ].map((partner, i) => (
-                <div key={i} className="glass-card" style={{
+                <div key={`p1-${i}`} className="glass-card" style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -96,11 +96,31 @@ export default function Home() {
                   <span style={{ fontWeight: 800, color: '#64748b', fontSize: '0.9rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
                 </div>
               ))}
-              {/* Duplicate for infinite loop */}
+              {/* Duplicate 1 for infinite loop */}
               {[
                 'Vodafone EG', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alamenda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
               ].map((partner, i) => (
-                <div key={i + 20} className="glass-card" style={{
+                <div key={`p2-${i}`} className="glass-card" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '200px',
+                  height: '100px',
+                  borderRadius: '16px',
+                  filter: 'grayscale(100%)',
+                  flexShrink: 0
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.filter = 'grayscale(0%)'}
+                onMouseLeave={(e) => e.currentTarget.style.filter = 'grayscale(100%)'}
+                >
+                  <span style={{ fontWeight: 800, color: '#64748b', fontSize: '0.9rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
+                </div>
+              ))}
+              {/* Duplicate 2 for absolute continuity on large screens */}
+              {[
+                'Vodafone EG', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alamenda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
+              ].map((partner, i) => (
+                <div key={`p3-${i}`} className="glass-card" style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
