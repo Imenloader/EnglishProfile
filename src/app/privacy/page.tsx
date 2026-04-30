@@ -62,4 +62,3 @@ export default function PrivacyPage() {
     </main>
   );
 }
-旋

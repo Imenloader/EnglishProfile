@@ -26,8 +26,8 @@ export default function AboutPage() {
       <section style={{ padding: '12rem 0 6rem', textAlign: 'center' }}>
         <div className="container">
           <div data-aos="fade-up">
-            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px' }}>INSTITUTIONAL CORE</span>
-            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', color: 'white', marginTop: '2rem', fontFamily: 'var(--font-serif)' }}>Our Vision & Mission</h1>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px' }}>{t('institutionalCore')}</span>
+            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', color: 'white', marginTop: '2rem', fontFamily: 'var(--font-serif)' }}>{t('visionMission')}</h1>
           </div>
         </div>
       </section>
@@ -42,15 +42,15 @@ export default function AboutPage() {
           }}>
             <div data-aos="fade-right" style={{ background: 'rgba(255,255,255,0.03)', padding: '5rem', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <i className="fa-solid fa-eye" style={{ fontSize: '3rem', marginBottom: '2.5rem', color: 'var(--accent-gold)' }}></i>
-              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'white' }}>OUR VISION</span>
-              <h2 style={{ fontSize: '2.8rem', color: 'white' }}>Achieve Effortlessly</h2>
-              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'white' }}>Provide opportunities for language learners to unlock their full potentials and achieve their goals effortlessly.</p>
+              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'white' }}>{t('ourVision')}</span>
+              <h2 style={{ fontSize: '2.8rem', color: 'white' }}>{t('visionTitle')}</h2>
+              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'white' }}>{t('visionDesc')}</p>
             </div>
             <div data-aos="fade-left" style={{ background: 'rgba(255,255,255,0.03)', padding: '5rem', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <i className="fa-solid fa-bullseye" style={{ fontSize: '3rem', marginBottom: '2.5rem', color: 'var(--accent-gold)' }}></i>
-              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'white' }}>OUR MISSION</span>
-              <h2 style={{ fontSize: '2.8rem', color: 'white' }}>Lead and Support</h2>
-              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'white' }}>Support and lead the English learning community in Egypt through innovation and excellence.</p>
+              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'white' }}>{t('ourMission')}</span>
+              <h2 style={{ fontSize: '2.8rem', color: 'white' }}>{t('missionTitle')}</h2>
+              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'white' }}>{t('missionDesc')}</p>
             </div>
           </div>
         </div>
@@ -60,8 +60,8 @@ export default function AboutPage() {
       <section style={{ padding: '8rem 0', position: 'relative', overflow: 'hidden' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
-            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px' }}>LEARNING EVOLUTION</span>
-            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: 'white', marginTop: '1.5rem' }}>Your Professional Trajectory</h2>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px' }}>{t('learningEvolution')}</span>
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: 'white', marginTop: '1.5rem' }}>{t('professionalTrajectory')}</h2>
           </div>
 
           <div style={{ position: 'relative', height: '400px', width: '100%', maxWidth: '1000px', margin: '0 auto' }} data-aos="zoom-in">
@@ -71,12 +71,12 @@ export default function AboutPage() {
             </svg>
 
             {[
-              { id: 'A1', x: '5%', y: '87%', label: 'Beginner', desc: 'Foundation skills' },
-              { id: 'A2', x: '25%', y: '87%', label: 'Elementary', desc: 'Social basics' },
-              { id: 'B1', x: '40%', y: '50%', label: 'Intermediate', desc: 'Workplace ready' },
-              { id: 'B2', x: '65%', y: '50%', label: 'Upper-Int', desc: 'Professional fluency' },
-              { id: 'C1', x: '82%', y: '35%', label: 'Advanced', desc: 'Academic excellence' },
-              { id: 'C2', x: '95%', y: '12%', label: 'Mastery', desc: 'Native-level executive', star: true }
+              { id: 'A1', x: '5%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
+              { id: 'A2', x: '25%', y: '87%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
+              { id: 'B1', x: '40%', y: '50%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+              { id: 'B2', x: '65%', y: '50%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+              { id: 'C1', x: '82%', y: '35%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
+              { id: 'C2', x: '95%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
             ].map((m) => (
               <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
                 <div className="milestone-circle">

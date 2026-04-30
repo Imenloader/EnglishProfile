@@ -16,10 +16,15 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
+    let rafId: number;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      rafId = requestAnimationFrame(() => {
+        const isScrolled = window.scrollY > 50;
+        setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+      });
     };
-    window.addEventListener('scroll', handleScroll);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial check
 
     // Auth State
@@ -33,6 +38,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId);
       subscription.unsubscribe();
     };
   }, []);

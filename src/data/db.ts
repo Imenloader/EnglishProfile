@@ -42,6 +42,10 @@ const MOCK_SETTINGS: SiteSettings = {
   updatedAt: new Date(),
 };
 
+// Optimization: In-memory cache for site settings to prevent redundant Supabase calls
+let cachedSettings: SiteSettings | null = null;
+let settingsPromise: Promise<SiteSettings> | null = null;
+
 export const db = {
   // Leads
   getLeads: async (): Promise<Lead[]> => {
@@ -93,27 +97,47 @@ export const db = {
 
   // Settings
   getSettings: async (): Promise<SiteSettings> => {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*')
-        .eq('id', 1)
-        .single();
-      
-      if (error) throw error;
-      
-      return {
-        heroHeadlineEn: data.hero_headline_en,
-        heroHeadlineAr: data.hero_headline_ar,
-        heroSubheadlineEn: data.hero_subheadline_en,
-        heroSubheadlineAr: data.hero_subheadline_ar,
-        whatsappNumber: data.whatsapp_number,
-        contactEmail: data.contact_email
-      };
-    } catch (error) {
-      console.warn('⚠️ Fetching settings failed. Using Masterpiece fallback data.', error);
-      return MOCK_SETTINGS;
-    }
+    // If we have cached settings, return them immediately
+    if (cachedSettings) return cachedSettings;
+
+    // If a request is already in flight, wait for it
+    if (settingsPromise) return settingsPromise;
+
+    // Create a new promise for fetching settings
+    settingsPromise = (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('*')
+          .eq('id', 1)
+          .single();
+        
+        if (error) throw error;
+        
+        const settings: SiteSettings = {
+          id: '1',
+          heroHeadlineEn: data.hero_headline_en,
+          heroHeadlineAr: data.hero_headline_ar,
+          heroSubheadlineEn: data.hero_subheadline_en,
+          heroSubheadlineAr: data.hero_subheadline_ar,
+          whatsappNumber: data.whatsapp_number,
+          contactEmail: data.contact_email,
+          updatedAt: new Date(data.updated_at || Date.now())
+        };
+
+        cachedSettings = settings;
+        return settings;
+      } catch (error) {
+        console.warn('⚠️ Fetching settings failed. Using Masterpiece fallback data.', error);
+        return MOCK_SETTINGS;
+      } finally {
+        // Clear the promise once it's finished so next calls can refresh if needed
+        // though we check cachedSettings first
+        settingsPromise = null;
+      }
+    })();
+
+    return settingsPromise;
   },
 
   saveSettings: async (settings: SiteSettings) => {
@@ -131,6 +155,9 @@ export const db = {
         .eq('id', 1);
       
       if (error) throw error;
+      
+      // Update cache immediately on success
+      cachedSettings = settings;
     } catch (error) {
       console.error('❌ Updating settings failed:', error);
     }

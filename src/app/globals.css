@@ -169,6 +169,32 @@ p {
   color: white;
 }
 
+.btn {
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-master);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: var(--font-sans);
+}
+
+.btn-primary {
+  background: var(--primary-navy);
+  color: white;
+  box-shadow: 0 10px 20px rgba(1, 33, 105, 0.2);
+}
+
+.btn-primary:hover {
+  background: var(--accent-blue);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(1, 33, 105, 0.3);
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(50px); }

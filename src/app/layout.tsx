@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, Cormorant_Garamond, Montserrat } from "next/fo
 import "./globals.css";
 import "aos/dist/aos.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { UserProvider } from "@/contexts/UserContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -45,9 +46,11 @@ export default function RootLayout({
       </head>
       <body style={{ margin: 0 }}>
         <AOSInitializer />
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        <UserProvider>
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
+        </UserProvider>
       </body>
     </html>
   );

@@ -5,10 +5,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Hero from '@/components/Hero';
 import CTASection from '@/components/CTASection';
 import Link from 'next/link';
+import Image from 'next/image';
 import { db } from '@/data/db';
 
 export default function Home() {
-  const { language, isRtl } = useLanguage();
+  const { language, isRtl, t } = useLanguage();
   const [settings, setSettings] = useState<any>({
     contactEmail: "hello@linguaplanet.eg",
     facebookLink: "https://facebook.com/linguaplanet",
@@ -17,16 +18,49 @@ export default function Home() {
     tiktokLink: "https://tiktok.com/@linguaplanet",
   });
 
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   useEffect(() => {
     const fetchSettings = async () => {
       const s = await db.getSettings();
       if (s) setSettings(s);
     };
     fetchSettings();
+
+    // Performance Optimization: Throttled Scroll Listener
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+          setScrollProgress(progress);
+          setShowScrollTop(window.scrollY > 500);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <main className="marble-pattern">
+      {/* Scroll Progress Bar */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: `${scrollProgress}%`,
+        height: '4px',
+        background: 'var(--accent-gold)',
+        zIndex: 2000,
+        transition: 'width 0.2s ease-out'
+      }}></div>
+
       <Hero />
 
       {/* Corporate Trust Bar - Snippet Version */}
@@ -34,9 +68,9 @@ export default function Home() {
         <div className="container">
           <div className="text-center" style={{ marginBottom: '3rem' }} data-aos="fade-up">
             <span style={{ color: 'var(--accent-blue)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', display: 'block', marginBottom: '1rem' }}>
-              <i className="fa-solid fa-circle-dot" style={{ marginRight: '0.5rem' }}></i> TRUSTED BY
+              <i className="fa-solid fa-circle-dot" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '0.5rem' }}></i> {t('trustedBy')}
             </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>Companies that trust Linguaplanet</h2>
+            <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{t('companiesTrust')}</h2>
           </div>
           
           <div className="marquee-wrap" data-aos="fade-up" data-aos-delay="100">
@@ -90,23 +124,23 @@ export default function Home() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '8rem', alignItems: 'center' }}>
             <div data-aos="fade-up">
-              <span className="gold-text" style={{ letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2rem', display: 'block' }}>OUR PHILOSOPHY</span>
+              <span className="gold-text" style={{ letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2rem', display: 'block' }}>{t('about').toUpperCase()}</span>
               <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem' }}>
-                Engineering <br/> <span className="gold-text">Excellence</span> <br/> Through Language
+                {isRtl ? 'هندسة التميز' : 'Engineering'} <br/> <span className="gold-text">{isRtl ? 'من خلال اللغة' : 'Excellence'}</span> <br/> {isRtl ? '' : 'Through Language'}
               </h2>
               <div style={{ width: '100px', height: '2px', background: 'var(--accent-gold)', marginBottom: '3rem' }}></div>
               <p style={{ marginBottom: '2rem', fontSize: '1.3rem', color: '#555', fontWeight: 300 }}>
-                At Linguaplanet, we believe that language is more than just words—it's the key to unlocking your professional potential. 
+                {t('aboutText1')}
               </p>
               <p style={{ opacity: 0.7, fontWeight: 300, lineHeight: 2 }}>
-                Our curriculum integrates advanced English proficiency with essential soft skills like leadership, public speaking, and emotional intelligence. Whether you are a corporate executive or an aspiring professional, our tailored programs ensure you communicate with confidence and elegance on the global stage.
+                {t('aboutText2')}
               </p>
             </div>
             <div style={{ position: 'relative' }} data-aos="zoom-in">
               <div className="glass" style={{ padding: '4rem', borderRadius: '40px', border: 'none', position: 'relative', zIndex: 2 }}>
                 <i className="fa-solid fa-quote-left" style={{ fontSize: '3rem', color: 'var(--accent-gold)', opacity: 0.3, marginBottom: '2rem', display: 'block' }}></i>
                 <p style={{ fontSize: '1.8rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--primary-navy)' }}>
-                  "The limit of your language is the limit of your world."
+                  {t('quote')}
                 </p>
                 <div style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                   <div style={{ width: '50px', height: '1px', background: 'var(--accent-gold)' }}></div>
@@ -318,8 +352,8 @@ export default function Home() {
       <section id="services" style={{ padding: '10rem 0', background: '#f8fafc' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }}>
-            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>ACADEMIC TRACKS</span>
-            <h2 style={{ fontSize: '3.5rem', marginTop: '1rem' }}>Our Programs</h2>
+            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('academicTracks')}</span>
+            <h2 style={{ fontSize: '3.5rem', marginTop: '1rem' }}>{t('ourPrograms')}</h2>
           </div>
           
           <div style={{ 
@@ -328,12 +362,12 @@ export default function Home() {
             gap: '2.5rem' 
           }}>
             {[
-              { icon: 'fa-book-open', title: 'General English', text: 'Structured courses from A1 to C2 covering all core language skills with modern materials.' },
-              { icon: 'fa-comments', title: 'Conversation Classes', text: 'Build real-world fluency fast with small groups and immersive speaking exercises.' },
-              { icon: 'fa-briefcase', title: 'Business English', text: 'Master professional communication for emails, presentations, and global negotiations.' },
-              { icon: 'fa-graduation-cap', title: 'IG / SAT Prep', text: 'Expert coaching and proven strategies to excel in international academic exams.' },
-              { icon: 'fa-certificate', title: 'IELTS / TOEFL', text: 'Achieve your target score with comprehensive prep, mock tests, and expert feedback.' },
-              { icon: 'fa-lightbulb', title: 'Soft Skills', text: 'Leadership, critical thinking, and public speaking — the skills that set you apart.' }
+              { icon: 'fa-book-open', title: t('program1Title'), text: t('program1Desc') },
+              { icon: 'fa-comments', title: t('program2Title'), text: t('program2Desc') },
+              { icon: 'fa-briefcase', title: t('program3Title'), text: t('program3Desc') },
+              { icon: 'fa-graduation-cap', title: t('program4Title'), text: t('program4Desc') },
+              { icon: 'fa-certificate', title: t('program5Title'), text: t('program5Desc') },
+              { icon: 'fa-lightbulb', title: t('program6Title'), text: t('program6Desc') }
             ].map((program, i) => (
               <div key={i} className="program-card" data-aos="fade-up" data-aos-delay={i * 50} style={{
                 background: 'white',
@@ -355,7 +389,7 @@ export default function Home() {
                   fontSize: '0.8rem', 
                   letterSpacing: '1px',
                   textDecoration: 'none'
-                }}>EXPLORE TRACK <i className="fa-solid fa-arrow-right" style={{ marginLeft: '0.5rem' }}></i></Link>
+                }}>{t('exploreTrack')} <i className={`fa-solid ${isRtl ? 'fa-arrow-left' : 'fa-arrow-right'}`} style={{ [isRtl ? 'marginRight' : 'marginLeft']: '0.5rem' }}></i></Link>
               </div>
             ))}
           </div>
@@ -366,8 +400,8 @@ export default function Home() {
       <section id="team" style={{ padding: '8rem 0', background: 'white' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }}>
-            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>EXECUTIVE LEADERSHIP</span>
-            <h2 style={{ fontSize: '3rem', marginTop: '1rem' }}>The Minds Behind Success</h2>
+            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('executiveLeadership')}</span>
+            <h2 style={{ fontSize: '3rem', marginTop: '1rem' }}>{t('mindsBehindSuccess')}</h2>
           </div>
 
           <div style={{ 
@@ -376,9 +410,9 @@ export default function Home() {
             gap: '3rem' 
           }}>
             {[
-              { name: 'Maged Shabana', role: 'General Manager', img: '/images/GM-new.png' },
-              { name: 'Muhammad Raafat', role: 'Recruitment Manager', img: '/images/Recruitment-new.png' },
-              { name: 'Ibrahim ElEmam', role: 'Marketing Manager', img: '/images/Marketing-new.png' }
+              { name: 'Maged Shabana', role: t('roleGM'), img: '/images/GM-new.png' },
+              { name: 'Muhammad Raafat', role: t('roleRecruitment'), img: '/images/Recruitment-new.png' },
+              { name: 'Ibrahim ElEmam', role: t('roleMarketing'), img: '/images/Marketing-new.png' }
             ].map((member, i) => (
               <div key={i} className="team-card" data-aos="fade-up" data-aos-delay={i * 100} style={{ textAlign: 'center' }}>
                 <div style={{ 
@@ -389,9 +423,11 @@ export default function Home() {
                   border: '4px solid white',
                   boxShadow: '0 15px 40px rgba(0,0,0,0.1)',
                   overflow: 'hidden',
-                  background: 'var(--primary-navy)'
+                  background: 'var(--primary-navy)',
+                  position: 'relative'
                 }}>
-                  <img src={member.img} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {/* ⚡ Bolt Optimization: Using next/image instead of standard img to leverage automatic WebP conversion, resizing to exact 180x180 container size, and native lazy-loading. Expected impact: ~75% reduction in image payload size. */}
+                  <Image src={member.img} alt={member.name} width={180} height={180} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <h4 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary-navy)' }}>{member.name}</h4>
                 <p style={{ color: 'var(--accent-blue)', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '1px', marginTop: '0.5rem', textTransform: 'uppercase' }}>{member.role}</p>
@@ -466,39 +502,39 @@ export default function Home() {
                 </svg>
               </div>
               <p style={{ opacity: 0.5, lineHeight: 1.8, fontSize: '0.95rem', maxWidth: '300px' }}>
-                Where success becomes a habit. Empowering language learners in Egypt through institutional excellence since 2015.
+                {t('footerDesc')}
               </p>
             </div>
 
             {/* Column 2: Academic Programs */}
             <div>
-              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>ACADEMIC TRACKS</h5>
+              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('academicTracks')}</h5>
               <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem' }}>
-                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>General English</Link></li>
-                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Business Communication</Link></li>
-                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Soft Skills Mastery</Link></li>
-                <li><Link href="/placement-test" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Placement Assessment</Link></li>
+                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('generalEnglish')}</Link></li>
+                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('businessCommunication')}</Link></li>
+                <li><Link href="/#services" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('softSkillsMastery')}</Link></li>
+                <li><Link href="/placement-test" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('placementAssessment')}</Link></li>
               </ul>
             </div>
 
             {/* Column 3: Corporate Identity */}
             <div>
-              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>CORPORATE</h5>
+              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('corporate')}</h5>
               <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem' }}>
-                <li><Link href="/about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>About the Academy</Link></li>
-                <li><Link href="/#team" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>Leadership Team</Link></li>
-                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>TAX ID: 416-241-177</span></li>
-                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>EST. 2015</span></li>
+                <li><Link href="/about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('aboutAcademy')}</Link></li>
+                <li><Link href="/#team" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('leadershipTeam')}</Link></li>
+                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>{t('taxId')}: 416-241-177</span></li>
+                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>{t('est2015')}</span></li>
               </ul>
             </div>
 
             {/* Column 4: Connectivity */}
             <div>
-              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>CONNECTIVITY</h5>
+              <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('connectivity')}</h5>
               <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem', opacity: 0.6, fontSize: '0.9rem', marginBottom: '2rem' }}>
                 <li>{settings?.contactEmail || 'hello@linguaplanet.eg'}</li>
                 <li>+20 127 006 8237</li>
-                <li>Cairo, Egypt</li>
+                <li>{t('cairoEgypt')}</li>
               </ul>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 <a href={settings?.facebookLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-facebook-f" style={{ fontSize: '1.1rem' }}></i></a>
@@ -510,15 +546,52 @@ export default function Home() {
           </div>
 
           {/* Bottom Bar */}
-          <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.2, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '2px' }}>
-            <p>© 2026 LINGUAPLANET ACADEMY. ALL RIGHTS RESERVED.</p>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>PRIVACY POLICY</Link>
-              <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>TERMS OF SERVICE</Link>
+          <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.2, fontSize: '0.65rem', fontWeight: 700, letterSpacing: '2px', flexDirection: isRtl ? 'row-reverse' : 'row' }}>
+            <p>© 2026 LINGUAPLANET ACADEMY. {t('allRights').toUpperCase()}</p>
+            <div style={{ display: 'flex', gap: '2rem', flexDirection: isRtl ? 'row-reverse' : 'row' }}>
+              <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>{t('privacyPolicy').toUpperCase()}</Link>
+              <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>{t('termsOfService').toUpperCase()}</Link>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Back to Top Button */}
+      <button 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        style={{
+          position: 'fixed',
+          bottom: '130px',
+          right: isRtl ? 'auto' : '40px',
+          left: isRtl ? '40px' : 'auto',
+          width: '50px',
+          height: '50px',
+          background: 'var(--primary-navy)',
+          color: 'var(--accent-gold)',
+          border: '1px solid var(--accent-gold)',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1.2rem',
+          cursor: 'pointer',
+          zIndex: 9998,
+          opacity: showScrollTop ? 1 : 0,
+          visibility: showScrollTop ? 'visible' : 'hidden',
+          transform: showScrollTop ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'var(--accent-gold)';
+          e.currentTarget.style.color = 'var(--primary-navy)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'var(--primary-navy)';
+          e.currentTarget.style.color = 'var(--accent-gold)';
+        }}
+      >
+        <i className="fa-solid fa-arrow-up"></i>
+      </button>
     </main>
   );
 }

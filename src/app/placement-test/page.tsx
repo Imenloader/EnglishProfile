@@ -87,10 +87,11 @@ export default function PlacementTest() {
             
             <div style={{ background: 'rgba(255,255,255,0.03)', padding: '3rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '3rem' }}>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', lineHeight: 1.8 }}>
-                {t('congrats') ? t('congrats').replace('{name}', leadData.name).replace('{score}', score.toString()).replace('{total}', placementQuestions.length.toString()) : (isRtl 
-                  ? `تهانينا ${leadData.name}! لقد أظهرت كفاءة استثنائية. درجتك هي ${score} من ${placementQuestions.length}. بناءً على أدائك، نوصي بالمسار التالي:`
-                  : `Congratulations ${leadData.name}! You have demonstrated exceptional proficiency. Your score is ${score}/${placementQuestions.length}. Based on your performance, we recommend the following track:`
-                )}
+                {t('congrats')
+                  .replace('{name}', leadData.name)
+                  .replace('{score}', score.toString())
+                  .replace('{total}', placementQuestions.length.toString())
+                }
               </p>
               <h3 style={{ color: 'var(--accent-gold)', marginTop: '2rem', fontSize: '1.8rem' }}>
                 {level === 'A1' || level === 'A2' ? t('foundationTrack') : 
@@ -125,8 +126,11 @@ export default function PlacementTest() {
             height: '100%', 
             background: 'var(--accent-gold)', 
             boxShadow: '0 0 20px var(--accent-gold)',
-            transition: 'width 0.8        <div className="container" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.3)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px' }}>
-          <span>{t('part')} 0{currentPart} / {currentQuestion + 1}</span>
+            transition: 'width 0.8s ease'
+          }} />
+        </div>
+        <div className="container" style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", color: "rgba(255,255,255,0.3)", fontSize: "0.65rem", fontWeight: 800, letterSpacing: "2px" }}>
+          <span>{t('part')} {`0${currentPart}`} / {currentQuestion + 1}</span>
           <span>{progress}% {t('complete')}</span>
         </div>
       </div>

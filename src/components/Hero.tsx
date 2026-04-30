@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { db, SiteSettings } from '@/data/db';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Hero() {
   const { language, t, isRtl } = useLanguage();
@@ -16,7 +17,7 @@ export default function Hero() {
   });
 
   useEffect(() => {
-    setMounted(true);
+    setTimeout(() => setMounted(true), 0);
     const fetchSettings = async () => {
       const s = await db.getSettings();
       if (s) setSettings(s);
@@ -49,12 +50,29 @@ export default function Hero() {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundImage: `linear-gradient(to right, var(--primary-navy) 40%, transparent 100%), url("/images/hero.webp")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        opacity: 0.6,
-        zIndex: 1
-      }}></div>
+        zIndex: 1,
+        overflow: 'hidden'
+      }}>
+        {/* ⚡ Bolt Optimization: Replacing backgroundImage CSS with next/image for automatic WebP, 
+            resizing, and priority loading for LCP. Added a gradient overlay div for the fade effect. */}
+        <Image 
+          src="/images/hero.webp" 
+          alt="Linguaplanet Hero Background" 
+          fill 
+          priority 
+          quality={85}
+          style={{ objectFit: 'cover', opacity: 0.6 }}
+        />
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundImage: `linear-gradient(to ${isRtl ? 'left' : 'right'}, var(--primary-navy) 40%, transparent 100%)`,
+          zIndex: 2
+        }}></div>
+      </div>
 
       {/* Decorative Light Orbs */}
       <div className="float" style={{
