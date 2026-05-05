@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { supabase } from '@/lib/supabase';
+import { useUser } from '@/contexts/UserContext';
 
 interface NavbarProps {
   isDarkPage?: boolean;
@@ -13,7 +13,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   const { language, setLanguage, t, isRtl } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const { user, signOut } = useUser();
 
   useEffect(() => {
     let rafId: number;
@@ -27,16 +27,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial check
 
-    // Auth State
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    // Theme Check (SSR Safe)
+// Theme Check (SSR Safe)
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
@@ -45,7 +36,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(rafId);
-      subscription.unsubscribe();
+
     };
   }, []);
 
@@ -57,7 +48,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     setIsOpen(false);
   };
 
@@ -297,7 +288,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             </button>
 
             {/* ⚡ Bolt: Smart Drawer Links */}
-            {(user || user?.email === 'admin@linguaplanet.com') && (
+            {(user || (user as any)?.email === 'admin@linguaplanet.com') && (
               <div style={{ padding: '1rem', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '12px', marginBottom: '1rem' }}>
                 <span style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--accent-gold)', letterSpacing: '2px' }}>
                   {isRtl ? 'حسابك' : 'YOUR ACCOUNT'}
@@ -307,7 +298,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                     <i className="fa-solid fa-gauge-high" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem' }}></i>
                     {t('dashboard').toUpperCase()}
                   </Link>
-                  {user?.email === 'admin@linguaplanet.com' && (
+                  {((user as any)?.email === 'admin@linguaplanet.com') && (
                     <Link href="/admin" onClick={() => setIsOpen(false)} style={{ color: 'var(--accent-gold)', textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem' }}>
                       <i className="fa-solid fa-user-shield" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem' }}></i>
                       ADMIN PORTAL
