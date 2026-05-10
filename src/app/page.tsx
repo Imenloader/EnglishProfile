@@ -8,6 +8,7 @@ import CTASection from '@/components/CTASection';
 import Link from 'next/link';
 import Image from 'next/image';
 import { db } from '@/data/db';
+import { ScrollProgressBar, BackToTopButton } from '@/components/ScrollFeatures';
 
 export default function Home() {
   const { language, isRtl, t } = useLanguage();
@@ -19,49 +20,18 @@ export default function Home() {
     tiktokLink: "https://tiktok.com/@linguaplanet",
   });
 
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
   useEffect(() => {
     const fetchSettings = async () => {
       const s = await db.getSettings();
       if (s) setSettings(s);
     };
     fetchSettings();
-
-    // Performance Optimization: Throttled Scroll Listener
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-          setScrollProgress(progress);
-          setShowScrollTop(window.scrollY > 500);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <main className="marble-pattern">
       <Navbar />
-      {/* Scroll Progress Bar */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: `${scrollProgress}%`,
-        height: '4px',
-        background: 'var(--accent-gold)',
-        zIndex: 2000,
-        transition: 'width 0.2s ease-out'
-      }}></div>
+      <ScrollProgressBar />
 
       <Hero />
 
@@ -74,7 +44,7 @@ export default function Home() {
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{t('companiesTrust')}</h2>
           </div>
-          
+
           <div className="marquee-wrap" style={{ marginTop: '2rem' }}>
             <div className="marquee-track">
               {[
@@ -287,7 +257,7 @@ export default function Home() {
       <section style={{ padding: '8rem 0', background: 'white' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem' }}>
-            
+
             {/* Facing Challenges Box */}
             <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
               <div className="flex items-center gap-4 mb-6">
@@ -331,12 +301,12 @@ export default function Home() {
             <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('pillars').toUpperCase()}</span>
             <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--primary-navy)' }}>{t('valuesTitle')}</h2>
           </div>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '3rem', 
-            marginTop: '5rem' 
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '3rem',
+            marginTop: '5rem'
           }}>
             {[
               { icon: 'fa-medal', title: t('excellence'), text: t('excellenceDesc') },
@@ -377,11 +347,11 @@ export default function Home() {
             <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('academicTracks')}</span>
             <h2 style={{ fontSize: '3.5rem', marginTop: '1rem' }}>{t('ourPrograms')}</h2>
           </div>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-            gap: '2.5rem' 
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '2.5rem'
           }}>
             {[
               { icon: 'fa-book-open', title: t('program1Title'), text: t('program1Desc') },
@@ -403,12 +373,12 @@ export default function Home() {
                 </div>
                 <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>{program.title}</h3>
                 <p style={{ opacity: 0.6, lineHeight: 1.7 }}>{program.text}</p>
-                <Link href="#contact" style={{ 
-                  display: 'inline-block', 
-                  marginTop: '2rem', 
-                  color: 'var(--accent-blue)', 
-                  fontWeight: 800, 
-                  fontSize: '0.8rem', 
+                <Link href="#contact" style={{
+                  display: 'inline-block',
+                  marginTop: '2rem',
+                  color: 'var(--accent-blue)',
+                  fontWeight: 800,
+                  fontSize: '0.8rem',
                   letterSpacing: '1px',
                   textDecoration: 'none'
                 }}>{t('exploreTrack')} <i className={`fa-solid ${isRtl ? 'fa-arrow-left' : 'fa-arrow-right'}`} style={{ [isRtl ? 'marginRight' : 'marginLeft']: '0.5rem' }}></i></Link>
@@ -426,10 +396,10 @@ export default function Home() {
             <h2 style={{ fontSize: '3rem', marginTop: '1rem' }}>{t('mindsBehindSuccess')}</h2>
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-            gap: '3rem' 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '3rem'
           }}>
             {[
               { name: 'Maged Shabana', role: t('roleGM'), img: '/images/GM-new.png' },
@@ -437,10 +407,10 @@ export default function Home() {
               { name: 'Ibrahim ElEmam', role: t('roleMarketing'), img: '/images/Marketing-new.png' }
             ].map((member, i) => (
               <div key={i} className="team-card" data-aos="fade-up" data-aos-delay={i * 100} style={{ textAlign: 'center' }}>
-                <div style={{ 
-                  width: '180px', 
-                  height: '180px', 
-                  borderRadius: '50%', 
+                <div style={{
+                  width: '180px',
+                  height: '180px',
+                  borderRadius: '50%',
                   margin: '0 auto 2rem',
                   border: '4px solid white',
                   boxShadow: '0 15px 40px rgba(0,0,0,0.1)',
@@ -466,7 +436,7 @@ export default function Home() {
       <CTASection />
 
       {/* WhatsApp Floating Action Button */}
-      <a 
+      <a
         href={`https://wa.me/${settings?.whatsappNumber || '201270068237'}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -515,7 +485,7 @@ export default function Home() {
       <footer style={{ padding: '8rem 0 4rem', background: 'var(--primary-navy)', color: 'white', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '5rem', paddingBottom: '6rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            
+
             {/* Column 1: Brand & Identity */}
             <div style={{ gridColumn: 'span 1.5' }}>
               <div style={{ width: '60px', height: '60px', background: 'white', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2.5rem' }}>
@@ -578,42 +548,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Back to Top Button */}
-      <button 
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        style={{
-          position: 'fixed',
-          bottom: '130px',
-          right: isRtl ? 'auto' : '40px',
-          left: isRtl ? '40px' : 'auto',
-          width: '50px',
-          height: '50px',
-          background: 'var(--primary-navy)',
-          color: 'var(--accent-gold)',
-          border: '1px solid var(--accent-gold)',
-          borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '1.2rem',
-          cursor: 'pointer',
-          zIndex: 9998,
-          opacity: showScrollTop ? 1 : 0,
-          visibility: showScrollTop ? 'visible' : 'hidden',
-          transform: showScrollTop ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'var(--accent-gold)';
-          e.currentTarget.style.color = 'var(--primary-navy)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'var(--primary-navy)';
-          e.currentTarget.style.color = 'var(--accent-gold)';
-        }}
-      >
-        <i className="fa-solid fa-arrow-up"></i>
-      </button>
+      <BackToTopButton />
     </main>
   );
 }
