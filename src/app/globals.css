@@ -75,18 +75,55 @@ p {
 
 /* Layout */
 .section-padding {
-  padding: clamp(6rem, 15vw, 12rem) 0;
+  padding: clamp(4rem, 10vw, 10rem) 0;
 }
 
 .container {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 4rem;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 2.5rem;
+  }
 }
 
 @media (max-width: 768px) {
   .container {
     padding: 0 1.5rem;
+  }
+}
+
+/* Responsive Grid Utilities */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 2rem;
+}
+
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .grid-2-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack-mobile {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .stack-mobile {
+    flex-direction: column;
   }
 }
 

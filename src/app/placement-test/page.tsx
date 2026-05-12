@@ -64,7 +64,6 @@ export default function PlacementTest() {
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data: { user } } = await supabase.auth.getUser();
     
     const { data: lead, error: leadError } = await supabase
       .from('leads')
@@ -76,8 +75,7 @@ export default function PlacementTest() {
         total_questions: placementQuestions.length,
         level: currentLevel,
         writing_response: writingResponse,
-        age_range: ageRange,
-        user_id: user?.id
+        age_range: ageRange
       }])
       .select()
       .single();

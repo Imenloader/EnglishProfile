@@ -144,7 +144,7 @@ export default function Home() {
       {/* The Manifesto / About */}
       <section id="about" className="section-padding">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '8rem', alignItems: 'center' }}>
+          <div className="grid-responsive" style={{ gap: 'clamp(3rem, 10vw, 8rem)', alignItems: 'center' }}>
             <div data-aos="fade-up">
               <span className="gold-text" style={{ letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2rem', display: 'block' }}>{t('about').toUpperCase()}</span>
               <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem' }}>
@@ -286,7 +286,7 @@ export default function Home() {
       {/* Trust & Challenges Nodes */}
       <section style={{ padding: '8rem 0', background: 'white' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem' }}>
+          <div className="grid-responsive" style={{ gap: '3rem' }}>
             
             {/* Facing Challenges Box */}
             <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
@@ -332,9 +332,7 @@ export default function Home() {
             <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--primary-navy)' }}>{t('valuesTitle')}</h2>
           </div>
           
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          <div className="grid-responsive" style={{ 
             gap: '3rem', 
             marginTop: '5rem' 
           }}>
@@ -378,9 +376,7 @@ export default function Home() {
             <h2 style={{ fontSize: '3.5rem', marginTop: '1rem' }}>{t('ourPrograms')}</h2>
           </div>
           
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+          <div className="grid-responsive" style={{ 
             gap: '2.5rem' 
           }}>
             {[
@@ -426,9 +422,7 @@ export default function Home() {
             <h2 style={{ fontSize: '3rem', marginTop: '1rem' }}>{t('mindsBehindSuccess')}</h2>
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          <div className="grid-responsive" style={{ 
             gap: '3rem' 
           }}>
             {[

@@ -30,9 +30,7 @@ export default function CTASection() {
   return (
     <section id="contact" className="section-padding" style={{ position: 'relative', overflow: 'hidden', direction: isRtl ? 'rtl' : 'ltr', background: 'white' }}>
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        <div className="grid-responsive" style={{ 
           gap: '3rem',
           alignItems: 'stretch' 
         }}>

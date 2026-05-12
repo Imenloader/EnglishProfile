@@ -35,9 +35,7 @@ export default function AboutPage() {
       {/* 02: Vision & Mission Cards */}
       <section style={{ padding: '4rem 0' }}>
         <div className="container">
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+          <div className="grid-responsive" style={{ 
             gap: '3rem'
           }}>
             <div data-aos="fade-right" style={{ background: 'rgba(255,255,255,0.03)', padding: '5rem', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -190,8 +188,8 @@ function AboutContactForm({ onSave, t }: { onSave: any, t: any }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '2.5rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+    <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '2rem' }}>
+      <div className="grid-2-col" style={{ gap: '2rem' }}>
         <div className="form-group">
           <label className="form-label">{t('yourName')}</label>
           <input 
@@ -216,7 +214,7 @@ function AboutContactForm({ onSave, t }: { onSave: any, t: any }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div className="grid-2-col" style={{ gap: '2rem' }}>
         <div className="form-group">
           <label className="form-label">{t('phone') || 'PHONE'}</label>
           <input 

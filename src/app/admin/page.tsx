@@ -30,7 +30,6 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('analytics');
   const [leads, setLeads] = useState<any[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedLead, setSelectedLead] = useState<any>(null);
   const [isEditingQuestion, setIsEditingQuestion] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<Partial<Question>>({
@@ -76,14 +75,6 @@ export default function AdminDashboard() {
           .select('*')
           .order('part', { ascending: true });
         if (!qError) setQuestions(q || []);
-      }
-
-      if (activeTab === 'profiles') {
-        const { data: p, error: pError } = await supabase
-          .from('profiles')
-          .select('*')
-          .order('created_at', { ascending: false });
-        if (!pError) setProfiles(p || []);
       }
     } catch (error) {
       console.error("Dashboard failed to fetch data:", error);
@@ -197,7 +188,6 @@ export default function AdminDashboard() {
           {[
             { id: 'analytics', label: 'ANALYTICS', icon: 'fa-chart-line' },
             { id: 'leads', label: 'STUDENT LEADS', icon: 'fa-users' },
-            { id: 'profiles', label: 'USER PROFILES', icon: 'fa-id-card' },
             { id: 'content', label: 'CONTENT MANAGER', icon: 'fa-pen-to-square' },
             { id: 'test', label: 'TEST MANAGER', icon: 'fa-list-check' }
           ].map(item => (
@@ -299,26 +289,7 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {activeTab === 'profiles' && (
-            <div className="glass-card" style={{ padding: '2rem', background: 'white' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', color: 'var(--primary-navy)' }}>
-                <thead>
-                  <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--soft-gray)' }}>
-                    <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>STUDENT NAME</th>
-                    <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>JOINED DATE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {profiles.map(p => (
-                    <tr key={p.id} style={{ borderBottom: '1px solid var(--soft-gray)' }}>
-                      <td style={{ padding: '1.5rem', fontWeight: 800 }}>{p.full_name}</td>
-                      <td style={{ padding: '1.5rem', opacity: 0.4 }}>{p.created_at.split('T')[0]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+
 
           {activeTab === 'content' && (
             <form onSubmit={handleSettingsSave} className="glass-card" style={{ padding: '4rem', background: 'white', borderRadius: '32px', color: 'var(--primary-navy)' }}>

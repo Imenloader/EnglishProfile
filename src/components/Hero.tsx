@@ -100,7 +100,7 @@ export default function Hero() {
               {t('worldClassAcademy')}
             </span>
             <h1 style={{ 
-              fontSize: 'clamp(3.5rem, 8vw, 6.5rem)', 
+              fontSize: 'clamp(2.5rem, 10vw, 6.5rem)', 
               color: 'white',
               lineHeight: 0.95,
               marginBottom: '2.5rem',
@@ -132,7 +132,7 @@ export default function Hero() {
       </div>
 
       {/* Side Label */}
-      <div style={{
+      <div className="hidden-mobile" style={{
         position: 'absolute',
         right: '4rem',
         bottom: '4rem',
