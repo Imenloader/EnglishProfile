@@ -110,7 +110,7 @@ export default function AdminDashboard() {
         'Email': l.email,
         'Phone': l.phone || 'N/A',
         'Score': `${l.score}/${l.total_questions}`,
-        'Percentage': `${Math.round((l.score / l.total_questions) * 100)}%`,
+        'Percentage': `${l.total_questions > 0 ? Math.round((l.score / l.total_questions) * 100) : 0}%`,
         'CEFR Level': l.level,
         'Age Range': (l.age_range || 'N/A').toUpperCase(),
         'Date': l.created_at.split('T')[0],
