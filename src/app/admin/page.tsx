@@ -103,47 +103,83 @@ export default function AdminDashboard() {
 
       const workbook = XLSX.utils.book_new();
       
-      // 1. Students Summary Sheet (with Writing Response)
+      // 1. MASTER STUDENTS SUMMARY (High-level overview)
       const summaryData = (leadsData || []).map(l => ({
+        'ID': l.id.slice(0, 8),
         'Student Name': l.name,
         'Email': l.email,
         'Phone': l.phone || 'N/A',
         'Score': `${l.score}/${l.total_questions}`,
+        'Percentage': `${Math.round((l.score / l.total_questions) * 100)}%`,
         'CEFR Level': l.level,
         'Age Range': (l.age_range || 'N/A').toUpperCase(),
-        'Writing Response': l.writing_response || 'No response provided',
         'Date': l.created_at.split('T')[0],
         'Time': l.created_at.split('T')[1].split('.')[0]
       }));
-      const leadsSheet = XLSX.utils.json_to_sheet(summaryData);
-      XLSX.utils.book_append_sheet(workbook, leadsSheet, "Students Summary");
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
-      // 2. Detailed Answers Sheet
-      const detailData = (answersData || []).map(a => ({
-        'Student Name': a.student_name,
-        'Question': a.question_text,
-        'Student Answer': a.student_answer,
-        'Correct Answer': a.correct_answer,
-        'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
-        'Date': a.created_at.split('T')[0]
+      // 2. STUDENT-QUESTION MATRIX (Deep Granular Tracking)
+      // This creates a grid where rows are students and columns are individual questions
+      const uniqueQuestions = Array.from(new Set((answersData || []).map(a => a.question_text)));
+      const matrixData = (leadsData || []).map(l => {
+        const studentAnswers = (answersData || []).filter(a => a.lead_id === l.id);
+        const row: any = {
+          'Student Name': l.name,
+          'Total Score': l.score,
+          'Level': l.level
+        };
+        uniqueQuestions.forEach(q => {
+          const ans = studentAnswers.find(a => a.question_text === q);
+          row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
+        });
+        return row;
+      });
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Student-Question Matrix");
+
+      // 3. QUESTION DIFFICULTY ANALYSIS (Curriculum Insights)
+      const questionAnalysis = uniqueQuestions.map(q => {
+        const relevantAnswers = (answersData || []).filter(a => a.question_text === q);
+        const correctCount = relevantAnswers.filter(a => a.is_correct).length;
+        const totalAttempts = relevantAnswers.length;
+        return {
+          'Question Text': q,
+          'Total Attempts': totalAttempts,
+          'Correct Answers': correctCount,
+          'Success Rate (%)': totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0,
+          'Difficulty Rating': totalAttempts === 0 ? 'N/A' : (correctCount / totalAttempts > 0.7 ? 'EASY' : correctCount / totalAttempts > 0.4 ? 'MODERATE' : 'HARD')
+        };
+      }).sort((a, b) => a['Success Rate (%)'] - b['Success Rate (%)']);
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(questionAnalysis), "Question Difficulty");
+
+      // 4. DEDICATED WRITING ASSESSMENT PORTAL
+      const writingData = (leadsData || []).filter(l => l.writing_response).map(l => ({
+        'Student Name': l.name,
+        'Email': l.email,
+        'CEFR (Predicted)': l.level,
+        'Writing Content': l.writing_response,
+        'Instructor Grade': '',
+        'Instructor Comments': '',
+        'Status': 'PENDING REVIEW'
       }));
-      const answersSheet = XLSX.utils.json_to_sheet(detailData);
-      XLSX.utils.book_append_sheet(workbook, answersSheet, "Detailed Answers");
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(writingData), "Writing Review Portal");
 
-      // 3. Performance Summary (Analytics)
+      // 5. CEFR LEVEL DISTRIBUTION (Institutional Stats)
       const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-      const performanceData = levels.map(lvl => ({
-        'CEFR Level': lvl,
-        'Student Count': (leadsData || []).filter(l => l.level === lvl).length,
-        'Percentage': leadsData?.length ? `${Math.round(((leadsData || []).filter(l => l.level === lvl).length / leadsData.length) * 100)}%` : '0%'
-      }));
-      const performanceSheet = XLSX.utils.json_to_sheet(performanceData);
-      XLSX.utils.book_append_sheet(workbook, performanceSheet, "Performance Analytics");
+      const cefrStats = levels.map(lvl => {
+        const matchingLeads = (leadsData || []).filter(l => l.level === lvl);
+        return {
+          'CEFR Level': lvl,
+          'Count': matchingLeads.length,
+          'Percentage': leadsData?.length ? `${Math.round((matchingLeads.length / leadsData.length) * 100)}%` : '0%',
+          'Average Score': matchingLeads.length ? Math.round(matchingLeads.reduce((a, b) => a + (b.score || 0), 0) / matchingLeads.length) : 0
+        };
+      });
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cefrStats), "Level Distribution");
 
-      XLSX.writeFile(workbook, `Linguaplanet_Master_Export_${new Date().toISOString().split('T')[0]}.xlsx`);
+      XLSX.writeFile(workbook, `LINGUAPLANET_ULTIMATE_EXPORT_${new Date().toISOString().split('T')[0]}.xlsx`);
     } catch (error) {
-      console.error("Excel export failed:", error);
-      alert("Failed to generate Excel file.");
+      console.error("Ultimate Excel export failed:", error);
+      alert("Failed to generate advanced Excel file.");
     }
   };
 
