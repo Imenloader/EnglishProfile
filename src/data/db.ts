@@ -24,6 +24,7 @@ export interface SiteSettings {
   linkedinLink?: string;
   tiktokLink?: string;
   updatedAt: Date;
+  webhookUrl?: string;
 }
 
 // Fallback data in case of connection failure
@@ -40,6 +41,7 @@ const MOCK_SETTINGS: SiteSettings = {
   linkedinLink: "https://linkedin.com/company/linguaplanet",
   tiktokLink: "https://tiktok.com/@linguaplanet",
   updatedAt: new Date(),
+  webhookUrl: "",
 };
 
 // Optimization: In-memory cache for site settings to prevent redundant Supabase calls
@@ -122,7 +124,8 @@ export const db = {
           heroSubheadlineAr: data.hero_subheadline_ar,
           whatsappNumber: data.whatsapp_number,
           contactEmail: data.contact_email,
-          updatedAt: new Date(data.updated_at || Date.now())
+          updatedAt: new Date(data.updated_at || Date.now()),
+          webhookUrl: data.webhook_url || ""
         };
 
         cachedSettings = settings;
@@ -150,7 +153,8 @@ export const db = {
           hero_subheadline_en: settings.heroSubheadlineEn,
           hero_subheadline_ar: settings.heroSubheadlineAr,
           whatsapp_number: settings.whatsappNumber,
-          contact_email: settings.contactEmail
+          contact_email: settings.contactEmail,
+          webhook_url: settings.webhookUrl
         })
         .eq('id', 1);
       

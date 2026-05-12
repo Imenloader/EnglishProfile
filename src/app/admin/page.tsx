@@ -6,6 +6,10 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import { useLanguage } from '@/contexts/LanguageContext';
 import * as XLSX from 'xlsx';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  AreaChart, Area, Cell, PieChart, Pie
+} from 'recharts';
 
 interface Question {
   id: string;
@@ -48,7 +52,8 @@ export default function AdminDashboard() {
     heroSubheadlineAr: '',
     whatsappNumber: '',
     contactEmail: '',
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    webhookUrl: ''
   });
 
   useEffect(() => {
@@ -98,18 +103,22 @@ export default function AdminDashboard() {
 
       const workbook = XLSX.utils.book_new();
       
+      // 1. Students Summary Sheet (with Writing Response)
       const summaryData = (leadsData || []).map(l => ({
         'Student Name': l.name,
         'Email': l.email,
         'Phone': l.phone || 'N/A',
         'Score': `${l.score}/${l.total_questions}`,
         'CEFR Level': l.level,
-        'Age Range': l.age_range || 'N/A',
-        'Date': l.created_at.split('T')[0]
+        'Age Range': (l.age_range || 'N/A').toUpperCase(),
+        'Writing Response': l.writing_response || 'No response provided',
+        'Date': l.created_at.split('T')[0],
+        'Time': l.created_at.split('T')[1].split('.')[0]
       }));
       const leadsSheet = XLSX.utils.json_to_sheet(summaryData);
       XLSX.utils.book_append_sheet(workbook, leadsSheet, "Students Summary");
 
+      // 2. Detailed Answers Sheet
       const detailData = (answersData || []).map(a => ({
         'Student Name': a.student_name,
         'Question': a.question_text,
@@ -120,6 +129,16 @@ export default function AdminDashboard() {
       }));
       const answersSheet = XLSX.utils.json_to_sheet(detailData);
       XLSX.utils.book_append_sheet(workbook, answersSheet, "Detailed Answers");
+
+      // 3. Performance Summary (Analytics)
+      const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+      const performanceData = levels.map(lvl => ({
+        'CEFR Level': lvl,
+        'Student Count': (leadsData || []).filter(l => l.level === lvl).length,
+        'Percentage': leadsData?.length ? `${Math.round(((leadsData || []).filter(l => l.level === lvl).length / leadsData.length) * 100)}%` : '0%'
+      }));
+      const performanceSheet = XLSX.utils.json_to_sheet(performanceData);
+      XLSX.utils.book_append_sheet(workbook, performanceSheet, "Performance Analytics");
 
       XLSX.writeFile(workbook, `Linguaplanet_Master_Export_${new Date().toISOString().split('T')[0]}.xlsx`);
     } catch (error) {
@@ -234,20 +253,78 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="glass-card" style={{ padding: '4rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
-                <h3 style={{ marginBottom: '3rem', fontSize: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Proficiency Distribution</h3>
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2rem', height: '300px', paddingBottom: '2rem' }}>
-                  {['A1', 'A2', 'B1', 'B2', 'C1/C2'].map(lvl => {
-                    const count = leads.filter(l => l.level === lvl || (lvl === 'C1/C2' && (l.level === 'C1' || l.level === 'C2'))).length;
-                    const height = leads.length > 0 ? (count / leads.length) * 100 : 0;
-                    return (
-                      <div key={lvl} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                        <div style={{ color: 'var(--accent-gold)', fontWeight: 800, fontSize: '0.8rem' }}>{count}</div>
-                        <div style={{ width: '100%', height: `${Math.max(height, 2)}%`, background: 'var(--navy-gradient)', borderRadius: '8px 8px 0 0', transition: 'height 1s ease' }}></div>
-                        <div style={{ fontWeight: 800, fontSize: '0.7rem', opacity: 0.4, color: 'var(--primary-navy)' }}>{lvl}</div>
-                      </div>
-                    );
-                  })}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
+                <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Proficiency Distribution</h3>
+                  <div style={{ height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => ({
+                        name: lvl,
+                        count: leads.filter(l => l.level === lvl || (lvl === 'C1/C2' && (l.level === 'C1' || l.level === 'C2'))).length
+                      }))}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700 }} />
+                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                        <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                        <Bar dataKey="count" fill="var(--accent-gold)" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Daily Leads Volume</h3>
+                  <div style={{ height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={Array.from({ length: 7 }).map((_, i) => {
+                        const d = new Date();
+                        d.setDate(d.getDate() - (6 - i));
+                        const dateStr = d.toISOString().split('T')[0];
+                        return {
+                          date: dateStr.split('-').slice(1).join('/'),
+                          count: leads.filter(l => l.created_at.startsWith(dateStr)).length
+                        };
+                      })}>
+                        <defs>
+                          <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                        <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                        <Tooltip />
+                        <Area type="monotone" dataKey="count" stroke="var(--accent-blue)" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Age Range Distribution</h3>
+                <div style={{ height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={['kids', 'teens', 'adults'].map(age => ({
+                          name: age.toUpperCase(),
+                          value: leads.filter(l => l.age_range === age).length
+                        }))}
+                        cx="50%" cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {['var(--accent-gold)', 'var(--accent-blue)', 'var(--primary-navy)'].map((color, index) => (
+                          <Cell key={`cell-${index}`} fill={color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
@@ -309,6 +386,22 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
+              
+              <div style={{ borderTop: '1px solid var(--soft-gray)', paddingTop: '3rem', marginTop: '1rem' }}>
+                <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>WEBHOOK INTEGRATION</h4>
+                <div style={{ marginBottom: '2rem' }}>
+                  <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4, color: 'var(--primary-navy)' }}>NOTIFICATIONS WEBHOOK URL (ZAPIER / MAKE / SLACK)</label>
+                  <input 
+                    type="url" 
+                    placeholder="https://hooks.zapier.com/..."
+                    value={settings.webhookUrl || ''} 
+                    onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })} 
+                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, color: 'var(--primary-navy)' }} 
+                  />
+                  <p style={{ marginTop: '1rem', fontSize: '0.75rem', opacity: 0.5 }}>New leads will be POSTed to this URL in real-time.</p>
+                </div>
+              </div>
+
               <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>PUBLISH ALL CHANGES</button>
             </form>
           )}

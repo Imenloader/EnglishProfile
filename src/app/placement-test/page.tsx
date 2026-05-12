@@ -22,6 +22,8 @@ export default function PlacementTest() {
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
   const [detailedAnswers, setDetailedAnswers] = useState<any[]>([]);
+  const [honeypot, setHoneypot] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -65,34 +67,80 @@ export default function PlacementTest() {
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const { data: lead, error: leadError } = await supabase
-      .from('leads')
-      .insert([{
-        name: leadData.name,
-        email: leadData.email,
-        phone: leadData.phone,
-        score: score,
-        total_questions: placementQuestions.length,
-        level: currentLevel,
-        writing_response: writingResponse,
-        age_range: ageRange
-      }])
-      .select()
-      .single();
-    
-    if (!leadError && lead) {
-      // Save detailed answers
-      const answersToSave = detailedAnswers.map(ans => ({
-        lead_id: lead.id,
-        student_name: leadData.name,
-        ...ans
-      }));
-      await supabase.from('lead_answers').insert(answersToSave);
+    // Technical Robustness: Honeypot check
+    if (honeypot) {
+      console.warn("Spam detected via honeypot.");
+      setIsFinished(true);
+      return;
     }
 
-    setShowLeadForm(false);
-    setLevel(currentLevel);
-    setIsFinished(true);
+    // Technical Robustness: Simple Rate Limit (prevent multiple submissions within 5 mins)
+    const lastSubmission = localStorage.getItem('last_test_submission');
+    if (lastSubmission && Date.now() - parseInt(lastSubmission) < 5 * 60 * 1000) {
+      alert(isRtl ? 'لقد قمت بإرسال اختبار مؤخراً. يرجى الانتظار قليلاً.' : 'You have recently submitted a test. Please wait a few minutes.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const { data: lead, error: leadError } = await supabase
+        .from('leads')
+        .insert([{
+          name: leadData.name,
+          email: leadData.email,
+          phone: leadData.phone,
+          score: score,
+          total_questions: placementQuestions.length,
+          level: currentLevel,
+          writing_response: writingResponse,
+          age_range: ageRange
+        }])
+        .select()
+        .single();
+      
+      if (!leadError && lead) {
+        // Save detailed answers
+        const answersToSave = detailedAnswers.map(ans => ({
+          lead_id: lead.id,
+          student_name: leadData.name,
+          ...ans
+        }));
+        await supabase.from('lead_answers').insert(answersToSave);
+
+        // ⚡ Webhook Integration: Trigger external notification
+        const settings = await db.getSettings();
+        if (settings?.webhookUrl) {
+          fetch(settings.webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event: 'new_lead',
+              lead: {
+                id: lead.id,
+                name: lead.name,
+                email: lead.email,
+                phone: lead.phone,
+                score: `${score}/${placementQuestions.length}`,
+                level: currentLevel,
+                age: ageRange,
+                writing: writingResponse,
+                timestamp: new Date().toISOString()
+              }
+            })
+          }).catch(err => console.error("Webhook failed:", err));
+        }
+      }
+
+      localStorage.setItem('last_test_submission', Date.now().toString());
+      setShowLeadForm(false);
+      setLevel(currentLevel);
+      setIsFinished(true);
+    } catch (error) {
+      console.error("Submission failed:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!mounted) return <div style={{ background: 'var(--primary-navy)', minHeight: '100vh' }}></div>;
@@ -178,6 +226,16 @@ export default function PlacementTest() {
                     onChange={(e) => setLeadData({ ...leadData, name: e.target.value })}
                   />
                 </div>
+                {/* Honeypot field - Invisible to humans */}
+                <div style={{ display: 'none' }}>
+                  <input 
+                    type="text" 
+                    value={honeypot} 
+                    onChange={(e) => setHoneypot(e.target.value)} 
+                    tabIndex={-1} 
+                    autoComplete="off" 
+                  />
+                </div>
                 <div className="form-group">
                   <label className="immortal-label">{t('emailAddress').toUpperCase()}</label>
                   <input 
@@ -222,8 +280,9 @@ export default function PlacementTest() {
                     fontSize: '0.8rem'
                   }}></i>
                 </div>
-                <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
-                  {t('generateReport')} <i className="fa-solid fa-bolt" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
+                <button type="submit" disabled={isSubmitting} className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center', opacity: isSubmitting ? 0.7 : 1 }}>
+                  {isSubmitting ? (isRtl ? 'جاري الإرسال...' : 'SUBMITTING...') : t('generateReport')} 
+                  {!isSubmitting && <i className="fa-solid fa-bolt" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>}
                 </button>
               </form>
             </div>
