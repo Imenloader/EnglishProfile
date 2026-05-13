@@ -127,7 +127,7 @@ export default function Home() {
           <div className="grid-responsive" style={{ gap: 'clamp(3rem, 10vw, 8rem)', alignItems: 'center' }}>
             <div data-aos="fade-up">
               <span className="gold-text" style={{ letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2rem', display: 'block' }}>{t('about').toUpperCase()}</span>
-              <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem', color: 'var(--primary-navy)' }} dangerouslySetInnerHTML={{ __html: t('aboutHeadline') }}></h2>
+              <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem', color: 'var(--text-color)' }} dangerouslySetInnerHTML={{ __html: t('aboutHeadline') }}></h2>
               <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: 'var(--text-color-muted)', marginBottom: '4rem', maxWidth: '600px' }}>
                 {t('aboutDescription')}
               </p>
@@ -152,7 +152,7 @@ export default function Home() {
                       <i className={`fa-solid ${item.icon}`} style={{ color: 'var(--accent-gold)', fontSize: '1.2rem' }}></i>
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--primary-navy)', marginBottom: '0.5rem' }}>{item.title}</h4>
+                      <h4 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-color)', marginBottom: '0.5rem' }}>{item.title}</h4>
                       <p style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>{item.desc}</p>
                     </div>
                   </div>
@@ -262,10 +262,10 @@ export default function Home() {
               }
             ].map((node, i) => (
               <div key={i} className="card-premium" style={{ borderTop: '4px solid var(--accent-gold)' }} data-aos="fade-up" data-aos-delay={i * 50}>
-                <div style={{ width: '60px', height: '60px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
-                  <i className={`fa-solid ${node.icon}`} style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
+                <div style={{ width: '60px', height: '60px', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
+                  <i className={`fa-solid ${node.icon}`} style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
                 </div>
-                <h3 style={{ fontSize: '1.6rem', marginBottom: '1.5rem', color: 'var(--primary-navy)' }}>{node.title}</h3>
+                <h3 style={{ fontSize: '1.6rem', marginBottom: '1.5rem', color: 'var(--text-color)' }}>{node.title}</h3>
                 <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1rem' }}>
                   {node.bullets.map((bullet, j) => (
                     <li key={j} style={{ display: 'flex', gap: '1rem', opacity: 0.7, fontSize: '0.95rem', lineHeight: 1.4 }}>
@@ -286,7 +286,7 @@ export default function Home() {
           <div className="grid-responsive" style={{ gap: '3rem' }}>
             
             {/* Facing Challenges Box */}
-            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
+            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-right">
               <div className="flex items-center gap-4 mb-6">
                 <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <i className="fa-solid fa-triangle-exclamation" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
@@ -317,8 +317,8 @@ export default function Home() {
               <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--primary-navy)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
                 {t('safeHandsDesc3')}
               </p>
-              <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <i className="fa-solid fa-shield-halved" style={{ color: 'var(--primary-navy)' }}></i>
+              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <i className="fa-solid fa-shield-halved" style={{ color: 'var(--accent-gold)' }}></i>
                 <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--text-color)' }}>{t('institutionalGuarantee')}</span>
               </div>
             </div>
