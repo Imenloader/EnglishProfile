@@ -418,38 +418,85 @@ export default function AdminDashboard() {
           {activeTab === 'content' && (
             <form onSubmit={handleSettingsSave} className="glass-card" style={{ padding: '4rem', background: 'white', borderRadius: '32px', color: 'var(--primary-navy)' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', marginBottom: '3rem' }}>
+                {/* English Content */}
                 <div>
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>GLOBAL (EN)</h4>
                   <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4, color: 'var(--primary-navy)' }}>HERO HEADLINE</label>
-                    <input type="text" value={settings.heroHeadlineEn} onChange={(e) => setSettings({ ...settings, heroHeadlineEn: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>HERO HEADLINE</label>
+                    <input type="text" value={settings.heroHeadlineEn} onChange={(e) => setSettings({ ...settings, heroHeadlineEn: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600 }} />
+                  </div>
+                  <div style={{ marginBottom: '2rem' }}>
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>HERO SUBHEADLINE</label>
+                    <textarea value={settings.heroSubheadlineEn} onChange={(e) => setSettings({ ...settings, heroSubheadlineEn: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, resize: 'none' }} />
                   </div>
                 </div>
+
+                {/* Arabic Content */}
                 <div style={{ direction: 'rtl' }}>
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>المحتوى العربي (AR)</h4>
                   <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4, color: 'var(--primary-navy)' }}>العنوان الرئيسي</label>
-                    <input type="text" value={settings.heroHeadlineAr} onChange={(e) => setSettings({ ...settings, heroHeadlineAr: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>العنوان الرئيسي</label>
+                    <input type="text" value={settings.heroHeadlineAr} onChange={(e) => setSettings({ ...settings, heroHeadlineAr: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600 }} />
+                  </div>
+                  <div style={{ marginBottom: '2rem' }}>
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>العنوان الفرعي</label>
+                    <textarea value={settings.heroSubheadlineAr} onChange={(e) => setSettings({ ...settings, heroSubheadlineAr: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, resize: 'none' }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact & Socials */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--soft-gray)', marginBottom: '3rem' }}>
+                <div>
+                  <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>CONTACT INFO</h4>
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>WHATSAPP NUMBER</label>
+                    <input type="text" value={settings.whatsappNumber} onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                  </div>
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>CONTACT EMAIL</label>
+                    <input type="email" value={settings.contactEmail} onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>SOCIAL CHANNELS</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>FACEBOOK</label>
+                      <input type="text" value={settings.facebookLink || ''} onChange={(e) => setSettings({ ...settings, facebookLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>INSTAGRAM</label>
+                      <input type="text" value={settings.instagramLink || ''} onChange={(e) => setSettings({ ...settings, instagramLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>LINKEDIN</label>
+                      <input type="text" value={settings.linkedinLink || ''} onChange={(e) => setSettings({ ...settings, linkedinLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>TIKTOK</label>
+                      <input type="text" value={settings.tiktokLink || ''} onChange={(e) => setSettings({ ...settings, tiktokLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                    </div>
                   </div>
                 </div>
               </div>
               
-              <div style={{ borderTop: '1px solid var(--soft-gray)', paddingTop: '3rem', marginTop: '1rem' }}>
-                <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>WEBHOOK INTEGRATION</h4>
+              <div style={{ borderTop: '1px solid var(--soft-gray)', paddingTop: '3rem', marginTop: '1rem', marginBottom: '3rem' }}>
+                <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>AUTOMATION</h4>
                 <div style={{ marginBottom: '2rem' }}>
-                  <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4, color: 'var(--primary-navy)' }}>NOTIFICATIONS WEBHOOK URL (ZAPIER / MAKE / SLACK)</label>
+                  <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>NOTIFICATIONS WEBHOOK URL (ZAPIER / MAKE)</label>
                   <input 
                     type="url" 
                     placeholder="https://hooks.zapier.com/..."
                     value={settings.webhookUrl || ''} 
                     onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })} 
-                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, color: 'var(--primary-navy)' }} 
+                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600 }} 
                   />
-                  <p style={{ marginTop: '1rem', fontSize: '0.75rem', opacity: 0.5 }}>New leads will be POSTed to this URL in real-time.</p>
                 </div>
               </div>
 
-              <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>PUBLISH ALL CHANGES</button>
+              <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>PUBLISH ALL CHANGES TO LIVE SITE</button>
             </form>
           )}
 

@@ -124,6 +124,10 @@ export const db = {
           heroSubheadlineAr: data.hero_subheadline_ar,
           whatsappNumber: data.whatsapp_number,
           contactEmail: data.contact_email,
+          facebookLink: data.facebook_link,
+          instagramLink: data.instagram_link,
+          linkedinLink: data.linkedin_link,
+          tiktokLink: data.tiktok_link,
           updatedAt: new Date(data.updated_at || Date.now()),
           webhookUrl: data.webhook_url || ""
         };
@@ -154,6 +158,10 @@ export const db = {
           hero_subheadline_ar: settings.heroSubheadlineAr,
           whatsapp_number: settings.whatsappNumber,
           contact_email: settings.contactEmail,
+          facebook_link: settings.facebookLink,
+          instagram_link: settings.instagramLink,
+          linkedin_link: settings.linkedinLink,
+          tiktok_link: settings.tiktokLink,
           webhook_url: settings.webhookUrl
         })
         .eq('id', 1);
