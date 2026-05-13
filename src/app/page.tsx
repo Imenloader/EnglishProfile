@@ -77,181 +77,153 @@ export default function Home() {
           
           <div className="marquee-wrap" style={{ marginTop: '2rem' }}>
             <div className="marquee-track">
-              {[
-                'Vodafone EG', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alamenda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
-              ].map((partner, i) => (
-                <div key={`p1-${i}`} className="glass-card" style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '200px',
-                  height: '100px',
-                  borderRadius: '16px',
-                  filter: 'grayscale(100%)',
-                  flexShrink: 0
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.filter = 'grayscale(0%)'}
-                onMouseLeave={(e) => e.currentTarget.style.filter = 'grayscale(100%)'}
-                >
-                  <span style={{ fontWeight: 800, color: '#64748b', fontSize: '0.9rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
-                </div>
-              ))}
-              {/* Duplicate 1 for infinite loop */}
-              {[
-                'Vodafone EG', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alamenda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
-              ].map((partner, i) => (
-                <div key={`p2-${i}`} className="glass-card" style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '200px',
-                  height: '100px',
-                  borderRadius: '16px',
-                  filter: 'grayscale(100%)',
-                  flexShrink: 0
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.filter = 'grayscale(0%)'}
-                onMouseLeave={(e) => e.currentTarget.style.filter = 'grayscale(100%)'}
-                >
-                  <span style={{ fontWeight: 800, color: '#64748b', fontSize: '0.9rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
-                </div>
-              ))}
-              {/* Duplicate 2 for absolute continuity on large screens */}
-              {[
-                'Vodafone EG', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alamenda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
-              ].map((partner, i) => (
-                <div key={`p3-${i}`} className="glass-card" style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '200px',
-                  height: '100px',
-                  borderRadius: '16px',
-                  filter: 'grayscale(100%)',
-                  flexShrink: 0
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.filter = 'grayscale(0%)'}
-                onMouseLeave={(e) => e.currentTarget.style.filter = 'grayscale(100%)'}
-                >
-                  <span style={{ fontWeight: 800, color: '#64748b', fontSize: '0.9rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
-                </div>
-              ))}
+              {(() => {
+                const partners = [
+                  'Vodafone', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alameda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
+                ];
+                // Multiply the partners array to ensure enough content for the infinite scroll marquee
+                const triplePartners = [...partners, ...partners, ...partners];
+                
+                return triplePartners.map((partner, i) => (
+                  <div key={`${partner}-${i}`} className="glass-card" style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '220px',
+                    height: '120px',
+                    padding: '1.5rem',
+                    borderRadius: '20px',
+                    filter: 'grayscale(100%)',
+                    flexShrink: 0,
+                    transition: 'all 0.4s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.filter = 'grayscale(0%)';
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.filter = 'grayscale(100%)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                  >
+                    <div style={{ width: '40px', height: '40px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <i className="fa-solid fa-building" style={{ opacity: 0.2 }}></i>
+                    </div>
+                    <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '0.85rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
+                  </div>
+                ));
+              })()}
             </div>
           </div>
         </div>
       </section>
 
-      {/* The Manifesto / About */}
-      <section id="about" className="section-padding">
+      {/* 01: The Manifesto / About */}
+      <section id="about" style={{ padding: '10rem 0', background: 'white' }}>
         <div className="container">
           <div className="grid-responsive" style={{ gap: 'clamp(3rem, 10vw, 8rem)', alignItems: 'center' }}>
             <div data-aos="fade-up">
               <span className="gold-text" style={{ letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2rem', display: 'block' }}>{t('about').toUpperCase()}</span>
-              <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem' }}>
-                {isRtl ? 'هندسة التميز' : 'Engineering'} <br/> <span className="gold-text">{isRtl ? 'من خلال اللغة' : 'Excellence'}</span> <br/> {isRtl ? '' : 'Through Language'}
-              </h2>
-              <div style={{ width: '100px', height: '2px', background: 'var(--accent-gold)', marginBottom: '3rem' }}></div>
-              <p style={{ marginBottom: '2rem', fontSize: '1.3rem', color: '#555', fontWeight: 300 }}>
-                {t('aboutText1')}
+              <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem', color: 'var(--primary-navy)' }} dangerouslySetInnerHTML={{ __html: t('aboutHeadline') }}></h2>
+              <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: '#4b5563', marginBottom: '4rem', maxWidth: '600px' }}>
+                {t('aboutDescription')}
               </p>
-              <p style={{ opacity: 0.7, fontWeight: 300, lineHeight: 2 }}>
-                {t('aboutText2')}
-              </p>
+              
+              <div style={{ display: 'grid', gap: '2.5rem' }}>
+                {[
+                  { title: t('pillar1Title'), desc: t('pillar1Desc'), icon: 'fa-star' },
+                  { title: t('pillar2Title'), desc: t('pillar2Desc'), icon: 'fa-tags' },
+                  { title: t('pillar3Title'), desc: t('pillar3Desc'), icon: 'fa-lightbulb' }
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }} data-aos="fade-up" data-aos-delay={i * 100}>
+                    <div style={{ 
+                      width: '48px', 
+                      height: '48px', 
+                      background: 'rgba(197, 160, 89, 0.1)', 
+                      borderRadius: '12px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <i className={`fa-solid ${item.icon}`} style={{ color: 'var(--accent-gold)', fontSize: '1.2rem' }}></i>
+                    </div>
+                    <div>
+                      <h4 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--primary-navy)', marginBottom: '0.5rem' }}>{item.title}</h4>
+                      <p style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             <div style={{ position: 'relative' }} data-aos="zoom-in">
-              <div className="glass" style={{ padding: '4rem', borderRadius: '40px', border: 'none', position: 'relative', zIndex: 2 }}>
-                <i className="fa-solid fa-quote-left" style={{ fontSize: '3rem', color: 'var(--accent-gold)', opacity: 0.3, marginBottom: '2rem', display: 'block' }}></i>
-                <p style={{ fontSize: '1.8rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--primary-navy)' }}>
-                  {t('quote')}
-                </p>
-                <div style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                  <div style={{ width: '50px', height: '1px', background: 'var(--accent-gold)' }}></div>
-                  <span style={{ letterSpacing: '2px', fontSize: '0.7rem', fontWeight: 800 }}>LUDWIG WITTGENSTEIN</span>
-                </div>
+              <div style={{ borderRadius: '40px', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.1)' }}>
+                <Image 
+                  src="/images/about-vision.webp" 
+                  alt="Linguaplanet Vision" 
+                  width={600} 
+                  height={800} 
+                  style={{ width: '100%', height: 'auto', display: 'block' }} 
+                />
               </div>
-              {/* Decorative Background Element */}
               <div style={{
                 position: 'absolute',
-                top: '-20px',
-                right: '-20px',
+                top: '30px',
+                right: isRtl ? 'auto' : '-30px',
+                left: isRtl ? '-30px' : 'auto',
                 width: '100%',
                 height: '100%',
-                border: '1px solid var(--accent-gold)',
+                border: '2px solid var(--accent-gold)',
                 borderRadius: '40px',
-                zIndex: 1
+                zIndex: -1
               }}></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 01: Mastery Pillars (Bento Grid) - Responsive */}
-      <section id="standards" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
+      {/* 02: Core Values & Vision/Mission */}
+      <section id="values" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
-            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>{t('operationalExcellence')}</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginTop: '1.5rem', color: 'white', fontFamily: 'var(--font-serif)' }}>{t('standardsTitle')}</h2>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>{t('ourValues')}</span>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginTop: '1.5rem', color: 'white', fontFamily: 'var(--font-serif)' }}>{t('valuesSubtitle')}</h2>
           </div>
 
-          <div className="bento-grid-container">
-            {/* 01: Quality Assurance */}
-            <div className="bento-item span-8 glass-dark" data-aos="fade-up">
-              <div className="bento-content">
-                <span className="pillar-tag">01 / {t('qualityAssurance')}</span>
-                <h3 style={{ fontSize: '2.5rem', fontWeight: 600 }}>{t('eliteAcademicRigor')}</h3>
-                <ul className="pillar-list" style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.8)' }}>
-                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> {t('qa1')}</li>
-                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> {t('qa2')}</li>
-                  <li><i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)' }}></i> {t('qa3')}</li>
-                </ul>
+          <div className="grid-responsive" style={{ gap: '2rem' }}>
+            {[
+              { title: t('value1Title'), value: t('value1Desc'), icon: 'fa-award' },
+              { title: t('value2Title'), value: t('value2Desc'), icon: 'fa-arrows-spin' },
+              { title: t('value3Title'), value: t('value3Desc'), icon: 'fa-handshake-angle' }
+            ].map((value, i) => (
+              <div key={i} className="glass-dark" style={{ padding: '4rem', borderRadius: '32px', textAlign: 'center' }} data-aos="fade-up" data-aos-delay={i * 100}>
+                <div style={{ fontSize: '3rem', color: 'var(--accent-gold)', marginBottom: '2rem' }}>
+                  <i className={`fa-solid ${value.icon}`}></i>
+                </div>
+                <h3 style={{ color: 'white', fontSize: '1.8rem', marginBottom: '1.5rem' }}>{value.title}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem' }}>{value.value}</p>
               </div>
-            </div>
+            ))}
+          </div>
 
-            {/* 02: Flexible Scheduling */}
-            <div className="bento-item span-4 gold-pillar" data-aos="fade-up" data-aos-delay="100">
-              <div className="bento-content dark-text">
-                <span className="pillar-tag-dark" style={{ color: 'var(--primary-navy)', opacity: 0.4 }}>02 / {t('flexibilityTitle')}</span>
-                <h3 style={{ color: 'var(--primary-navy)', fontSize: '2rem' }}>{t('adaptiveDelivery')}</h3>
-                <p style={{ color: 'var(--primary-navy)', opacity: 0.9, fontWeight: 500 }}>
-                  {t('flexibilityDesc')}
-                </p>
-              </div>
+          {/* Integrated Vision & Mission */}
+          <div className="grid-2-col" style={{ marginTop: '6rem', gap: '3rem' }}>
+            <div className="glass-dark" style={{ padding: '4.5rem', borderRadius: '40px' }} data-aos="fade-right">
+              <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('ourVision')}</span>
+              <h3 style={{ color: 'white', fontSize: '2.5rem', margin: '1.5rem 0' }}>{t('visionTitle')}</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', lineHeight: 1.8 }}>{t('visionDesc')}</p>
             </div>
-
-            {/* 03: Transparent Pricing */}
-            <div className="bento-item span-4 glass-dark" data-aos="fade-up" data-aos-delay="200">
-              <div className="bento-content">
-                <span className="pillar-tag">03 / {t('pricingTitle')}</span>
-                <h3 style={{ fontSize: '2rem' }}>{t('transparentInvestment')}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>
-                  {t('pricingDesc')}
-                </p>
-              </div>
-            </div>
-
-            {/* 04: Reporting & Follow-up */}
-            <div className="bento-item span-5 glass-dark" data-aos="fade-up" data-aos-delay="300">
-              <div className="bento-content">
-                <span className="pillar-tag">04 / {t('trackingTitle')}</span>
-                <h3 style={{ fontSize: '2rem' }}>{t('reportingFollowup')}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>
-                  {t('trackingDesc')}
-                </p>
-              </div>
-            </div>
-
-            {/* 05: Guarantees */}
-            <div className="bento-item span-3 glass-dark" data-aos="fade-up" data-aos-delay="400">
-              <div className="bento-content">
-                <span className="pillar-tag">05 / {t('guaranteesTitle')}</span>
-                <h3 style={{ fontSize: '1.8rem' }}>{t('institutionalSupport')}</h3>
-                <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.6)' }}>
-                  {t('guaranteesDesc')}
-                </p>
-              </div>
+            <div className="glass-dark" style={{ padding: '4.5rem', borderRadius: '40px' }} data-aos="fade-left">
+              <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('ourMission')}</span>
+              <h3 style={{ color: 'white', fontSize: '2.5rem', margin: '1.5rem 0' }}>{t('missionTitle')}</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', lineHeight: 1.8 }}>{t('missionDesc')}</p>
             </div>
           </div>
         </div>
+      </section>
 
         <style jsx>{`
           .bento-grid-container {
@@ -284,7 +256,7 @@ export default function Home() {
       </section>
 
       {/* Trust & Challenges Nodes */}
-      <section style={{ padding: '8rem 0', background: 'white' }}>
+      <section style={{ padding: '8rem 0', background: '#fdfcfb' }}>
         <div className="container">
           <div className="grid-responsive" style={{ gap: '3rem' }}>
             
@@ -314,6 +286,12 @@ export default function Home() {
               <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
                 {t('safeHandsDesc')}
               </p>
+              <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
+                {t('safeHandsDesc2')}
+              </p>
+              <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--primary-navy)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
+                {t('safeHandsDesc3')}
+              </p>
               <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <i className="fa-solid fa-shield-check" style={{ color: 'var(--primary-navy)' }}></i>
                 <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--primary-navy)' }}>{t('institutionalGuarantee')}</span>
@@ -324,44 +302,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 02: Our Values - From Snippet */}
-      <section id="values" style={{ padding: '8rem 0', background: '#fdfcfb' }}>
-        <div className="container text-center">
-          <div data-aos="fade-up">
-            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('pillars').toUpperCase()}</span>
-            <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--primary-navy)' }}>{t('valuesTitle')}</h2>
+      {/* 02: Why Choose Us (Why LinguaPlanet?) */}
+      <section id="why-us" style={{ padding: '10rem 0', background: 'white' }}>
+        <div className="container">
+          <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>{t('whyChooseUs')}</span>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginTop: '1.5rem', color: 'var(--primary-navy)', fontFamily: 'var(--font-serif)' }}>{t('whyLinguaPlanet')}</h2>
           </div>
-          
-          <div className="grid-responsive" style={{ 
-            gap: '3rem', 
-            marginTop: '5rem' 
-          }}>
+
+          <div className="grid-responsive" style={{ gap: '2.5rem' }}>
             {[
-              { icon: 'fa-medal', title: t('excellence'), text: t('excellenceDesc') },
-              { icon: 'fa-shield-halved', title: t('integrity'), text: t('integrityDesc') },
-              { icon: 'fa-lightbulb', title: t('innovation'), text: t('innovationDesc') }
-            ].map((value, i) => (
-              <div key={i} className="value-card" data-aos="fade-up" data-aos-delay={i * 100} style={{
-                padding: '3.5rem',
-                background: 'white',
-                borderRadius: '32px',
-                boxShadow: '0 10px 40px rgba(0,0,0,0.03)',
-                transition: 'all 0.4s ease'
-              }}>
-                <div style={{
-                  width: '70px',
-                  height: '70px',
-                  background: 'rgba(10, 17, 40, 0.05)',
-                  borderRadius: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.8rem',
-                  color: 'var(--primary-navy)',
-                  margin: '0 auto 2rem'
-                }}><i className={`fa-solid ${value.icon}`}></i></div>
-                <h3 style={{ fontSize: '1.6rem', color: 'var(--primary-navy)' }}>{value.title}</h3>
-                <p style={{ marginTop: '1rem', opacity: 0.6, lineHeight: 1.6 }}>{value.text}</p>
+              { 
+                title: t('qualityTitle'), 
+                bullets: [t('qualityBullet1'), t('qualityBullet2'), t('qualityBullet3')], 
+                icon: 'fa-gem' 
+              },
+              { 
+                title: t('flexibilityTitle'), 
+                bullets: [t('flexibilityBullet1'), t('flexibilityBullet2')], 
+                icon: 'fa-clock-rotate-left' 
+              },
+              { 
+                title: t('pricingTitle'), 
+                bullets: [t('pricingBullet1'), t('pricingBullet2'), t('pricingBullet3')], 
+                icon: 'fa-wallet' 
+              },
+              { 
+                title: t('reportingTitle'), 
+                bullets: [t('reportingBullet1'), t('reportingBullet2'), t('reportingBullet3')], 
+                icon: 'fa-chart-line' 
+              },
+              { 
+                title: t('guaranteesTitle'), 
+                bullets: [t('guaranteesBullet1'), t('guaranteesBullet2'), t('guaranteesBullet3')], 
+                icon: 'fa-shield-check' 
+              }
+            ].map((node, i) => (
+              <div key={i} className="card-premium" style={{ borderTop: '4px solid var(--accent-gold)' }} data-aos="fade-up" data-aos-delay={i * 50}>
+                <div style={{ width: '60px', height: '60px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
+                  <i className={`fa-solid ${node.icon}`} style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
+                </div>
+                <h3 style={{ fontSize: '1.6rem', marginBottom: '1.5rem', color: 'var(--primary-navy)' }}>{node.title}</h3>
+                <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1rem' }}>
+                  {node.bullets.map((bullet, j) => (
+                    <li key={j} style={{ display: 'flex', gap: '1rem', opacity: 0.7, fontSize: '0.95rem', lineHeight: 1.4 }}>
+                      <i className="fa-solid fa-circle-check" style={{ color: 'var(--accent-gold)', marginTop: '3px' }}></i>
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -427,10 +416,9 @@ export default function Home() {
           }}>
             {[
               { name: 'Maged Shabana', role: t('roleGM'), img: '/images/GM-new.png' },
-              { name: 'Muhammad Raafat', role: t('roleRecruitment'), img: '/images/Recruitment-new.png' },
+              { name: 'Muhammad Raafat', role: 'Recruitment and Talent Acquisition Manager', img: '/images/Recruitment-new.png' },
               { name: 'Ibrahim ElEmam', role: t('roleMarketing'), img: '/images/Marketing-new.png' }
             ].map((member, i) => (
-              <div key={i} className="team-card" data-aos="fade-up" data-aos-delay={i * 100} style={{ textAlign: 'center' }}>
                 <div style={{ 
                   width: '180px', 
                   height: '180px', 
@@ -442,7 +430,6 @@ export default function Home() {
                   background: 'var(--primary-navy)',
                   position: 'relative'
                 }}>
-                  {/* ⚡ Bolt Optimization: Using next/image instead of standard img to leverage automatic WebP conversion, resizing to exact 180x180 container size, and native lazy-loading. Expected impact: ~75% reduction in image payload size. */}
                   <Image src={member.img} alt={member.name} width={180} height={180} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <h4 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary-navy)' }}>{member.name}</h4>
@@ -455,6 +442,86 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* 06: The Mastery Journey (CEFR Path) */}
+      <section id="trajectory" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
+        <div className="container">
+          <div style={{ position: 'relative', height: '400px', width: '100%', maxWidth: '1000px', margin: '0 auto' }} data-aos="zoom-in">
+            <svg viewBox="0 0 1000 400" fill="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+              <path d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="rgba(255,255,255,0.05)" strokeWidth="12" strokeLinecap="round" />
+              <path className="journey-path" d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" strokeDasharray="1000" strokeDashoffset="1000" />
+            </svg>
+
+            {[
+              { id: 'A1', x: '5%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
+              { id: 'A2', x: '25%', y: '87%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
+              { id: 'B1', x: '40%', y: '50%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+              { id: 'B2', x: '65%', y: '50%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+              { id: 'C1', x: '82%', y: '35%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
+              { id: 'C2', x: '95%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+            ].map((m) => (
+              <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
+                <div className="milestone-circle">
+                  {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
+                  <div className="milestone-tooltip">
+                    <span style={{ fontWeight: 800, color: 'var(--accent-gold)', display: 'block', fontSize: '0.9rem' }}>{m.id} / {m.label}</span>
+                    <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8, color: 'white' }}>{m.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style jsx>{`
+          .journey-path {
+            animation: path-reveal 3s ease-out forwards;
+          }
+          @keyframes path-reveal {
+            to { stroke-dashoffset: 0; }
+          }
+          .milestone-circle {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justifyContent: center;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+          }
+          .milestone-circle:hover {
+            background: var(--accent-gold);
+            color: var(--primary-navy);
+            transform: scale(1.2);
+          }
+          .milestone-tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--primary-navy);
+            padding: 1.5rem;
+            border-radius: 15px;
+            width: 200px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+          }
+          .milestone-circle:hover .milestone-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+        `}</style>
       </section>
 
       <CTASection />
@@ -537,7 +604,7 @@ export default function Home() {
             <div>
               <h5 style={{ color: 'var(--accent-gold)', marginBottom: '2.5rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('corporate')}</h5>
               <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem' }}>
-                <li><Link href="/about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('aboutAcademy')}</Link></li>
+                <li><Link href="/#about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('aboutAcademy')}</Link></li>
                 <li><Link href="/#team" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('leadershipTeam')}</Link></li>
                 <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>{t('taxId')}: 416-241-177</span></li>
                 <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>{t('est2015')}</span></li>

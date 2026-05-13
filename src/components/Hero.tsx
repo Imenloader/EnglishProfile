@@ -30,8 +30,10 @@ export default function Hero() {
     return <section style={{ minHeight: '100vh', backgroundColor: 'var(--primary-navy)' }}></section>;
   }
 
-  const headline = language === 'en' ? settings.heroHeadlineEn : settings.heroHeadlineAr;
-  const subheadline = language === 'en' ? settings.heroSubheadlineEn : settings.heroSubheadlineAr;
+  const headline = language === 'en' ? 'Where success becomes a habit' : 'حيث يصبح النجاح عادة';
+  const subheadline = language === 'en' 
+    ? 'Empowering language learners in Egypt with ground-breaking teaching methods that unlock your full potential.' 
+    : 'تمكين متعلمي اللغة في مصر بطرق تدريس مبتكرة تطلق العنان لإمكاناتك الكاملة.';
 
   return (
     <section style={{
@@ -53,8 +55,6 @@ export default function Hero() {
         zIndex: 1,
         overflow: 'hidden'
       }}>
-        {/* ⚡ Bolt Optimization: Replacing backgroundImage CSS with next/image for automatic WebP, 
-            resizing, and priority loading for LCP. Added a gradient overlay div for the fade effect. */}
         <Image 
           src="/images/hero.webp" 
           alt="Linguaplanet Hero Background" 
@@ -100,9 +100,9 @@ export default function Hero() {
               {t('worldClassAcademy')}
             </span>
             <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 10vw, 6.5rem)', 
+              fontSize: 'clamp(2.5rem, 10vw, 6rem)', 
               color: 'white',
-              lineHeight: 0.95,
+              lineHeight: 1.1,
               marginBottom: '2.5rem',
               fontFamily: 'var(--font-serif)'
             }}>
@@ -119,13 +119,10 @@ export default function Hero() {
               {subheadline}
             </p>
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-              <Link href="/placement-test" className="btn-master btn-gold">
+              <Link href="/placement-test" className="btn-master btn-gold" style={{ padding: '1.2rem 2.5rem' }}>
                 {t('startAssessment')}
                 <i className="fa-solid fa-arrow-right-long" style={{ fontSize: '1.2rem', transform: isRtl ? 'rotate(180deg)' : 'none', [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
               </Link>
-              <a href="/about" className="btn-master btn-white" style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'transparent', color: 'white' }}>
-                {t('learnMore')}
-              </a>
             </div>
           </div>
         </div>

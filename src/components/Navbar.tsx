@@ -97,26 +97,38 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               <path fill="#012169" d="M1782.58,1279.59c-201.86,148.03-411.38,220.51-628.43,217.17v-212.36c-17.78,12.22-35.43,24.32-53.09,36.05v173.71c-66.67-10-128.65-27.9-185.69-53.83-97.17,60.13-190.14,113.34-276.56,158.65,131,93.46,282.49,140.01,454.72,140.01,144.7,0,281.87-40.37,411.38-121.12,117.78-77.41,216.19-183.47,295.45-318.04l-17.78-20.25ZM735.97,1319.84c-23.33-22.35-45.43-46.67-66.42-72.97,132.97-112.85,201.99-171.62,207.05-176.68,62.1-68.89,93.22-154.82,93.22-257.42V297.92l131.24-108.65v1021.91c17.66-12.1,35.31-24.45,53.09-36.92v-419.53l408.91,12.47,133.59-232.11-290.14-7.41,197.54-198.9,7.16-7.28,151.12-152.23-9.14-21.48-5.93-13.95c-3.33,0-5.93.86-7.66,2.59h-27.78c-79.14,0-154.82-10.12-227.05-30.37-106.06-28.52-192.73-63.96-260.02-106.06l-494.6,393.85v585.47c0,18.52-.49,35.31-1.36,50.5-.74,15.19-2.1,28.64-3.7,40.37-8.4,45.31-37.9,90.87-88.4,136.3-29.38-43.95-54.2-89.88-74.33-137.91-12.47-29.88-23.21-60.5-31.98-91.98-21.73-76.79-32.59-158.28-32.59-244.58,0-68.89,12.22-135.32,36.42-199.39,52.1-138.03,160.26-264.95,324.59-381.01l-22.59-38.03c-178.41,96.05-309.65,202.98-393.73,320.51-38.52,52.23-69.51,108.15-92.97,167.91-37.41,94.45-56.05,198.28-56.05,311.62,0,89.02,11.36,172.73,34.32,251.13,9.14,31.85,20.37,62.84,33.46,92.97,9.38,21.85,19.75,43.09,31.11,63.95v.12c34.45,63.21,78.15,122.35,130.75,177.29,12.96,13.46,26.3,26.3,39.76,38.52,81.73-42.1,169.52-91.49,261.5-147.42-31.24-20.49-60.62-44.08-88.4-70.37ZM1154.15,219.52c82.97,48.64,171.86,84.82,266.68,107.91,15.93,4.07,31.98,7.53,48.15,10.74,14.32,2.96,29.01,5.31,43.58,7.65l-78.52,79.02-279.89,281.99V219.52Z" />
             </svg>
           </div>
-          <span className="nav-brand-text" style={{ 
-            fontSize: scrolled ? 'clamp(1rem, 3vw, 1.4rem)' : 'clamp(1.2rem, 4vw, 1.8rem)', 
-            fontWeight: 900, 
-            color: textColor,
-            letterSpacing: '2px',
-            transition: 'all 0.5s ease',
-            fontFamily: 'var(--font-serif)'
-          }}>LINGUAPLANET</span>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span className="nav-brand-text" style={{ 
+              fontSize: scrolled ? 'clamp(1rem, 2.5vw, 1.3rem)' : 'clamp(1.1rem, 3vw, 1.6rem)', 
+              fontWeight: 900, 
+              color: textColor,
+              letterSpacing: '2px',
+              transition: 'all 0.5s ease',
+              fontFamily: 'var(--font-serif)',
+              lineHeight: 1
+            }}>LINGUAPLANET</span>
+            <span style={{ 
+              fontSize: '0.6rem', 
+              color: textColor, 
+              opacity: 0.7, 
+              letterSpacing: '1px',
+              marginTop: '4px',
+              fontWeight: 500,
+              textTransform: 'uppercase'
+            }}>{t('tagline')}</span>
+          </div>
         </Link>
 
         {/* Desktop Interface */}
         <div className="hidden-mobile" style={{
           display: 'flex',
-          gap: '3rem',
+          gap: 'clamp(1.5rem, 4vw, 4rem)',
           alignItems: 'center',
           flexDirection: isRtl ? 'row-reverse' : 'row'
         }}>
           {(() => {
             const navItems = [
-              { name: t('about'), href: '/about' },
+              { name: t('about'), href: '/#about' },
               { name: t('programs'), href: '/#services' },
               { name: t('team'), href: '/#team' },
               { name: t('placementTest'), href: '/placement-test' },
@@ -130,9 +142,9 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 style={{
                   textDecoration: 'none',
                   color: textColor,
-                  fontSize: '0.75rem',
+                  fontSize: '0.7rem',
                   fontWeight: 700,
-                  letterSpacing: '3px',
+                  letterSpacing: '2px',
                   textTransform: 'uppercase',
                   transition: 'all 0.4s ease',
                   opacity: scrolled ? 1 : 0.85,
@@ -146,47 +158,44 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               </Link>
             ));
           })()}
-          
-          <button
-            onClick={toggleTheme}
-            style={{
-              background: 'none',
-              border: `1px solid ${scrolled ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)'}`,
-              color: textColor,
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            <i className="fa-solid fa-moon"></i>
-          </button>
+          {/* Desktop CTAs */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', [isRtl ? 'marginRight' : 'marginLeft']: 'auto' }}>
+            <button 
+              onClick={toggleLanguage}
+              style={{ 
+                background: scrolled ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)', 
+                border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
+                color: textColor,
+                padding: '0.5rem 0.8rem',
+                borderRadius: '10px',
+                fontWeight: 700,
+                fontSize: '0.7rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              {language.toUpperCase()}
+            </button>
 
-          <button
-            onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
-            style={{
-              background: (scrolled && !isDarkPage) ? 'var(--primary-navy)' : 'rgba(255,255,255,0.1)',
-              border: 'none',
-              color: 'white',
-              padding: '0.7rem 1.4rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.7rem',
-              fontWeight: 800,
-              letterSpacing: '1px',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            {language === 'en' ? 'AR' : 'EN'}
-          </button>
-
-          <Link href="/placement-test" className="btn-master btn-gold" style={{ padding: '0.6rem 1.2rem', fontSize: '0.65rem' }}>
-            {t('startFreeTest').toUpperCase()}
-          </Link>
+            <button
+              onClick={toggleTheme}
+              style={{
+                background: 'none',
+                border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
+                color: textColor,
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <i className="fa-solid fa-moon"></i>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Command Toggle */}
