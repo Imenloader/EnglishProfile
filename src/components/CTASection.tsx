@@ -28,7 +28,7 @@ export default function CTASection() {
   }, []);
 
   return (
-    <section id="contact" className="section-padding" style={{ position: 'relative', overflow: 'hidden', direction: isRtl ? 'rtl' : 'ltr', background: 'white' }}>
+    <section id="contact" className="section-padding" style={{ position: 'relative', overflow: 'hidden', direction: isRtl ? 'rtl' : 'ltr', background: 'var(--bg-color)' }}>
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div className="grid-responsive" style={{ 
           gap: '3rem',
@@ -44,8 +44,8 @@ export default function CTASection() {
             alignItems: 'center'
           }}>
             <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>01 / {t('placementTest').toUpperCase()}</span>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('placementTest')}</h3>
-            <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px' }}>{t('testDesc')}</p>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2, color: 'var(--text-color)' }}>{t('placementTest')}</h3>
+            <p style={{ color: 'var(--text-color-muted)', marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px' }}>{t('testDesc')}</p>
             <div style={{ flex: 1 }}></div>
             <Link href="/placement-test" className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem' }}>
               {t('startTest').toUpperCase()}
@@ -61,8 +61,8 @@ export default function CTASection() {
             alignItems: 'center'
           }}>
             <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>02 / {t('whatsappChat').toUpperCase()}</span>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('whatsappChat')}</h3>
-            <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px' }}>{t('whatsappDesc')}</p>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2, color: 'var(--text-color)' }}>{t('whatsappChat')}</h3>
+            <p style={{ color: 'var(--text-color-muted)', marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px' }}>{t('whatsappDesc')}</p>
             <div style={{ flex: 1 }}></div>
             <a href={`https://wa.me/${settings.whatsappNumber.replace(/\+/g, '')}?text=${encodeURIComponent(t('whatsappMessage'))}`} className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem' }}>
               {t('chatWhatsapp').toUpperCase()}
@@ -78,8 +78,8 @@ export default function CTASection() {
             alignItems: 'center'
           }}>
             <span style={{ fontSize: '0.65rem', letterSpacing: '4px', fontWeight: 800, color: 'var(--accent-gold)', display: 'block', marginBottom: '1.5rem' }}>03 / {t('contact').toUpperCase()}</span>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2 }}>{t('emailInquiries')}</h3>
-            <p style={{ opacity: 0.6, marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px' }}>{t('emailDesc')}</p>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', lineHeight: 1.2, color: 'var(--text-color)' }}>{t('emailInquiries')}</h3>
+            <p style={{ color: 'var(--text-color-muted)', marginBottom: '2.5rem', fontSize: '0.95rem', maxWidth: '280px' }}>{t('emailDesc')}</p>
             <div style={{ flex: 1 }}></div>
             <Link href="/about#contact" className="btn-master btn-gold" style={{ padding: '1rem 2rem', fontSize: '0.75rem' }}>
               {t('sendEmail').toUpperCase()}

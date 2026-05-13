@@ -41,7 +41,7 @@ export default function Hero() {
       display: 'flex',
       alignItems: 'center',
       position: 'relative',
-      backgroundColor: 'var(--primary-navy)',
+      backgroundColor: 'var(--bg-color)',
       overflow: 'hidden',
       direction: isRtl ? 'rtl' : 'ltr'
     }}>
@@ -69,7 +69,7 @@ export default function Hero() {
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundImage: `linear-gradient(to ${isRtl ? 'left' : 'right'}, var(--primary-navy) 40%, transparent 100%)`,
+          backgroundImage: `linear-gradient(to ${isRtl ? 'left' : 'right'}, var(--bg-color) 40%, transparent 100%)`,
           zIndex: 2
         }}></div>
       </div>
@@ -101,7 +101,7 @@ export default function Hero() {
             </span>
             <h1 style={{ 
               fontSize: 'clamp(2.5rem, 10vw, 6rem)', 
-              color: 'white',
+              color: 'var(--text-color)',
               lineHeight: 1.1,
               marginBottom: '2.5rem',
               fontFamily: 'var(--font-serif)'
@@ -109,7 +109,7 @@ export default function Hero() {
               {headline}
             </h1>
             <p style={{ 
-              color: 'rgba(255,255,255,0.7)', 
+              color: 'var(--text-color-muted)', 
               fontSize: '1.25rem', 
               maxWidth: '600px', 
               marginBottom: '4rem',
@@ -134,7 +134,8 @@ export default function Hero() {
         right: '4rem',
         bottom: '4rem',
         writingMode: 'vertical-rl',
-        color: 'rgba(255,255,255,0.2)',
+        color: 'var(--text-color)',
+        opacity: 0.2,
         fontSize: '0.7rem',
         letterSpacing: '5px',
         textTransform: 'uppercase',

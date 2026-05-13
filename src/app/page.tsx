@@ -66,13 +66,13 @@ export default function Home() {
       <Hero />
 
       {/* Corporate Trust Bar - Snippet Version */}
-      <section id="clients" style={{ backgroundColor: '#f8fafc', padding: '5rem 0', overflow: 'hidden' }}>
+      <section id="clients" style={{ backgroundColor: 'var(--bg-color-alt)', padding: '5rem 0', overflow: 'hidden' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '3rem' }} data-aos="fade-up">
             <span style={{ color: 'var(--accent-blue)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', display: 'block', marginBottom: '1rem' }}>
               <i className="fa-solid fa-circle-dot" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '0.5rem' }}></i> {t('trustedBy')}
             </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800 }}>{t('companiesTrust')}</h2>
+            <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-color)' }}>{t('companiesTrust')}</h2>
           </div>
           
           <div className="marquee-wrap" style={{ marginTop: '2rem' }}>
@@ -112,7 +112,7 @@ export default function Home() {
                     <div style={{ width: '40px', height: '40px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <i className="fa-solid fa-building" style={{ opacity: 0.2 }}></i>
                     </div>
-                    <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '0.85rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
+                    <span style={{ fontWeight: 800, color: 'var(--text-color)', fontSize: '0.85rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
                   </div>
                 ));
               })()}
@@ -122,13 +122,13 @@ export default function Home() {
       </section>
 
       {/* 01: The Manifesto / About */}
-      <section id="about" style={{ padding: '10rem 0', background: 'white' }}>
+      <section id="about" style={{ padding: '10rem 0', background: 'var(--bg-color)' }}>
         <div className="container">
           <div className="grid-responsive" style={{ gap: 'clamp(3rem, 10vw, 8rem)', alignItems: 'center' }}>
             <div data-aos="fade-up">
               <span className="gold-text" style={{ letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 700, marginBottom: '2rem', display: 'block' }}>{t('about').toUpperCase()}</span>
               <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, marginBottom: '3rem', color: 'var(--primary-navy)' }} dangerouslySetInnerHTML={{ __html: t('aboutHeadline') }}></h2>
-              <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: '#4b5563', marginBottom: '4rem', maxWidth: '600px' }}>
+              <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: 'var(--text-color-muted)', marginBottom: '4rem', maxWidth: '600px' }}>
                 {t('aboutDescription')}
               </p>
               
@@ -186,11 +186,11 @@ export default function Home() {
       </section>
 
       {/* 02: Core Values & Vision/Mission */}
-      <section id="values" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
+      <section id="values" style={{ padding: '10rem 0', background: 'var(--bg-color-alt)', position: 'relative', overflow: 'hidden' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
             <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>{t('ourValues')}</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginTop: '1.5rem', color: 'white', fontFamily: 'var(--font-serif)' }}>{t('valuesSubtitle')}</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginTop: '1.5rem', color: 'var(--text-color)', fontFamily: 'var(--font-serif)' }}>{t('valuesSubtitle')}</h2>
           </div>
 
           <div className="grid-responsive" style={{ gap: '2rem' }}>
@@ -199,38 +199,38 @@ export default function Home() {
               { title: t('value2Title'), value: t('value2Desc'), icon: 'fa-arrows-spin' },
               { title: t('value3Title'), value: t('value3Desc'), icon: 'fa-handshake-angle' }
             ].map((value, i) => (
-              <div key={i} className="glass-dark" style={{ padding: '4rem', borderRadius: '32px', textAlign: 'center' }} data-aos="fade-up" data-aos-delay={i * 100}>
+              <div key={i} className="glass-card" style={{ padding: '4rem', borderRadius: '32px', textAlign: 'center' }} data-aos="fade-up" data-aos-delay={i * 100}>
                 <div style={{ fontSize: '3rem', color: 'var(--accent-gold)', marginBottom: '2rem' }}>
                   <i className={`fa-solid ${value.icon}`}></i>
                 </div>
-                <h3 style={{ color: 'white', fontSize: '1.8rem', marginBottom: '1.5rem' }}>{value.title}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem' }}>{value.value}</p>
+                <h3 style={{ color: 'var(--text-color)', fontSize: '1.8rem', marginBottom: '1.5rem' }}>{value.title}</h3>
+                <p style={{ color: 'var(--text-color-muted)', fontSize: '1.1rem' }}>{value.value}</p>
               </div>
             ))}
           </div>
 
           {/* Integrated Vision & Mission */}
           <div className="grid-2-col" style={{ marginTop: '6rem', gap: '3rem' }}>
-            <div className="glass-dark" style={{ padding: '4.5rem', borderRadius: '40px' }} data-aos="fade-right">
+            <div className="glass-card" style={{ padding: '4.5rem', borderRadius: '40px' }} data-aos="fade-right">
               <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('ourVision')}</span>
-              <h3 style={{ color: 'white', fontSize: '2.5rem', margin: '1.5rem 0' }}>{t('visionTitle')}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', lineHeight: 1.8 }}>{t('visionDesc')}</p>
+              <h3 style={{ color: 'var(--text-color)', fontSize: '2.5rem', margin: '1.5rem 0' }}>{t('visionTitle')}</h3>
+              <p style={{ color: 'var(--text-color-muted)', fontSize: '1.2rem', lineHeight: 1.8 }}>{t('visionDesc')}</p>
             </div>
-            <div className="glass-dark" style={{ padding: '4.5rem', borderRadius: '40px' }} data-aos="fade-left">
+            <div className="glass-card" style={{ padding: '4.5rem', borderRadius: '40px' }} data-aos="fade-left">
               <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px' }}>{t('ourMission')}</span>
-              <h3 style={{ color: 'white', fontSize: '2.5rem', margin: '1.5rem 0' }}>{t('missionTitle')}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', lineHeight: 1.8 }}>{t('missionDesc')}</p>
+              <h3 style={{ color: 'var(--text-color)', fontSize: '2.5rem', margin: '1.5rem 0' }}>{t('missionTitle')}</h3>
+              <p style={{ color: 'var(--text-color-muted)', fontSize: '1.2rem', lineHeight: 1.8 }}>{t('missionDesc')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 03: Why Choose Us (Why LinguaPlanet?) */}
-      <section id="why-us" style={{ padding: '10rem 0', background: 'white' }}>
+      <section id="why-us" style={{ padding: '10rem 0', background: 'var(--bg-color)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
             <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase' }}>{t('whyChooseUs')}</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginTop: '1.5rem', color: 'var(--primary-navy)', fontFamily: 'var(--font-serif)' }}>{t('whyLinguaPlanet')}</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginTop: '1.5rem', color: 'var(--text-color)', fontFamily: 'var(--font-serif)' }}>{t('whyLinguaPlanet')}</h2>
           </div>
 
           <div className="grid-responsive" style={{ gap: '2.5rem' }}>
@@ -281,7 +281,7 @@ export default function Home() {
       </section>
 
       {/* Trust & Challenges Nodes */}
-      <section style={{ padding: '8rem 0', background: '#fdfcfb' }}>
+      <section style={{ padding: '8rem 0', background: 'var(--bg-color-alt)' }}>
         <div className="container">
           <div className="grid-responsive" style={{ gap: '3rem' }}>
             
@@ -291,7 +291,7 @@ export default function Home() {
                 <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <i className="fa-solid fa-triangle-exclamation" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
                 </div>
-                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('facingChallenges')}</h3>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--text-color)' }}>{t('facingChallenges')}</h3>
               </div>
               <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem', opacity: 0.7, lineHeight: 1.7 }}>
                 <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges1')}</li>
@@ -306,7 +306,7 @@ export default function Home() {
                 <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <i className="fa-solid fa-hands-holding" style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
                 </div>
-                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('safeHands')}</h3>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--text-color)' }}>{t('safeHands')}</h3>
               </div>
               <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
                 {t('safeHandsDesc')}
@@ -319,7 +319,7 @@ export default function Home() {
               </p>
               <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <i className="fa-solid fa-shield-halved" style={{ color: 'var(--primary-navy)' }}></i>
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--primary-navy)' }}>{t('institutionalGuarantee')}</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--text-color)' }}>{t('institutionalGuarantee')}</span>
               </div>
             </div>
 
@@ -328,11 +328,11 @@ export default function Home() {
       </section>
 
       {/* 04: Academic Programs (Services) - Detailed Snippet Data */}
-      <section id="services" style={{ padding: '10rem 0', background: '#f8fafc' }}>
+      <section id="services" style={{ padding: '10rem 0', background: 'var(--bg-color-alt)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }}>
             <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('academicTracks')}</span>
-            <h2 style={{ fontSize: '3.5rem', marginTop: '1rem' }}>{t('ourPrograms')}</h2>
+            <h2 style={{ fontSize: '3.5rem', marginTop: '1rem', color: 'var(--text-color)' }}>{t('ourPrograms')}</h2>
           </div>
           
           <div className="grid-responsive" style={{ 
@@ -346,18 +346,18 @@ export default function Home() {
               { icon: 'fa-certificate', title: t('program5Title'), text: t('program5Desc') },
               { icon: 'fa-lightbulb', title: t('program6Title'), text: t('program6Desc') }
             ].map((program, i) => (
-              <div key={i} className="program-card" data-aos="fade-up" data-aos-delay={i * 50} style={{
-                background: 'white',
+              <div key={i} className="card-premium" data-aos="fade-up" data-aos-delay={i * 50} style={{
+                background: 'var(--card-bg)',
                 padding: '3rem',
                 borderRadius: '32px',
-                border: '1px solid rgba(0,0,0,0.03)',
+                border: '1px solid var(--border-color)',
                 transition: 'all 0.4s ease'
               }}>
                 <div style={{ fontSize: '2.5rem', color: 'var(--accent-blue)', marginBottom: '1.5rem' }}>
                   <i className={`fa-solid ${program.icon}`}></i>
                 </div>
-                <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>{program.title}</h3>
-                <p style={{ opacity: 0.6, lineHeight: 1.7 }}>{program.text}</p>
+                <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--text-color)' }}>{program.title}</h3>
+                <p style={{ color: 'var(--text-color-muted)', lineHeight: 1.7 }}>{program.text}</p>
                 <Link href="#contact" style={{ 
                   display: 'inline-block', 
                   marginTop: '2rem', 
@@ -374,11 +374,11 @@ export default function Home() {
       </section>
 
       {/* 05: Leadership & Team - Premium Staggered */}
-      <section id="team" style={{ padding: '8rem 0', background: 'white' }}>
+      <section id="team" style={{ padding: '8rem 0', background: 'var(--bg-color)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }}>
             <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('executiveLeadership')}</span>
-            <h2 style={{ fontSize: '3rem', marginTop: '1rem' }}>{t('mindsBehindSuccess')}</h2>
+            <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--text-color)' }}>{t('mindsBehindSuccess')}</h2>
           </div>
 
           <div className="grid-responsive" style={{ 
@@ -403,7 +403,7 @@ export default function Home() {
                 }}>
                   <Image src={member.img} alt={member.name} width={180} height={180} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <h4 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary-navy)' }}>{member.name}</h4>
+                <h4 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-color)' }}>{member.name}</h4>
                 <p style={{ color: 'var(--accent-blue)', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '1px', marginTop: '0.5rem', textTransform: 'uppercase' }}>{member.role}</p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
                   <i className="fa-brands fa-linkedin" style={{ opacity: 0.2, cursor: 'pointer' }}></i>
