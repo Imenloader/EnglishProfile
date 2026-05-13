@@ -51,12 +51,27 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
 
   // Theme Logic
   const isDarkTheme = isDarkPage || (isOpen && !scrolled);
-  const navBg = scrolled 
-    ? (isDarkPage ? 'rgba(1, 33, 105, 0.8)' : 'rgba(255, 255, 255, 0.98)') 
-    : (isOpen ? 'var(--primary-navy)' : 'transparent');
   
-  const textColor = (scrolled && !isDarkPage) || (isOpen && !isDarkPage) 
-    ? 'var(--primary-navy)' 
+  const navBg = scrolled 
+    ? (isDarkPage ? 'rgba(1, 33, 105, 0.95)' : 'rgba(255, 255, 255, 0.98)') 
+    : (isOpen ? 'var(--primary-navy)' : (isDarkPage ? 'transparent' : 'rgba(255, 255, 255, 0.95)'));
+  
+  const textColor = isDarkPage 
+    ? (scrolled || isOpen ? 'white' : 'white') // Default white for dark pages
+    : 'var(--primary-navy)';
+
+  // Re-adjusting textColor for scrolled state on light pages
+  const finalTextColor = isDarkPage 
+    ? (scrolled ? 'white' : 'white')
+    : 'var(--primary-navy)';
+    
+  // Wait, I want the home page (isDarkPage=true) to have white text on hero, 
+  // but if it scrolls to a white section, it should stay white IF the navBg is navy.
+  // My navBg logic above says: if isDarkPage and scrolled, navBg is dark navy.
+  // So white text is perfect.
+  
+  const effectiveTextColor = (scrolled || isOpen || !isDarkPage) 
+    ? (isDarkPage ? 'white' : 'var(--primary-navy)')
     : 'white';
 
   return (
@@ -101,7 +116,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             <span className="nav-brand-text" style={{ 
               fontSize: scrolled ? 'clamp(1rem, 2.5vw, 1.3rem)' : 'clamp(1.1rem, 3vw, 1.6rem)', 
               fontWeight: 900, 
-              color: textColor,
+              color: effectiveTextColor,
               letterSpacing: '2px',
               transition: 'all 0.5s ease',
               fontFamily: 'var(--font-serif)',
@@ -109,7 +124,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             }}>LINGUAPLANET</span>
             <span style={{ 
               fontSize: '0.6rem', 
-              color: textColor, 
+              color: effectiveTextColor, 
               opacity: 0.7, 
               letterSpacing: '1px',
               marginTop: '4px',
@@ -141,7 +156,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 href={item.href} 
                 style={{
                   textDecoration: 'none',
-                  color: textColor,
+                  color: effectiveTextColor,
                   fontSize: '0.7rem',
                   fontWeight: 700,
                   letterSpacing: '2px',
@@ -165,7 +180,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               style={{ 
                 background: scrolled ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)', 
                 border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
-                color: textColor,
+                color: effectiveTextColor,
                 padding: '0.5rem 0.8rem',
                 borderRadius: '10px',
                 fontWeight: 700,
@@ -182,7 +197,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               style={{
                 background: 'none',
                 border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
-                color: textColor,
+                color: effectiveTextColor,
                 width: '32px',
                 height: '32px',
                 borderRadius: '50%',
@@ -205,13 +220,13 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           style={{
             background: 'none',
             border: 'none',
-            color: textColor,
+            color: effectiveTextColor,
             fontSize: '1.8rem',
             cursor: 'pointer',
             padding: '0.5rem'
           }}
         >
-          <i className={`fa-solid ${isOpen ? 'fa-xmark' : 'fa-bars-staggered'}`}></i>
+          <i className={`fa-solid ${isOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
         </button>
       </div>
 
