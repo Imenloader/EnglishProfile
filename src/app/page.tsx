@@ -225,84 +225,7 @@ export default function Home() {
         </div>
       </section>
 
-        <style jsx>{`
-          .bento-grid-container {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 2rem;
-          }
-          .bento-item {
-            border-radius: 24px;
-            overflow: hidden;
-            transition: var(--transition-master);
-          }
-          .bento-content { padding: 4rem; }
-          .bento-content h3 { margin-top: 1.5rem; color: white; }
-          .bento-content p { margin-top: 2rem; opacity: 0.7; line-height: 1.8; }
-          .span-8 { grid-column: span 8; }
-          .span-4 { grid-column: span 4; }
-          .span-5 { grid-column: span 5; }
-          .span-3 { grid-column: span 3; }
-          .pillar-tag { color: var(--accent-gold); font-size: 0.7rem; font-weight: 800; letter-spacing: 4px; }
-          .pillar-list { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; gap: 1.5rem; color: white; }
-          .pillar-list i { ${isRtl ? 'margin-left' : 'margin-right'}: 1.2rem; }
-
-          @media (max-width: 991px) {
-            .bento-grid-container { grid-template-columns: 1fr; }
-            .span-8, .span-4, .span-5, .span-3 { grid-column: span 1 !important; }
-            .bento-content { padding: 2.5rem; }
-          }
-        `}</style>
-      </section>
-
-      {/* Trust & Challenges Nodes */}
-      <section style={{ padding: '8rem 0', background: '#fdfcfb' }}>
-        <div className="container">
-          <div className="grid-responsive" style={{ gap: '3rem' }}>
-            
-            {/* Facing Challenges Box */}
-            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
-              <div className="flex items-center gap-4 mb-6">
-                <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className="fa-solid fa-bridge" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
-                </div>
-                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('facingChallenges')}</h3>
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem', opacity: 0.7, lineHeight: 1.7 }}>
-                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges1')}</li>
-                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges2')}</li>
-                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges3')}</li>
-              </ul>
-            </div>
-
-            {/* Safe Hands Box */}
-            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-left">
-              <div className="flex items-center gap-4 mb-6">
-                <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className="fa-solid fa-hands-holding" style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
-                </div>
-                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('safeHands')}</h3>
-              </div>
-              <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
-                {t('safeHandsDesc')}
-              </p>
-              <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
-                {t('safeHandsDesc2')}
-              </p>
-              <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--primary-navy)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
-                {t('safeHandsDesc3')}
-              </p>
-              <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <i className="fa-solid fa-shield-check" style={{ color: 'var(--primary-navy)' }}></i>
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--primary-navy)' }}>{t('institutionalGuarantee')}</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* 02: Why Choose Us (Why LinguaPlanet?) */}
+      {/* 03: Why Choose Us (Why LinguaPlanet?) */}
       <section id="why-us" style={{ padding: '10rem 0', background: 'white' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
@@ -353,6 +276,53 @@ export default function Home() {
                 </ul>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & Challenges Nodes */}
+      <section style={{ padding: '8rem 0', background: '#fdfcfb' }}>
+        <div className="container">
+          <div className="grid-responsive" style={{ gap: '3rem' }}>
+            
+            {/* Facing Challenges Box */}
+            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
+              <div className="flex items-center gap-4 mb-6">
+                <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-bridge" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
+                </div>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('facingChallenges')}</h3>
+              </div>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem', opacity: 0.7, lineHeight: 1.7 }}>
+                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges1')}</li>
+                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges2')}</li>
+                <li><i className="fa-solid fa-chevron-right" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem', color: 'var(--accent-gold)', fontSize: '0.8rem', transform: isRtl ? 'rotate(180deg)' : 'none' }}></i> {t('challenges3')}</li>
+              </ul>
+            </div>
+
+            {/* Safe Hands Box */}
+            <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-left">
+              <div className="flex items-center gap-4 mb-6">
+                <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-hands-holding" style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
+                </div>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('safeHands')}</h3>
+              </div>
+              <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
+                {t('safeHandsDesc')}
+              </p>
+              <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
+                {t('safeHandsDesc2')}
+              </p>
+              <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--primary-navy)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
+                {t('safeHandsDesc3')}
+              </p>
+              <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <i className="fa-solid fa-shield-check" style={{ color: 'var(--primary-navy)' }}></i>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--primary-navy)' }}>{t('institutionalGuarantee')}</span>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
