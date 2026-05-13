@@ -17,7 +17,8 @@ export default function PlacementTest() {
   const [isFinished, setIsFinished] = useState(false);
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState('');
-  const [showLeadForm, setShowLeadForm] = useState(false);
+  const [showLeadForm, setShowLeadForm] = useState(true);
+  const [testStarted, setTestStarted] = useState(false);
   const [leadData, setLeadData] = useState({ name: '', email: '', phone: '' });
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
@@ -64,24 +65,16 @@ export default function PlacementTest() {
 
   const currentLevel = calculateLevel(score);
 
-  const handleLeadSubmit = async (e: React.FormEvent) => {
+  const handleLeadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Technical Robustness: Honeypot check
-    if (honeypot) {
-      console.warn("Spam detected via honeypot.");
-      setIsFinished(true);
-      return;
-    }
+    if (honeypot) return;
+    setTestStarted(true);
+    setShowLeadForm(false);
+  };
 
-    // Technical Robustness: Simple Rate Limit (prevent multiple submissions within 5 mins)
-    const lastSubmission = localStorage.getItem('last_test_submission');
-    if (lastSubmission && Date.now() - parseInt(lastSubmission) < 5 * 60 * 1000) {
-      alert(isRtl ? 'لقد قمت بإرسال اختبار مؤخراً. يرجى الانتظار قليلاً.' : 'You have recently submitted a test. Please wait a few minutes.');
-      return;
-    }
-
+  const handleFinishTest = async () => {
     setIsSubmitting(true);
+    const finalLevel = calculateLevel(score);
     
     try {
       const { data: lead, error: leadError } = await supabase
@@ -92,7 +85,7 @@ export default function PlacementTest() {
           phone: leadData.phone,
           score: score,
           total_questions: placementQuestions.length,
-          level: currentLevel,
+          level: finalLevel,
           writing_response: writingResponse,
           age_range: ageRange
         }])
@@ -100,7 +93,6 @@ export default function PlacementTest() {
         .single();
       
       if (!leadError && lead) {
-        // Save detailed answers
         const answersToSave = detailedAnswers.map(ans => ({
           lead_id: lead.id,
           student_name: leadData.name,
@@ -108,7 +100,6 @@ export default function PlacementTest() {
         }));
         await supabase.from('lead_answers').insert(answersToSave);
 
-        // ⚡ Webhook Integration: Trigger external notification
         const settings = await db.getSettings();
         if (settings?.webhookUrl) {
           fetch(settings.webhookUrl, {
@@ -122,7 +113,7 @@ export default function PlacementTest() {
                 email: lead.email,
                 phone: lead.phone,
                 score: `${score}/${placementQuestions.length}`,
-                level: currentLevel,
+                level: finalLevel,
                 age: ageRange,
                 writing: writingResponse,
                 timestamp: new Date().toISOString()
@@ -132,9 +123,7 @@ export default function PlacementTest() {
         }
       }
 
-      localStorage.setItem('last_test_submission', Date.now().toString());
-      setShowLeadForm(false);
-      setLevel(currentLevel);
+      setLevel(finalLevel);
       setIsFinished(true);
     } catch (error) {
       console.error("Submission failed:", error);
@@ -280,9 +269,9 @@ export default function PlacementTest() {
                     fontSize: '0.8rem'
                   }}></i>
                 </div>
-                <button type="submit" disabled={isSubmitting} className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center', opacity: isSubmitting ? 0.7 : 1 }}>
-                  {isSubmitting ? (isRtl ? 'جاري الإرسال...' : 'SUBMITTING...') : t('generateReport')} 
-                  {!isSubmitting && <i className="fa-solid fa-bolt" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>}
+                <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
+                  {isRtl ? 'بدء الاختبار الآن' : 'START TEST NOW'} 
+                  <i className="fa-solid fa-arrow-right" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
                 </button>
               </form>
             </div>
@@ -327,10 +316,12 @@ export default function PlacementTest() {
               />
               <button 
                 className="btn-master btn-gold" 
-                style={{ width: '100%', justifyContent: 'center' }}
-                onClick={() => setShowLeadForm(true)}
+                disabled={isSubmitting}
+                style={{ width: '100%', justifyContent: 'center', opacity: isSubmitting ? 0.7 : 1 }}
+                onClick={handleFinishTest}
               >
-                {t('submitAssessment')} <i className="fa-solid fa-paper-plane" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
+                {isSubmitting ? (isRtl ? 'جاري إرسال النتائج...' : 'SUBMITTING RESULTS...') : t('submitAssessment')} 
+                {!isSubmitting && <i className="fa-solid fa-paper-plane" style={{ [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>}
               </button>
             </div>
           )}
