@@ -140,25 +140,21 @@ export default function PlacementTest() {
         <Navbar isDarkPage={true} />
         <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: 'clamp(4rem, 10vw, 8rem) 1.5rem' }}>
           <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
-            <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>{t('evaluationComplete')}</span>
-            <h1 style={{ color: 'white', fontSize: 'clamp(4rem, 15vw, 10rem)', margin: '2rem 0', fontFamily: 'var(--font-serif)', fontWeight: 700 }} className="gold-text">
-              {level}
-            </h1>
-            <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '2rem' }}>{t('predictedLevel')}</h2>
+            <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>{t('assessmentSubmitted')}</span>
+            <div style={{ margin: '3rem 0' }}>
+              <div style={{ width: '80px', height: '80px', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', border: '1px solid var(--accent-gold)' }}>
+                <i className="fa-solid fa-check" style={{ color: 'var(--accent-gold)', fontSize: '2rem' }}></i>
+              </div>
+              <h1 style={{ color: 'white', fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontFamily: 'var(--font-serif)', fontWeight: 700 }}>
+                {t('evaluationComplete')}
+              </h1>
+              <h2 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', marginTop: '1rem', letterSpacing: '2px', fontWeight: 800 }}>{t('predictedLevel').toUpperCase()}</h2>
+            </div>
             
             <div style={{ background: 'rgba(255,255,255,0.03)', padding: '3rem', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '3rem' }}>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', lineHeight: 1.8 }}>
-                {t('congrats')
-                  .replace('{name}', leadData.name)
-                  .replace('{score}', score.toString())
-                  .replace('{total}', placementQuestions.length.toString())
-                }
+                {t('nextSteps')}
               </p>
-              <h3 style={{ color: 'var(--accent-gold)', marginTop: '2rem', fontSize: '1.8rem' }}>
-                {level === 'A1' || level === 'A2' ? t('foundationTrack') : 
-                 level === 'B1' || level === 'B2' ? t('professionalTrack') : 
-                 t('executiveTrack')}
-              </h3>
             </div>
 
             <Link href="/" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>
