@@ -375,6 +375,10 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           from { transform: translateX(-100%); }
           to { transform: translateX(0); }
         }
+        .nav-link-premium:hover {
+          color: var(--accent-gold) !important;
+          opacity: 1 !important;
+        }
         .nav-indicator {
           position: absolute;
           bottom: 0;
@@ -386,7 +390,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           transform: translateX(-50%);
         }
         .nav-link-premium:hover .nav-indicator {
-          width: 20px;
+          width: 25px;
         }
         @media (max-width: 1024px) {
           .hidden-mobile { display: none !important; }
