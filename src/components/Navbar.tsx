@@ -13,6 +13,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     let rafId: number;
@@ -30,6 +31,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
+      setTheme(savedTheme);
     }
 
     return () => {
@@ -39,40 +41,24 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
   }, []);
 
   const toggleTheme = () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
+    setTheme(newTheme);
   };
 
   const handleSignOut = async () => {
     setIsOpen(false);
   };
 
-  // Theme Logic
-  const isDarkTheme = isDarkPage || (isOpen && !scrolled);
-  
+  // Theme-aware Nav Logic
   const navBg = scrolled 
-    ? (isDarkPage ? 'rgba(1, 33, 105, 0.95)' : 'rgba(255, 255, 255, 0.98)') 
-    : (isOpen ? 'var(--primary-navy)' : (isDarkPage ? 'transparent' : 'rgba(255, 255, 255, 0.95)'));
+    ? (theme === 'dark' || isDarkPage ? 'rgba(1, 33, 105, 0.95)' : 'rgba(255, 255, 255, 0.98)') 
+    : (isOpen ? 'var(--primary-navy)' : (theme === 'dark' || isDarkPage ? 'transparent' : 'rgba(255, 255, 255, 0.95)'));
   
-  const textColor = isDarkPage 
-    ? (scrolled || isOpen ? 'white' : 'white') // Default white for dark pages
+  const effectiveTextColor = (theme === 'dark' || isDarkPage || scrolled || isOpen) 
+    ? (theme === 'dark' || isDarkPage ? 'white' : 'var(--primary-navy)')
     : 'var(--primary-navy)';
-
-  // Re-adjusting textColor for scrolled state on light pages
-  const finalTextColor = isDarkPage 
-    ? (scrolled ? 'white' : 'white')
-    : 'var(--primary-navy)';
-    
-  // Wait, I want the home page (isDarkPage=true) to have white text on hero, 
-  // but if it scrolls to a white section, it should stay white IF the navBg is navy.
-  // My navBg logic above says: if isDarkPage and scrolled, navBg is dark navy.
-  // So white text is perfect.
-  
-  const effectiveTextColor = (scrolled || isOpen || !isDarkPage) 
-    ? (isDarkPage ? 'white' : 'var(--primary-navy)')
-    : 'white';
 
   return (
     <nav style={{
@@ -208,7 +194,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 transition: 'all 0.3s ease'
               }}
             >
-              <i className="fa-solid fa-moon"></i>
+              <i className={`fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`}></i>
             </button>
           </div>
         </div>
@@ -319,26 +305,46 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               </Link>
             ))}
             
-            <button
-              onClick={() => {
-                setLanguage(language === 'en' ? 'ar' : 'en');
-                setIsOpen(false);
-              }}
-              style={{
-                marginTop: '0.5rem',
-                padding: '1.2rem 2rem',
-                background: isDarkPage ? 'var(--accent-gold)' : 'var(--primary-navy)',
-                color: isDarkPage ? 'var(--primary-navy)' : 'white',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: 800,
-                fontSize: '0.9rem',
-                letterSpacing: '2px',
-                width: '100%'
-              }}
-            >
-              {language === 'en' ? t('arabicInterface') : t('englishInterface')}
-            </button>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                onClick={() => {
+                  setLanguage(language === 'en' ? 'ar' : 'en');
+                  setIsOpen(false);
+                }}
+                style={{
+                  marginTop: '0.5rem',
+                  padding: '1.2rem 2rem',
+                  background: (theme === 'dark' || isDarkPage) ? 'var(--accent-gold)' : 'var(--primary-navy)',
+                  color: (theme === 'dark' || isDarkPage) ? 'var(--primary-navy)' : 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  letterSpacing: '2px',
+                  flex: 1
+                }}
+              >
+                {language === 'en' ? t('arabicInterface') : t('englishInterface')}
+              </button>
+              
+              <button
+                onClick={toggleTheme}
+                style={{
+                  marginTop: '0.5rem',
+                  padding: '1.2rem',
+                  background: (theme === 'dark' || isDarkPage) ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                  color: (theme === 'dark' || isDarkPage) ? 'white' : 'var(--primary-navy)',
+                  border: 'none',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                <i className={`fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`} style={{ fontSize: '1.2rem' }}></i>
+              </button>
+            </div>
 
             {/* Social Links to fill space */}
             <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', margin: '1rem 0' }}>
