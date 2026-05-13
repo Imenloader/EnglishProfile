@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <main className="marble-pattern">
-      <Navbar isDarkPage={true} />
+      <Navbar isDarkPage={false} />
       {/* Scroll Progress Bar */}
       <div style={{
         position: 'fixed',

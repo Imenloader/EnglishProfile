@@ -53,11 +53,11 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
 
   // Theme-aware Nav Logic
   const navBg = scrolled 
-    ? (theme === 'dark' || isDarkPage ? 'rgba(1, 33, 105, 0.95)' : 'rgba(255, 255, 255, 0.98)') 
-    : (isOpen ? 'var(--primary-navy)' : (theme === 'dark' || isDarkPage ? 'transparent' : 'rgba(255, 255, 255, 0.95)'));
+    ? (theme === 'dark' ? 'rgba(1, 33, 105, 0.95)' : 'rgba(255, 255, 255, 0.98)') 
+    : (isOpen ? 'var(--primary-navy)' : (theme === 'dark' || (isDarkPage && !scrolled) ? 'transparent' : 'rgba(255, 255, 255, 0.95)'));
   
-  const effectiveTextColor = (theme === 'dark' || isDarkPage || scrolled || isOpen) 
-    ? (theme === 'dark' || isDarkPage ? 'white' : 'var(--primary-navy)')
+  const effectiveTextColor = (theme === 'dark' || (isDarkPage && !scrolled && !isOpen)) 
+    ? 'white' 
     : 'var(--primary-navy)';
 
   return (
