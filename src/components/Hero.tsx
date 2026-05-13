@@ -100,30 +100,28 @@ export default function Hero() {
               {t('worldClassAcademy')}
             </span>
             <h1 style={{ 
-              fontSize: 'clamp(3rem, 8vw, 6rem)', 
+              fontSize: 'clamp(2.5rem, 10vw, 6rem)', 
               color: 'var(--text-color)',
-              lineHeight: 1,
+              lineHeight: 1.1,
               marginBottom: '2.5rem',
-              fontFamily: 'var(--font-serif)',
-              fontWeight: 700
+              fontFamily: 'var(--font-serif)'
             }}>
               {headline}
             </h1>
             <p style={{ 
-              color: 'var(--text-color)', 
+              color: 'var(--text-color-muted)', 
               fontSize: '1.25rem', 
-              maxWidth: '650px', 
+              maxWidth: '600px', 
               marginBottom: '4rem',
-              lineHeight: 1.6,
-              fontWeight: 400,
-              opacity: 0.8
+              lineHeight: 1.8,
+              fontWeight: 300
             }}>
               {subheadline}
             </p>
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-              <Link href="/placement-test" className="btn-master btn-gold-solid" style={{ padding: '1.4rem 3.5rem' }}>
-                <span style={{ position: 'relative', zIndex: 2 }}>{t('startAssessment').toUpperCase()}</span>
-                <i className="fa-solid fa-arrow-right-long" style={{ fontSize: '1.2rem', transform: isRtl ? 'rotate(180deg)' : 'none', [isRtl ? 'marginRight' : 'marginLeft']: '1rem', position: 'relative', zIndex: 2 }}></i>
+              <Link href="/placement-test" className="btn-master btn-gold" style={{ padding: '1.2rem 2.5rem' }}>
+                {t('startAssessment')}
+                <i className="fa-solid fa-arrow-right-long" style={{ fontSize: '1.2rem', transform: isRtl ? 'rotate(180deg)' : 'none', [isRtl ? 'marginRight' : 'marginLeft']: '1rem' }}></i>
               </Link>
             </div>
           </div>
