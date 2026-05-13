@@ -197,7 +197,7 @@ export default function PlacementTest() {
       </div>
 
       <div className="container flex-center" style={{ minHeight: '100vh', padding: 'clamp(6rem, 15vw, 10rem) 1.5rem' }}>
-        <div style={{ width: '100%', maxWidth: '850px' }}>
+        <div style={{ width: '100%', maxWidth: '850px', margin: '0 auto' }}>
           {showLeadForm ? (
             <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px' }}>
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
