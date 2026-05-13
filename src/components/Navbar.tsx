@@ -24,7 +24,16 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
       });
     };
     
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl + L shortcut for Admin
+      if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        window.location.href = '/admin';
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('keydown', handleKeyDown);
     handleScroll(); // Initial check
 
     // Theme Check (SSR Safe)
@@ -36,6 +45,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
       cancelAnimationFrame(rafId);
     };
   }, []);
@@ -132,8 +142,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               { name: t('about'), href: '/#about' },
               { name: t('programs'), href: '/#services' },
               { name: t('team'), href: '/#team' },
-              { name: t('placementTest'), href: '/placement-test' },
-              { name: 'ADMIN', href: '/admin' }
+              { name: t('placementTest'), href: '/placement-test' }
             ];
 
             return navItems.map((item) => (
@@ -272,13 +281,6 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               <i className="fa-solid fa-xmark"></i>
             </button>
 
-            {/* ⚡ Bolt: Smart Drawer Links */}
-            <div style={{ padding: '1rem', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '12px', marginBottom: '1rem' }}>
-              <Link href="/admin" onClick={() => setIsOpen(false)} style={{ color: 'var(--accent-gold)', textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem' }}>
-                <i className="fa-solid fa-user-shield" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '1rem' }}></i>
-                ADMIN PORTAL
-              </Link>
-            </div>
 
             {[
               { name: t('about'), href: '/about' },

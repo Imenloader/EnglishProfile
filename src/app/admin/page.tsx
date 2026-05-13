@@ -57,6 +57,10 @@ export default function AdminDashboard() {
     heroSubheadlineAr: '',
     whatsappNumber: '',
     contactEmail: '',
+    facebookLink: '',
+    instagramLink: '',
+    linkedinLink: '',
+    tiktokLink: '',
     updatedAt: new Date(),
     webhookUrl: ''
   });
