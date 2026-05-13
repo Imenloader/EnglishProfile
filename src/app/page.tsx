@@ -258,7 +258,7 @@ export default function Home() {
               { 
                 title: t('guaranteesTitle'), 
                 bullets: [t('guaranteesBullet1'), t('guaranteesBullet2'), t('guaranteesBullet3')], 
-                icon: 'fa-shield-check' 
+                icon: 'fa-shield-halved' 
               }
             ].map((node, i) => (
               <div key={i} className="card-premium" style={{ borderTop: '4px solid var(--accent-gold)' }} data-aos="fade-up" data-aos-delay={i * 50}>
@@ -289,7 +289,7 @@ export default function Home() {
             <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--primary-navy)', borderRight: isRtl ? '8px solid var(--primary-navy)' : 'none' }} data-aos="fade-right">
               <div className="flex items-center gap-4 mb-6">
                 <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className="fa-solid fa-bridge" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
+                  <i className="fa-solid fa-triangle-exclamation" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
                 </div>
                 <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-navy)' }}>{t('facingChallenges')}</h3>
               </div>
@@ -318,7 +318,7 @@ export default function Home() {
                 {t('safeHandsDesc3')}
               </p>
               <div style={{ background: 'rgba(1, 33, 105, 0.03)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <i className="fa-solid fa-shield-check" style={{ color: 'var(--primary-navy)' }}></i>
+                <i className="fa-solid fa-shield-halved" style={{ color: 'var(--primary-navy)' }}></i>
                 <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--primary-navy)' }}>{t('institutionalGuarantee')}</span>
               </div>
             </div>
