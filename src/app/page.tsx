@@ -389,6 +389,7 @@ export default function Home() {
               { name: 'Muhammad Raafat', role: 'Recruitment and Talent Acquisition Manager', img: '/images/Recruitment-new.png' },
               { name: 'Ibrahim ElEmam', role: t('roleMarketing'), img: '/images/Marketing-new.png' }
             ].map((member, i) => (
+              <div key={i} className="team-card" data-aos="fade-up" data-aos-delay={i * 100} style={{ textAlign: 'center' }}>
                 <div style={{ 
                   width: '180px', 
                   height: '180px', 
