@@ -330,7 +330,7 @@ export default function PlacementTest() {
           font-size: 0.65rem;
           letter-spacing: 3px;
           font-weight: 800;
-          color: rgba(255,255,255,0.3);
+          color: rgba(255,255,255,0.6);
           margin-bottom: 1.2rem;
         }
         .immortal-input {
