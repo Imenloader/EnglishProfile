@@ -461,7 +461,7 @@ export default function Home() {
             border-radius: 50%;
             display: flex;
             align-items: center;
-            justifyContent: center;
+            justify-content: center;
             font-weight: 800;
             color: white;
             cursor: pointer;
