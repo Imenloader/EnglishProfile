@@ -425,12 +425,12 @@ export default function Home() {
             </svg>
 
             {[
-              { id: 'A1', x: '8%', y: '85%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
-              { id: 'A2', x: '24%', y: '75%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
-              { id: 'B1', x: '42%', y: '42%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
-              { id: 'B2', x: '63%', y: '50%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-              { id: 'C1', x: '83%', y: '60%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
-              { id: 'C2', x: '94%', y: '15%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+              { id: 'A1', x: '8%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
+              { id: 'A2', x: '24%', y: '78%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
+              { id: 'B1', x: '42%', y: '35%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+              { id: 'B2', x: '63%', y: '41%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+              { id: 'C1', x: '83%', y: '55%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
+              { id: 'C2', x: '94%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
             ].map((m) => (
               <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
                 <div className="milestone-circle">
