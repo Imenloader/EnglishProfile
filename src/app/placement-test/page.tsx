@@ -276,8 +276,9 @@ export default function PlacementTest() {
               </form>
             </div>
           ) : currentPart < 3 ? (
-            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)' }}>
-              <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'left' }}>
+          ) : currentPart < 3 ? (
+            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)', textAlign: 'center' }}>
+              <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'center' }}>
                 {q.question}
               </h2>
               <div style={{ display: 'grid', gap: '1.5rem' }}>
@@ -287,7 +288,7 @@ export default function PlacementTest() {
                     dir="ltr"
                     onClick={() => handleAnswer(opt)}
                     className="choice-card"
-                    style={{ textAlign: 'left' }}
+                    style={{ textAlign: 'center', justifyContent: 'center' }}
                   >
                     <span className="choice-index" style={{ order: isRtl ? 2 : 0 }}>0{i+1}</span>
                     <span className="choice-text" style={{ flex: 1 }}>{opt}</span>
@@ -296,17 +297,17 @@ export default function PlacementTest() {
               </div>
             </div>
           ) : (
-            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px' }}>
+            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', textAlign: 'center' }}>
               <div style={{ marginBottom: '4rem' }}>
                 <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('finalAssessment')}</span>
                 <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('writingEvaluation')}</h2>
               </div>
-              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '2rem', borderRadius: '15px', borderLeft: isRtl ? 'none' : '4px solid var(--accent-gold)', borderRight: isRtl ? '4px solid var(--accent-gold)' : 'none', marginBottom: '3rem', color: 'rgba(255,255,255,0.8)' }}>
+              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '2rem', borderRadius: '15px', border: '1px solid var(--accent-gold)', marginBottom: '3rem', color: 'rgba(255,255,255,0.8)', textAlign: 'center' }}>
                 <p style={{ marginBottom: '1rem' }}>{t('writingPrompt')}</p>
-                <ol style={{ [isRtl ? 'paddingRight' : 'paddingLeft']: '1.5rem', display: 'grid', gap: '1rem' }}>
-                  <li>{t('writingTopic1')}</li>
-                  <li>{t('writingTopic2')}</li>
-                </ol>
+                <div style={{ display: 'grid', gap: '1rem', listStyle: 'none' }}>
+                  <p>1. {t('writingTopic1')}</p>
+                  <p>2. {t('writingTopic2')}</p>
+                </div>
               </div>
               <textarea 
                 value={writingResponse}
