@@ -298,47 +298,51 @@ export default function AdminDashboard() {
                 <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
                   <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Proficiency Distribution</h3>
                   <div style={{ height: '300px' }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => ({
-                        name: lvl,
-                        count: leads.filter(l => l.level === lvl || (lvl === 'C1/C2' && (l.level === 'C1' || l.level === 'C2'))).length
-                      }))}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700 }} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
-                        <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
-                        <Bar dataKey="count" fill="var(--accent-gold)" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
+                    {mounted && (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => ({
+                          name: lvl,
+                          count: leads.filter(l => l.level === lvl || (lvl === 'C1/C2' && (l.level === 'C1' || l.level === 'C2'))).length
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700 }} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                          <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                          <Bar dataKey="count" fill="var(--accent-gold)" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                 </div>
 
                 <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
                   <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Daily Leads Volume</h3>
                   <div style={{ height: '300px' }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={Array.from({ length: 7 }).map((_, i) => {
-                        const d = new Date();
-                        d.setDate(d.getDate() - (6 - i));
-                        const dateStr = d.toISOString().split('T')[0];
-                        return {
-                          date: dateStr.split('-').slice(1).join('/'),
-                          count: leads.filter(l => l.created_at.startsWith(dateStr)).length
-                        };
-                      })}>
-                        <defs>
-                          <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0}/>
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-                        <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-                        <Tooltip />
-                        <Area type="monotone" dataKey="count" stroke="var(--accent-blue)" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
+                    {mounted && (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={Array.from({ length: 7 }).map((_, i) => {
+                          const d = new Date();
+                          d.setDate(d.getDate() - (6 - i));
+                          const dateStr = d.toISOString().split('T')[0];
+                          return {
+                            date: dateStr.split('-').slice(1).join('/'),
+                            count: leads.filter(l => l.created_at.startsWith(dateStr)).length
+                          };
+                        })}>
+                          <defs>
+                            <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0}/>
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                          <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                          <Tooltip />
+                          <Area type="monotone" dataKey="count" stroke="var(--accent-blue)" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                 </div>
               </div>
@@ -366,7 +370,8 @@ export default function AdminDashboard() {
                       </Pie>
                       <Tooltip />
                     </PieChart>
-                  </ResponsiveContainer>
+                    </ResponsiveContainer>
+                  )}
                 </div>
               </div>
             </div>
