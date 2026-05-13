@@ -355,9 +355,6 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               <i className="fa-brands fa-facebook" style={{ fontSize: '1.5rem', opacity: 0.5 }}></i>
             </div>
 
-            <Link href="/placement-test" onClick={() => setIsOpen(false)} className="btn-master btn-gold" style={{ textAlign: 'center', width: '100%', justifyContent: 'center', marginTop: 'auto' }}>
-              {t('startFreeTest').toUpperCase()}
-            </Link>
           </div>
         </>
       )}
