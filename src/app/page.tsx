@@ -69,7 +69,7 @@ export default function Home() {
       <section id="clients" style={{ backgroundColor: 'var(--bg-color-alt)', padding: '5rem 0', overflow: 'hidden' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '3rem' }} data-aos="fade-up">
-            <span style={{ color: 'var(--accent-blue)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', display: 'block', marginBottom: '1rem' }}>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', display: 'block', marginBottom: '1rem' }}>
               <i className="fa-solid fa-circle-dot" style={{ [isRtl ? 'marginLeft' : 'marginRight']: '0.5rem' }}></i> {t('trustedBy')}
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-color)' }}>{t('companiesTrust')}</h2>
@@ -288,8 +288,8 @@ export default function Home() {
             {/* Facing Challenges Box */}
             <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-right">
               <div className="flex items-center gap-4 mb-6">
-                <div style={{ width: '50px', height: '50px', background: 'rgba(1, 33, 105, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className="fa-solid fa-triangle-exclamation" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
+                <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="fa-solid fa-triangle-exclamation" style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
                 </div>
                 <h3 style={{ fontSize: '1.8rem', color: 'var(--text-color)' }}>{t('facingChallenges')}</h3>
               </div>
@@ -303,7 +303,7 @@ export default function Home() {
             {/* Safe Hands Box */}
             <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-left">
               <div className="flex items-center gap-4 mb-6">
-                <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.05)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '50px', height: '50px', background: 'rgba(197, 160, 89, 0.1)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <i className="fa-solid fa-hands-holding" style={{ color: 'var(--accent-gold)', fontSize: '1.5rem' }}></i>
                 </div>
                 <h3 style={{ fontSize: '1.8rem', color: 'var(--text-color)' }}>{t('safeHands')}</h3>
@@ -314,7 +314,7 @@ export default function Home() {
               <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: '2rem' }}>
                 {t('safeHandsDesc2')}
               </p>
-              <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--primary-navy)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
+              <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--text-color)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
                 {t('safeHandsDesc3')}
               </p>
               <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -331,7 +331,7 @@ export default function Home() {
       <section id="services" style={{ padding: '10rem 0', background: 'var(--bg-color-alt)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }}>
-            <span style={{ color: 'var(--accent-blue)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('academicTracks')}</span>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('academicTracks')}</span>
             <h2 style={{ fontSize: '3.5rem', marginTop: '1rem', color: 'var(--text-color)' }}>{t('ourPrograms')}</h2>
           </div>
           
@@ -353,7 +353,7 @@ export default function Home() {
                 border: '1px solid var(--border-color)',
                 transition: 'all 0.4s ease'
               }}>
-                <div style={{ fontSize: '2.5rem', color: 'var(--accent-blue)', marginBottom: '1.5rem' }}>
+                <div style={{ fontSize: '2.5rem', color: 'var(--accent-gold)', marginBottom: '1.5rem' }}>
                   <i className={`fa-solid ${program.icon}`}></i>
                 </div>
                 <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--text-color)' }}>{program.title}</h3>
@@ -361,7 +361,7 @@ export default function Home() {
                 <Link href="#contact" style={{ 
                   display: 'inline-block', 
                   marginTop: '2rem', 
-                  color: 'var(--accent-blue)', 
+                  color: 'var(--accent-gold)', 
                   fontWeight: 800, 
                   fontSize: '0.8rem', 
                   letterSpacing: '1px',
@@ -398,13 +398,13 @@ export default function Home() {
                   border: '4px solid white',
                   boxShadow: '0 15px 40px rgba(0,0,0,0.1)',
                   overflow: 'hidden',
-                  background: 'var(--primary-navy)',
+                  background: 'var(--bg-color-alt)',
                   position: 'relative'
                 }}>
                   <Image src={member.img} alt={member.name} width={180} height={180} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <h4 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-color)' }}>{member.name}</h4>
-                <p style={{ color: 'var(--accent-blue)', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '1px', marginTop: '0.5rem', textTransform: 'uppercase' }}>{member.role}</p>
+                <p style={{ color: 'var(--accent-gold)', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '1px', marginTop: '0.5rem', textTransform: 'uppercase' }}>{member.role}</p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
                   <i className="fa-brands fa-linkedin" style={{ opacity: 0.2, cursor: 'pointer' }}></i>
                   <i className="fa-solid fa-envelope" style={{ opacity: 0.2, cursor: 'pointer' }}></i>
