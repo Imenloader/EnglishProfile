@@ -1,0 +1,63 @@
+===========================================================
+CONVERSATION SUMMARY: LINGUAPLANET PROJECT UPDATES
+Date: 2026-05-12
+===========================================================
+
+PROJECT OBJECTIVE:
+Refactor the EnglishProfile/Linguaplanet application to remove user-facing 
+cloud authentication (sign-up/sign-in) and transform it into a high-end 
+guest assessment tool with an advanced administrative dashboard.
+
+-----------------------------------------------------------
+MILESTONE 1: AUTHENTICATION REMOVAL
+-----------------------------------------------------------
+- Deleted user-facing account routes: /login, /signup, /dashboard.
+- Simplified UserContext.tsx to default to a null user state, 
+  maintaining app stability while disabling auth.
+- Refactored Navbar.tsx:
+    - Removed "Sign In", "Sign Up", and "Student Dashboard" links.
+    - Added a direct "ADMIN" link for staff.
+    - Standardized CTA to "START FREE TEST".
+
+-----------------------------------------------------------
+MILESTONE 2: PLACEMENT TEST EVOLUTION
+-----------------------------------------------------------
+- Removed authentication dependency for test submissions.
+- Integrated Student Leads: Results are now saved directly as "leads" 
+  in the database with support for:
+    - Name, Email, Phone
+    - Age Range (Kids/Teens/Adults)
+    - Writing Evaluation Response
+- Added Technical Robustness:
+    - Honeypot field (invisible to humans) to prevent bot spam.
+    - Local rate limiting (5-minute window per submission).
+
+-----------------------------------------------------------
+MILESTONE 3: ULTIMATE ADMIN DASHBOARD
+-----------------------------------------------------------
+- Visual Analytics: Integrated Recharts to provide:
+    - Proficiency Distribution (CEFR levels)
+    - Daily Lead Volume Trends
+    - Age Group Breakdown
+- Webhook Integration:
+    - Added a "Webhook URL" setting in the admin panel.
+    - Real-time POST notifications to external services (Zapier/Make/Slack) 
+      upon every new student lead.
+- ULTIMATE EXCEL EXPORT:
+    - Master Summary: High-level lead overview.
+    - Student-Question Matrix: 1/0 tracking of every answer per student.
+    - Question Difficulty Analysis: Automated audit of test performance.
+    - Writing Review Portal: Dedicated sheet for instructor grading.
+    - CEFR Analytics: Institutional proficiency statistics.
+
+-----------------------------------------------------------
+TECHNICAL REQUIREMENTS & SYNC
+-----------------------------------------------------------
+- GitHub: All changes pushed to the 'main' branch.
+- Database: Requires SQL Migration (provided in database_migration.sql) 
+  to add phone, age_range, writing_response, and webhook_url columns 
+  to the Supabase instance.
+
+===========================================================
+END OF SUMMARY
+===========================================================
