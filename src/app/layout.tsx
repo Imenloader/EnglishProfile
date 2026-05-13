@@ -30,6 +30,14 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Linguaplanet | Where Success Becomes a Habit",
   description: "Empowering language learners in Egypt with world-class English education and professional soft skills training.",
+  manifest: "/manifest.json",
+  themeColor: "#011627",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Linguaplanet",
+  },
 };
 
 import AOSInitializer from "@/components/AOSInitializer";

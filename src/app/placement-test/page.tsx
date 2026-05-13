@@ -149,8 +149,8 @@ export default function PlacementTest() {
     return (
       <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
         <Navbar isDarkPage={true} />
-        <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: '8rem 2rem' }}>
-          <div className="glass-dark animate-reveal" style={{ padding: '5rem', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
+        <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: 'clamp(4rem, 10vw, 8rem) 1.5rem' }}>
+          <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
             <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 800 }}>{t('evaluationComplete')}</span>
             <h1 style={{ color: 'white', fontSize: 'clamp(4rem, 15vw, 10rem)', margin: '2rem 0', fontFamily: 'var(--font-serif)', fontWeight: 700 }} className="gold-text">
               {level}
@@ -207,10 +207,10 @@ export default function PlacementTest() {
         </div>
       </div>
 
-      <div className="container flex-center" style={{ minHeight: '100vh', padding: '10rem 2rem' }}>
+      <div className="container flex-center" style={{ minHeight: '100vh', padding: 'clamp(6rem, 15vw, 10rem) 1.5rem' }}>
         <div style={{ width: '100%', maxWidth: '850px' }}>
           {showLeadForm ? (
-            <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px' }}>
+            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px' }}>
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('secureResults')}</span>
                 <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('finalStep')}</h2>
@@ -287,7 +287,7 @@ export default function PlacementTest() {
               </form>
             </div>
           ) : currentPart < 3 ? (
-            <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)' }}>
+            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)' }}>
               <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'left' }}>
                 {q.question}
               </h2>
@@ -307,7 +307,7 @@ export default function PlacementTest() {
               </div>
             </div>
           ) : (
-            <div className="glass-dark animate-reveal" style={{ padding: '5rem', borderRadius: '40px' }}>
+            <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px' }}>
               <div style={{ marginBottom: '4rem' }}>
                 <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('finalAssessment')}</span>
                 <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('writingEvaluation')}</h2>

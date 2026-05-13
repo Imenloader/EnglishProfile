@@ -1,0 +1,17 @@
+{
+  "name": "Linguaplanet Academy",
+  "short_name": "Linguaplanet",
+  "description": "Language learning, reimagined. World-class English education in Egypt.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#011627",
+  "theme_color": "#011627",
+  "icons": [
+    {
+      "src": "/pwa-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
