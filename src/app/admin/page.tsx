@@ -29,6 +29,7 @@ interface Profile {
 
 export default function AdminDashboard() {
   const { isRtl } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('analytics');
@@ -43,6 +44,10 @@ export default function AdminDashboard() {
     part: 1,
     level: 'A1'
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [settings, setSettings] = useState<SiteSettings>({
     id: '1',
@@ -243,8 +248,8 @@ export default function AdminDashboard() {
           {[
             { id: 'analytics', label: 'ANALYTICS', icon: 'fa-chart-line' },
             { id: 'leads', label: 'STUDENT LEADS', icon: 'fa-users' },
-            { id: 'content', label: 'CONTENT MANAGER', icon: 'fa-pen-to-square' },
-            { id: 'test', label: 'TEST MANAGER', icon: 'fa-list-check' }
+            { id: 'content', label: 'CONTENT MANAGER', icon: 'fa-pen' },
+            { id: 'test', label: 'TEST MANAGER', icon: 'fa-list' }
           ].map(item => (
             <button key={item.id} onClick={() => setActiveTab(item.id)} style={{ background: activeTab === item.id ? 'rgba(197, 160, 89, 0.1)' : 'transparent', color: activeTab === item.id ? 'var(--accent-gold)' : 'rgba(255,255,255,0.6)', border: 'none', padding: '1.2rem 1.5rem', textAlign: 'left', borderRadius: '12px', cursor: 'pointer', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '2px', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
               <i className={`fa-solid ${item.icon}`} style={{ fontSize: '1rem', width: '20px' }}></i>
@@ -271,7 +276,7 @@ export default function AdminDashboard() {
           </div>
         </header>
 
-        <div className="reveal">
+        <div>
           {activeTab === 'analytics' && (
             <div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '4rem' }}>
@@ -341,7 +346,8 @@ export default function AdminDashboard() {
               <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
                 <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Age Range Distribution</h3>
                 <div style={{ height: '300px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
+                  {mounted && (
+                    <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={['kids', 'teens', 'adults'].map(age => ({
