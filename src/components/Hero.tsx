@@ -10,10 +10,10 @@ export default function Hero() {
   const { language, t, isRtl } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [settings, setSettings] = useState<any>({
-    heroHeadlineEn: 'Experience Educational Magnificence',
-    heroHeadlineAr: 'اختبر الروعة التعليمية',
-    heroSubheadlineEn: "Elevate your professional profile with Linguaplanet's world-class English training.",
-    heroSubheadlineAr: "ارتقِ بملفك المهني من خلال تدريب لنجوابلانيت المتميز في اللغة الإنجليزية.",
+    heroHeadlineEn: 'Language learning, reimagined',
+    heroHeadlineAr: 'تعلم اللغة، برؤية جديدة',
+    heroSubheadlineEn: "Every Egyptian deserves access to world-class English education. We blend ground-breaking pedagogy with genuine care for our students' futures.",
+    heroSubheadlineAr: "يستحق كل مصري الحصول على تعليم لغة إنجليزية عالمي المستوى. نحن نمزج بين أساليب التدريس المبتكرة والرعاية الحقيقية لمستقبل طلابنا.",
   });
 
   useEffect(() => {
@@ -140,7 +140,7 @@ export default function Hero() {
         textTransform: 'uppercase',
         zIndex: 10
       }}>
-        ESTABLISHED MMXXIV • LINGUAPLANET
+        ESTABLISHED MMXV • LINGUAPLANET
       </div>
     </section>
   );

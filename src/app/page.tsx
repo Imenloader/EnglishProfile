@@ -162,8 +162,8 @@ export default function Home() {
             <div style={{ position: 'relative' }} data-aos="zoom-in">
               <div style={{ borderRadius: '40px', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.1)' }}>
                 <Image 
-                  src="/images/about-vision.webp" 
-                  alt="Linguaplanet Vision" 
+                  src="/images/about-vision.png" 
+                  alt="" 
                   width={600} 
                   height={800} 
                   style={{ width: '100%', height: 'auto', display: 'block' }} 
