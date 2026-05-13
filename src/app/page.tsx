@@ -577,8 +577,6 @@ export default function Home() {
               <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '1.2rem' }}>
                 <li><Link href="/#about" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('aboutAcademy')}</Link></li>
                 <li><Link href="/#team" style={{ color: 'white', opacity: 0.6, textDecoration: 'none', fontSize: '0.9rem' }}>{t('leadershipTeam')}</Link></li>
-                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>{t('taxId')}: 416-241-177</span></li>
-                <li><span style={{ color: 'white', opacity: 0.3, fontSize: '0.8rem', letterSpacing: '1px' }}>{t('est2015')}</span></li>
               </ul>
             </div>
 
