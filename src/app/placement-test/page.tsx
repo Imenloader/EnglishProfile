@@ -276,7 +276,6 @@ export default function PlacementTest() {
               </form>
             </div>
           ) : currentPart < 3 ? (
-          ) : currentPart < 3 ? (
             <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)', textAlign: 'center' }}>
               <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'center' }}>
                 {q.question}
