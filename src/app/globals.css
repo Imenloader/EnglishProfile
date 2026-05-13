@@ -206,7 +206,7 @@ p {
 }
 
 .btn-gold {
-  background: var(--primary-navy);
+  background: transparent;
   color: var(--accent-gold);
   border: 1px solid var(--accent-gold);
 }
@@ -214,7 +214,21 @@ p {
 .btn-gold:hover {
   background: var(--accent-gold);
   color: var(--primary-navy);
-  transform: scale(1.05);
+  transform: translateY(-3px);
+}
+
+.btn-gold-solid {
+  background: var(--accent-gold);
+  color: var(--primary-navy);
+  border: 1px solid var(--accent-gold);
+  box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3);
+}
+
+.btn-gold-solid:hover {
+  background: white;
+  border-color: white;
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
 }
 
 .btn-white {
