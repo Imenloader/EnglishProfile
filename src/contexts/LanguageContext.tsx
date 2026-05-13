@@ -324,7 +324,7 @@ const translations: Record<Language, Record<string, string>> = {
     programs: 'البرامج',
     team: 'فريقنا',
     arabicInterface: 'الواجهة العربية',
-    englishInterface: 'الإجهة الإنجليزية',
+    englishInterface: 'الواجهة الإنجليزية',
     evaluationComplete: 'اكتمل التقييم',
     predictedLevel: 'مستوى كفاءتك التنبؤي',
     foundationTrack: 'أساسيات اللغة الإنجليزية',
