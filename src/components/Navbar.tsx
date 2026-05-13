@@ -9,7 +9,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ isDarkPage = false }: NavbarProps) {
-  const { language, setLanguage, t, isRtl } = useLanguage();
+  const { language, setLanguage, toggleLanguage, t, isRtl } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
