@@ -94,10 +94,17 @@ export default function AboutPage() {
 
           {/* Mobile Trajectory */}
           <div className="mobile-trajectory" data-aos="fade-up">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem', position: 'relative', paddingLeft: '2rem' }}>
-              <div style={{ position: 'absolute', left: '14px', top: 0, bottom: 0, width: '2px', background: 'rgba(255,255,255,0.1)' }}>
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, var(--accent-gold), transparent)', opacity: 0.5 }}></div>
-              </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem', position: 'relative', alignItems: 'center' }}>
+              <div style={{ 
+                position: 'absolute', 
+                left: '50%', 
+                top: 0, 
+                bottom: 0, 
+                width: '2px', 
+                background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), var(--accent-gold), rgba(255,255,255,0.1), transparent)',
+                transform: 'translateX(-50%)',
+                zIndex: 1
+              }}></div>
               {[
                 { id: 'A1', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
                 { id: 'A2', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
@@ -106,28 +113,37 @@ export default function AboutPage() {
                 { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
                 { id: 'C2', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
               ].map((m) => (
-                <div key={m.id} style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                <div key={m.id} style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  width: '100%',
+                  maxWidth: '280px',
+                  position: 'relative',
+                  zIndex: 2
+                }}>
                   <div style={{ 
-                    width: '30px', 
-                    height: '30px', 
+                    width: '45px', 
+                    height: '45px', 
                     borderRadius: '50%', 
                     background: 'var(--accent-gold)', 
                     display: 'flex', 
                     alignItems: 'center', 
                     justifyContent: 'center', 
-                    fontSize: '0.7rem', 
+                    fontSize: '0.9rem', 
                     fontWeight: 800, 
                     color: 'var(--primary-navy)',
-                    flexShrink: 0,
-                    position: 'relative',
-                    zIndex: 2,
-                    boxShadow: '0 0 15px var(--accent-gold)'
+                    marginBottom: '1.2rem',
+                    boxShadow: '0 0 30px var(--accent-gold), 0 0 10px rgba(255,255,255,0.5)',
+                    border: '3px solid rgba(255,255,255,0.3)',
+                    flexShrink: 0
                   }}>
-                    {m.star ? <i className="fa-solid fa-star" style={{ fontSize: '0.6rem' }}></i> : m.id}
+                    {m.star ? <i className="fa-solid fa-star" style={{ fontSize: '0.8rem' }}></i> : m.id}
                   </div>
                   <div>
-                    <h4 style={{ color: 'var(--accent-gold)', fontSize: '1rem', fontWeight: 800, marginBottom: '0.5rem' }}>{m.label}</h4>
-                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', lineHeight: 1.6 }}>{m.desc}</p>
+                    <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '2px', textTransform: 'uppercase' }}>{m.label}</h4>
+                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', lineHeight: 1.6, fontWeight: 300 }}>{m.desc}</p>
                   </div>
                 </div>
               ))}
