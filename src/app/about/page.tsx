@@ -63,17 +63,9 @@ export default function AboutPage() {
             <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: 'white', marginTop: '1.5rem' }}>{t('professionalTrajectory')}</h2>
           </div>
 
-          <div style={{ 
-            position: 'relative', 
-            height: '400px', 
-            width: '100%', 
-            maxWidth: '1000px', 
-            margin: '0 auto',
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            WebkitOverflowScrolling: 'touch'
-          }} data-aos="zoom-in">
-            <div style={{ minWidth: '800px', height: '100%', position: 'relative' }}>
+          {/* Desktop Trajectory */}
+          <div className="desktop-trajectory" data-aos="zoom-in">
+            <div style={{ minWidth: '800px', height: '400px', position: 'relative' }}>
               <svg viewBox="0 0 1000 400" fill="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
                 <path d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="rgba(255,255,255,0.05)" strokeWidth="12" strokeLinecap="round" />
                 <path className="journey-path" d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" strokeDasharray="1000" strokeDashoffset="1000" />
@@ -99,6 +91,48 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
+
+          {/* Mobile Trajectory */}
+          <div className="mobile-trajectory" data-aos="fade-up">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem', position: 'relative', paddingLeft: '2rem' }}>
+              <div style={{ position: 'absolute', left: '14px', top: 0, bottom: 0, width: '2px', background: 'rgba(255,255,255,0.1)' }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, var(--accent-gold), transparent)', opacity: 0.5 }}></div>
+              </div>
+              {[
+                { id: 'A1', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
+                { id: 'A2', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
+                { id: 'B1', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+                { id: 'B2', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+                { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
+                { id: 'C2', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+              ].map((m) => (
+                <div key={m.id} style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                  <div style={{ 
+                    width: '30px', 
+                    height: '30px', 
+                    borderRadius: '50%', 
+                    background: 'var(--accent-gold)', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontSize: '0.7rem', 
+                    fontWeight: 800, 
+                    color: 'var(--primary-navy)',
+                    flexShrink: 0,
+                    position: 'relative',
+                    zIndex: 2,
+                    boxShadow: '0 0 15px var(--accent-gold)'
+                  }}>
+                    {m.star ? <i className="fa-solid fa-star" style={{ fontSize: '0.6rem' }}></i> : m.id}
+                  </div>
+                  <div>
+                    <h4 style={{ color: 'var(--accent-gold)', fontSize: '1rem', fontWeight: 800, marginBottom: '0.5rem' }}>{m.label}</h4>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', lineHeight: 1.6 }}>{m.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -116,6 +150,24 @@ export default function AboutPage() {
       </section>
 
       <style jsx>{`
+        .desktop-trajectory {
+          display: block;
+          overflow-x: auto;
+          overflow-y: hidden;
+          padding-bottom: 2rem;
+          -webkit-overflow-scrolling: touch;
+        }
+        .mobile-trajectory {
+          display: none;
+        }
+        @media (max-width: 768px) {
+          .desktop-trajectory {
+            display: none;
+          }
+          .mobile-trajectory {
+            display: block;
+          }
+        }
         .journey-path {
           animation: path-reveal 3s ease-out forwards;
         }
