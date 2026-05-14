@@ -131,9 +131,10 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 alt="Linguaplanet" 
                 style={{ 
                   height: '100%', 
-                  filter: (theme === 'dark' || (isDarkPage && !scrolled && !isOpen)) ? 'invert(1) brightness(1.5)' : 'none',
-                  mixBlendMode: (theme === 'dark' || (isDarkPage && !scrolled && !isOpen)) ? 'screen' : 'multiply',
-                  transition: 'all 0.5s ease'
+                  filter: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'invert(1)' : 'none',
+                  mixBlendMode: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'screen' : 'multiply',
+                  transition: 'all 0.5s ease',
+                  opacity: (theme === 'dark' || (isDarkPage && !scrolled)) ? 0.9 : 1
                 }} 
               />
             </div>
@@ -193,8 +194,8 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             <button 
               onClick={toggleLanguage}
               style={{ 
-                background: scrolled ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)', 
-                border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
+                background: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', 
+                border: (theme === 'dark' || (isDarkPage && !scrolled)) ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.1)',
                 color: effectiveTextColor,
                 padding: '0.5rem 0.8rem',
                 borderRadius: '10px',
@@ -207,40 +208,12 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               {language.toUpperCase()}
             </button>
 
-            <Link 
-              href="/login"
-              style={{
-                textDecoration: 'none',
-                color: effectiveTextColor,
-                padding: '0.6rem 1.2rem',
-                borderRadius: '12px',
-                border: scrolled ? '1px solid var(--primary-navy)' : '1px solid rgba(255,255,255,0.3)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                letterSpacing: '1px',
-                transition: 'all 0.4s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = effectiveTextColor;
-                e.currentTarget.style.color = (theme === 'dark' || (isDarkPage && !scrolled)) ? 'var(--primary-navy)' : 'white';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'none';
-                e.currentTarget.style.color = effectiveTextColor;
-              }}
-            >
-              <i className="fa-solid fa-user-circle"></i>
-              {t('login') || 'LOGIN'}
-            </Link>
 
             <button
               onClick={toggleTheme}
               style={{
-                background: 'none',
-                border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
+                background: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                border: (theme === 'dark' || (isDarkPage && !scrolled)) ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.1)',
                 color: effectiveTextColor,
                 width: '40px',
                 height: '40px',
@@ -356,24 +329,6 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               </Link>
             ))}
 
-            <Link 
-                href="/login"
-                onClick={() => setIsOpen(false)}
-                style={{
-                  textDecoration: 'none',
-                  color: 'var(--accent-gold)',
-                  fontSize: '1.2rem',
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  letterSpacing: '3px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem'
-                }}
-              >
-                <i className="fa-solid fa-user-lock"></i>
-                {t('login') || 'LOGIN'}
-              </Link>
             
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button
