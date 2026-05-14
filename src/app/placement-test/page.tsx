@@ -24,14 +24,40 @@ export default function PlacementTest() {
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
   const [detailedAnswers, setDetailedAnswers] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<any[]>(placementQuestions);
   const [honeypot, setHoneypot] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
 
   useEffect(() => {
     setMounted(true);
+    fetchQuestions();
   }, []);
 
-  const currentQuestions = placementQuestions.filter(q => q.part === (currentPart === 1 ? 1 : 2));
+  const fetchQuestions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .order('part', { ascending: true })
+        .order('id', { ascending: true });
+      
+      if (!error && data && data.length > 0) {
+        // Map DB fields to component fields if necessary
+        const formatted = data.map(q => ({
+          ...q,
+          correctAnswer: q.correct_answer || q.correctAnswer
+        }));
+        setQuestions(formatted);
+      }
+    } catch (err) {
+      console.error("Failed to fetch questions:", err);
+    } finally {
+      setIsLoadingQuestions(false);
+    }
+  };
+
+  const currentQuestions = questions.filter(q => q.part === (currentPart === 1 ? 1 : 2));
 
   const handleAnswer = (answer: string) => {
     const isCorrect = answer === q.correctAnswer;
@@ -85,7 +111,7 @@ export default function PlacementTest() {
           email: leadData.email,
           phone: leadData.phone,
           score: score,
-          total_questions: placementQuestions.length,
+          total_questions: questions.length,
           level: finalLevel,
           writing_response: writingResponse,
           age_range: ageRange,
@@ -115,7 +141,7 @@ export default function PlacementTest() {
                 email: lead.email,
                 phone: lead.phone,
                 company: leadData.company,
-                score: `${score}/${placementQuestions.length}`,
+                score: `${score}/${questions.length}`,
                 level: finalLevel,
                 age: ageRange,
                 writing: writingResponse,

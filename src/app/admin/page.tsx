@@ -27,6 +27,8 @@ interface Profile {
   created_at: string;
 }
 
+import { placementQuestions } from '@/data/questions';
+
 export default function AdminDashboard() {
   const { isRtl } = useLanguage();
   const [mounted, setMounted] = useState(false);
@@ -223,9 +225,27 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteQuestion = async (id: string) => {
-    if (confirm('Are you sure you want to delete this question?')) {
-      await supabase.from('questions').delete().eq('id', id);
+    }
+  };
+  
+  const handleSyncQuestions = async () => {
+    if (!confirm('This will upload 60 static questions to the database. Continue?')) return;
+    
+    const formatted = placementQuestions.map(q => ({
+      question: q.question,
+      options: q.options,
+      correct_answer: q.correctAnswer,
+      part: q.part,
+      level: q.category === 'advanced' ? 'B2' : (q.category === 'vocabulary' ? 'A2' : 'A1')
+    }));
+    
+    const { error } = await supabase.from('questions').insert(formatted);
+    if (!error) {
+      alert('Questions synchronized successfully!');
       fetchData();
+    } else {
+      console.error("Sync error:", error);
+      alert('Failed to sync questions: ' + error.message);
     }
   };
 
@@ -294,7 +314,10 @@ export default function AdminDashboard() {
               <button className="btn-master btn-gold" onClick={handleExportExcel}>MASTER EXCEL <i className="fa-solid fa-file-excel" style={{ marginLeft: '1rem' }}></i></button>
             )}
             {activeTab === 'test' && (
-              <button className="btn-master btn-gold" onClick={() => { setCurrentQuestion({ question: '', options: ['', '', '', ''], correct_answer: '', part: 1, level: 'A1' }); setIsEditingQuestion(true); }}>ADD QUESTION <i className="fa-solid fa-plus" style={{ marginLeft: '1rem' }}></i></button>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button className="btn-master btn-gold" onClick={handleSyncQuestions} style={{ background: 'rgba(255,255,255,0.05)', color: 'white', borderColor: 'rgba(255,255,255,0.1)' }}>SYNC FROM STATIC <i className="fa-solid fa-rotate" style={{ marginLeft: '1rem' }}></i></button>
+                <button className="btn-master btn-gold" onClick={() => { setCurrentQuestion({ question: '', options: ['', '', '', ''], correct_answer: '', part: 1, level: 'A1' }); setIsEditingQuestion(true); }}>ADD QUESTION <i className="fa-solid fa-plus" style={{ marginLeft: '1rem' }}></i></button>
+              </div>
             )}
           </div>
         </header>
