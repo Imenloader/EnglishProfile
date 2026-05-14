@@ -46,7 +46,12 @@ export default function Footer() {
                 <img 
                   src="/images/logo/logo-text.jpg" 
                   alt="Linguaplanet" 
-                  style={{ height: '30px', filter: 'brightness(0) invert(1)' }} 
+                  style={{ 
+                    height: '30px', 
+                    filter: 'invert(1) hue-rotate(180deg)',
+                    mixBlendMode: 'screen',
+                    opacity: 1
+                  }} 
                 />
                 <span style={{ 
                   fontSize: '0.65rem', 

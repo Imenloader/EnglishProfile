@@ -134,10 +134,10 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 alt="Linguaplanet" 
                 style={{ 
                   height: '100%', 
-                  filter: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'invert(1)' : 'none',
+                  filter: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'invert(1) hue-rotate(180deg)' : 'none',
                   mixBlendMode: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'screen' : 'multiply',
                   transition: 'all 0.5s ease',
-                  opacity: (theme === 'dark' || (isDarkPage && !scrolled)) ? 0.9 : 1
+                  opacity: 1
                 }} 
               />
             </div>
