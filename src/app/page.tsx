@@ -86,7 +86,10 @@ export default function Home() {
                   { name: 'Suez', logo: '/images/partners/suez.jpg' },
                   { name: 'Al-Azhar Graduates', logo: '/images/partners/alazhar.jpg' },
                   { name: 'Tamayyoz', logo: '/images/partners/tamayyoz.jpg' },
-                  { name: 'GHC', logo: '/images/partners/ghc.jpg' }
+                  { name: 'GHC', logo: '/images/partners/ghc.jpg' },
+                  { name: 'Magrabi Hospitals', logo: '' },
+                  { name: 'Dar Al-Fouad', logo: '' },
+                  { name: 'Egyptian Ministry of Education', logo: '' }
                 ];
                 // Multiply for infinite marquee
                 const triplePartners = [...partners, ...partners, ...partners];
@@ -101,7 +104,6 @@ export default function Home() {
                     height: '140px',
                     padding: '1.5rem',
                     borderRadius: '20px',
-                    filter: 'grayscale(100%)',
                     flexShrink: 0,
                     transition: 'all 0.4s ease',
                     background: 'var(--card-bg)',
@@ -109,25 +111,34 @@ export default function Home() {
                     overflow: 'hidden'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.filter = 'grayscale(0%)';
                     e.currentTarget.style.transform = 'translateY(-5px)';
                     e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.filter = 'grayscale(100%)';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                   >
-                    <img 
-                      src={partner.logo} 
-                      alt={partner.name} 
-                      style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
-                        objectFit: 'contain'
-                      }} 
-                    />
+                    {partner.logo ? (
+                      <img 
+                        src={partner.logo} 
+                        alt={partner.name} 
+                        style={{ 
+                          maxWidth: '100%', 
+                          maxHeight: '100%', 
+                          objectFit: 'contain'
+                        }} 
+                      />
+                    ) : (
+                      <span style={{ 
+                        fontWeight: 800, 
+                        fontSize: '0.9rem', 
+                        color: 'var(--text-color)', 
+                        textAlign: 'center',
+                        fontFamily: 'var(--font-serif)',
+                        opacity: 0.8
+                      }}>{partner.name}</span>
+                    )}
                   </div>
                 ));
               })()}
