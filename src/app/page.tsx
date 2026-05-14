@@ -79,24 +79,36 @@ export default function Home() {
             <div className="marquee-track">
               {(() => {
                 const partners = [
-                  'Vodafone', 'Etisalat', 'CIB Bank', 'Orascom', 'Petrojet', 'Alameda', 'Tamayyoz', 'Orange', 'WE', 'HSBC'
+                  { name: 'Etisalat International', logo: '/images/partners/etisalat.jpg' },
+                  { name: 'Alameda', logo: '/images/partners/alameda.jpg' },
+                  { name: 'Sonesta', logo: '/images/partners/sonesta.jpg' },
+                  { name: 'Suez', logo: '/images/partners/suez.jpg' },
+                  { name: 'Al-Azhar Graduates', logo: '/images/partners/alazhar.jpg' },
+                  { name: 'Tamayyoz', logo: '/images/partners/tamayyoz.jpg' },
+                  { name: 'GHC', logo: '/images/partners/ghc.jpg' },
+                  { name: 'Vodafone', logo: '' },
+                  { name: 'Orange', logo: '' },
+                  { name: 'HSBC', logo: '' }
                 ];
-                // Multiply the partners array to ensure enough content for the infinite scroll marquee
+                // Multiply for infinite marquee
                 const triplePartners = [...partners, ...partners, ...partners];
                 
                 return triplePartners.map((partner, i) => (
-                  <div key={`${partner}-${i}`} className="glass-card" style={{
+                  <div key={`${partner.name}-${i}`} className="glass-card" style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                     width: '220px',
-                    height: '120px',
+                    height: '140px',
                     padding: '1.5rem',
                     borderRadius: '20px',
                     filter: 'grayscale(100%)',
                     flexShrink: 0,
-                    transition: 'all 0.4s ease'
+                    transition: 'all 0.4s ease',
+                    background: 'var(--card-bg)',
+                    border: '1px solid var(--border-color)',
+                    overflow: 'hidden'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.filter = 'grayscale(0%)';
@@ -109,10 +121,24 @@ export default function Home() {
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                   >
-                    <div style={{ width: '40px', height: '40px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <i className="fa-solid fa-building" style={{ opacity: 0.2 }}></i>
-                    </div>
-                    <span style={{ fontWeight: 800, color: 'var(--text-color)', fontSize: '0.85rem', letterSpacing: '1px' }}>{partner.toUpperCase()}</span>
+                    {partner.logo ? (
+                      <img 
+                        src={partner.logo} 
+                        alt={partner.name} 
+                        style={{ 
+                          maxWidth: '100%', 
+                          maxHeight: '100%', 
+                          objectFit: 'contain'
+                        }} 
+                      />
+                    ) : (
+                      <>
+                        <div style={{ width: '40px', height: '40px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <i className="fa-solid fa-building" style={{ opacity: 0.2 }}></i>
+                        </div>
+                        <span style={{ fontWeight: 800, color: 'var(--text-color)', fontSize: '0.85rem', letterSpacing: '1px' }}>{partner.name.toUpperCase()}</span>
+                      </>
+                    )}
                   </div>
                 ));
               })()}
