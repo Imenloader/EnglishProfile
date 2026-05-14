@@ -28,33 +28,25 @@ export default function Footer() {
               <div style={{ 
                 width: '60px', 
                 height: '60px', 
+                background: 'white', 
                 borderRadius: '15px', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                padding: '5px'
               }}>
                 <img 
                   src="/images/logo/logo-icon.jpg" 
                   alt="Linguaplanet" 
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'contain',
-                    mixBlendMode: 'multiply'
-                  }} 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <img 
                   src="/images/logo/logo-text.jpg" 
                   alt="Linguaplanet" 
-                  style={{ 
-                    height: '30px', 
-                    filter: 'invert(1)', 
-                    mixBlendMode: 'screen',
-                    opacity: 0.9
-                  }} 
+                  style={{ height: '30px', filter: 'brightness(0) invert(1)' }} 
                 />
                 <span style={{ 
                   fontSize: '0.65rem', 
