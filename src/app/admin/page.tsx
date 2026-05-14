@@ -225,6 +225,9 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteQuestion = async (id: string) => {
+    if (confirm('Are you sure you want to delete this question?')) {
+      await supabase.from('questions').delete().eq('id', id);
+      fetchData();
     }
   };
   

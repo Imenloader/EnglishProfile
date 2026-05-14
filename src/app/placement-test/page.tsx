@@ -315,7 +315,7 @@ export default function PlacementTest() {
                 </h2>
               </div>
               <div style={{ display: 'grid', gap: '1.5rem' }}>
-                {q.options.map((opt, i) => (
+                {q.options.map((opt: string, i: number) => (
                   <button
                     key={opt}
                     dir="ltr"
