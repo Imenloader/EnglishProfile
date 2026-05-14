@@ -118,10 +118,11 @@ export default function AdminDashboard() {
         'Student Name': l.name,
         'Email': l.email,
         'Phone': l.phone || 'N/A',
+        'Company': l.company || 'N/A',
+        'Age': l.age_range || 'N/A',
         'Score': `${l.score}/${l.total_questions}`,
         'Percentage': `${l.total_questions > 0 ? Math.round((l.score / l.total_questions) * 100) : 0}%`,
         'CEFR Level': l.level,
-        'Age': l.age_range || 'N/A',
         'Date': l.created_at.split('T')[0],
         'Time': l.created_at.split('T')[1].split('.')[0]
       }));
@@ -134,6 +135,9 @@ export default function AdminDashboard() {
         const studentAnswers = (answersData || []).filter(a => a.lead_id === l.id);
         const row: any = {
           'Student Name': l.name,
+          'Phone': l.phone || 'N/A',
+          'Company': l.company || 'N/A',
+          'Age': l.age_range || 'N/A',
           'Total Score': l.score,
           'Level': l.level
         };
@@ -176,6 +180,9 @@ export default function AdminDashboard() {
       const writingData = (leadsData || []).filter(l => l.writing_response).map(l => ({
         'Student Name': l.name,
         'Email': l.email,
+        'Phone': l.phone || 'N/A',
+        'Company': l.company || 'N/A',
+        'Age': l.age_range || 'N/A',
         'CEFR (Predicted)': l.level,
         'Writing Content': l.writing_response,
         'Instructor Grade': '',
