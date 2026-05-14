@@ -484,12 +484,11 @@ export default function AdminDashboard() {
                 <div>
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>GLOBAL (EN)</h4>
                   <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>HERO HEADLINE</label>
-                    <input type="text" value={settings.heroHeadlineEn} onChange={(e) => setSettings({ ...settings, heroHeadlineEn: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600 }} />
+                    <input type="text" value={settings.heroHeadlineEn} onChange={(e) => setSettings({ ...settings, heroHeadlineEn: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }} />
                   </div>
                   <div style={{ marginBottom: '2rem' }}>
                     <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>HERO SUBHEADLINE</label>
-                    <textarea value={settings.heroSubheadlineEn} onChange={(e) => setSettings({ ...settings, heroSubheadlineEn: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, resize: 'none' }} />
+                    <textarea value={settings.heroSubheadlineEn} onChange={(e) => setSettings({ ...settings, heroSubheadlineEn: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, resize: 'none', color: 'var(--primary-navy)' }} />
                   </div>
                 </div>
 
@@ -498,11 +497,11 @@ export default function AdminDashboard() {
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>المحتوى العربي (AR)</h4>
                   <div style={{ marginBottom: '2rem' }}>
                     <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>العنوان الرئيسي</label>
-                    <input type="text" value={settings.heroHeadlineAr} onChange={(e) => setSettings({ ...settings, heroHeadlineAr: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600 }} />
+                    <input type="text" value={settings.heroHeadlineAr} onChange={(e) => setSettings({ ...settings, heroHeadlineAr: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }} />
                   </div>
                   <div style={{ marginBottom: '2rem' }}>
                     <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>العنوان الفرعي</label>
-                    <textarea value={settings.heroSubheadlineAr} onChange={(e) => setSettings({ ...settings, heroSubheadlineAr: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600, resize: 'none' }} />
+                    <textarea value={settings.heroSubheadlineAr} onChange={(e) => setSettings({ ...settings, heroSubheadlineAr: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, resize: 'none', color: 'var(--primary-navy)' }} />
                   </div>
                 </div>
               </div>
@@ -513,11 +512,11 @@ export default function AdminDashboard() {
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>CONTACT INFO</h4>
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>WHATSAPP NUMBER</label>
-                    <input type="text" value={settings.whatsappNumber} onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                    <input type="text" value={settings.whatsappNumber} onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
                   </div>
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>CONTACT EMAIL</label>
-                    <input type="email" value={settings.contactEmail} onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                    <input type="email" value={settings.contactEmail} onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
                   </div>
                 </div>
 
@@ -526,19 +525,19 @@ export default function AdminDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
                       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>FACEBOOK</label>
-                      <input type="text" value={settings.facebookLink || ''} onChange={(e) => setSettings({ ...settings, facebookLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                      <input type="text" value={settings.facebookLink || ''} onChange={(e) => setSettings({ ...settings, facebookLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
                     </div>
                     <div>
                       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>INSTAGRAM</label>
-                      <input type="text" value={settings.instagramLink || ''} onChange={(e) => setSettings({ ...settings, instagramLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                      <input type="text" value={settings.instagramLink || ''} onChange={(e) => setSettings({ ...settings, instagramLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
                     </div>
                     <div>
                       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>LINKEDIN</label>
-                      <input type="text" value={settings.linkedinLink || ''} onChange={(e) => setSettings({ ...settings, linkedinLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                      <input type="text" value={settings.linkedinLink || ''} onChange={(e) => setSettings({ ...settings, linkedinLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
                     </div>
                     <div>
                       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>TIKTOK</label>
-                      <input type="text" value={settings.tiktokLink || ''} onChange={(e) => setSettings({ ...settings, tiktokLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)' }} />
+                      <input type="text" value={settings.tiktokLink || ''} onChange={(e) => setSettings({ ...settings, tiktokLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
                     </div>
                   </div>
                 </div>
@@ -553,7 +552,7 @@ export default function AdminDashboard() {
                     placeholder="https://hooks.zapier.com/..."
                     value={settings.webhookUrl || ''} 
                     onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })} 
-                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--soft-gray)', background: 'var(--soft-gray)', fontWeight: 600 }} 
+                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }} 
                   />
                 </div>
               </div>
