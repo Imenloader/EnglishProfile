@@ -2,6 +2,7 @@
 
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 export default function TermsPage() {
@@ -56,9 +57,7 @@ export default function TermsPage() {
         </div>
       </section>
 
-      <footer style={{ padding: '4rem 0', textAlign: 'center', opacity: 0.3, color: 'white', fontSize: '0.7rem' }}>
-        © 2026 LINGUAPLANET ACADEMY. {t('allRights').toUpperCase()}
-      </footer>
+      <Footer />
     </main>
   );
 }

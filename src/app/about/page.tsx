@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { db } from '@/data/db';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 export default function AboutPage() {
@@ -151,16 +152,7 @@ export default function AboutPage() {
         }
       `}</style>
 
-      {/* Corporate Copyright Footer */}
-      <footer style={{ padding: '4rem 0', textAlign: 'center', opacity: 0.2, color: 'white', fontSize: '0.7rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="container">
-          <p>© 2026 LINGUAPLANET ACADEMY. {t('allRights').toUpperCase()}</p>
-          <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-            <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>{t('privacyPolicy').toUpperCase()}</Link>
-            <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>{t('termsOfService').toUpperCase()}</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

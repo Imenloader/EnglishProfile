@@ -6,6 +6,7 @@ import { db } from '@/data/db';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function PlacementTest() {
@@ -19,7 +20,7 @@ export default function PlacementTest() {
   const [level, setLevel] = useState('');
   const [showLeadForm, setShowLeadForm] = useState(true);
   const [testStarted, setTestStarted] = useState(false);
-  const [leadData, setLeadData] = useState({ name: '', email: '', phone: '' });
+  const [leadData, setLeadData] = useState({ name: '', email: '', phone: '', company: '' });
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
   const [detailedAnswers, setDetailedAnswers] = useState<any[]>([]);
@@ -87,7 +88,8 @@ export default function PlacementTest() {
           total_questions: placementQuestions.length,
           level: finalLevel,
           writing_response: writingResponse,
-          age_range: ageRange
+          age_range: ageRange,
+          company: leadData.company
         }])
         .select()
         .single();
@@ -112,6 +114,7 @@ export default function PlacementTest() {
                 name: lead.name,
                 email: lead.email,
                 phone: lead.phone,
+                company: leadData.company,
                 score: `${score}/${placementQuestions.length}`,
                 level: finalLevel,
                 age: ageRange,
@@ -241,6 +244,15 @@ export default function PlacementTest() {
                     onChange={(e) => setLeadData({ ...leadData, phone: e.target.value })}
                   />
                 </div>
+                <div className="form-group">
+                  <label className="immortal-label">{isRtl ? 'اسم الشركة' : 'COMPANY NAME'}</label>
+                  <input 
+                    type="text" 
+                    className="immortal-input" 
+                    value={leadData.company}
+                    onChange={(e) => setLeadData({ ...leadData, company: e.target.value })}
+                  />
+                </div>
                 <div className="form-group" style={{ position: 'relative' }}>
                   <label className="immortal-label">{t('flexibilityTitle').toUpperCase()}</label>
                   <select 
@@ -273,9 +285,22 @@ export default function PlacementTest() {
             </div>
           ) : currentPart < 3 ? (
             <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', borderTop: '4px solid var(--accent-gold)', textAlign: 'center' }}>
-              <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'center' }}>
-                {q.question}
-              </h2>
+              <div style={{ position: 'relative' }}>
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '-3rem', 
+                  left: '50%', 
+                  transform: 'translateX(-50%)', 
+                  fontSize: '5rem', 
+                  color: 'var(--accent-gold)', 
+                  opacity: 0.1,
+                  fontFamily: 'var(--font-serif)',
+                  pointerEvents: 'none'
+                }}>?</div>
+                <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                  {q.question}
+                </h2>
+              </div>
               <div style={{ display: 'grid', gap: '1.5rem' }}>
                 {q.options.map((opt, i) => (
                   <button
@@ -397,6 +422,7 @@ export default function PlacementTest() {
           font-weight: 400;
         }
       `}</style>
+      <Footer />
     </main>
   );
 }

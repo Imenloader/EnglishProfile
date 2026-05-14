@@ -145,6 +145,18 @@ export default function AdminDashboard() {
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Student-Question Matrix");
 
+      // 2.5 INDIVIDUAL LEAD ANSWERS
+      const detailedAnswers = (answersData || []).map(a => ({
+        'Student': a.student_name,
+        'Question': a.question_text,
+        'Answer': a.student_answer,
+        'Correct': a.correct_answer,
+        'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
+        'Date': a.created_at
+      }));
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(detailedAnswers), "Detailed Answers");
+
+
       // 3. QUESTION DIFFICULTY ANALYSIS (Curriculum Insights)
       const questionAnalysis = uniqueQuestions.map(q => {
         const relevantAnswers = (answersData || []).filter(a => a.question_text === q);
@@ -397,7 +409,10 @@ export default function AdminDashboard() {
                     <tr><td colSpan={4} style={{ textAlign: 'center', padding: '5rem', opacity: 0.3 }}>No student data available.</td></tr>
                   ) : (
                     leads.map(lead => (
-                      <tr key={lead.id} style={{ background: 'var(--soft-gray)', transition: 'all 0.3s ease' }} className="hover-lift">
+                      <tr key={lead.id} onClick={async () => {
+                        const { data: ans } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
+                        setSelectedLead({ ...lead, answers: ans });
+                      }} style={{ background: 'var(--soft-gray)', transition: 'all 0.3s ease', cursor: 'pointer' }} className="hover-lift">
                         <td style={{ padding: '1.5rem', borderRadius: '12px 0 0 12px' }}>
                           <div style={{ fontWeight: 800, color: 'var(--primary-navy)' }}>{lead.name}</div>
                           <div style={{ fontSize: '0.8rem', opacity: 0.5 }}>{lead.email}</div>
@@ -407,7 +422,7 @@ export default function AdminDashboard() {
                           <span style={{ padding: '0.4rem 1rem', background: 'var(--primary-navy)', color: 'white', borderRadius: '50px', fontSize: '0.7rem', fontWeight: 800 }}>{lead.level}</span>
                         </td>
                         <td style={{ padding: '1.5rem', borderRadius: '0 12px 12px 0' }}>
-                          <button onClick={() => setSelectedLead(lead)} style={{ color: 'var(--accent-gold)', border: 'none', background: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.75rem' }}>VIEW DETAILS</button>
+                          <button style={{ color: 'var(--accent-gold)', border: 'none', background: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.75rem' }}>VIEW DETAILS</button>
                         </td>
                       </tr>
                     ))
@@ -534,7 +549,114 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Modals for Detail and Question Editor omitted for brevity but remain in functionality */}
+      {/* Lead Details Modal */}
+      {selectedLead && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-dark" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <button onClick={() => setSelectedLead(null)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
+            
+            <div style={{ marginBottom: '4rem' }}>
+              <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>STUDENT DOSSIER</span>
+              <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem', fontFamily: 'var(--font-serif)' }}>{selectedLead.name}</h2>
+              <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem', opacity: 0.6, fontSize: '0.9rem', color: 'white' }}>
+                <span><i className="fa-solid fa-envelope" style={{ marginRight: '0.5rem' }}></i>{selectedLead.email}</span>
+                <span><i className="fa-solid fa-phone" style={{ marginRight: '0.5rem' }}></i>{selectedLead.phone}</span>
+                {selectedLead.company && <span><i className="fa-solid fa-building" style={{ marginRight: '0.5rem' }}></i>{selectedLead.company}</span>}
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
+              <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800, color: 'white' }}>ACADEMIC SCORE</span>
+                <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-gold)', marginTop: '0.5rem' }}>{selectedLead.score}/{selectedLead.total_questions}</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800, color: 'white' }}>PREDICTED LEVEL</span>
+                <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-blue)', marginTop: '0.5rem' }}>{selectedLead.level}</div>
+              </div>
+            </div>
+
+            {selectedLead.writing_response && (
+              <div style={{ marginBottom: '4rem' }}>
+                <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Writing Assessment</h4>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2.5rem', borderRadius: '24px', color: 'rgba(255,255,255,0.8)', lineHeight: 1.8, fontSize: '1.1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  {selectedLead.writing_response}
+                </div>
+              </div>
+            )}
+
+            <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Detailed Answers</h4>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {(!selectedLead.answers || selectedLead.answers.length === 0) ? (
+                <div style={{ padding: '2rem', textAlign: 'center', opacity: 0.3, color: 'white' }}>No detailed answer data found for this student.</div>
+              ) : (
+                selectedLead.answers.map((ans: any, i: number) => (
+                  <div key={i} style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '0.9rem', color: 'white', marginBottom: '0.5rem' }}>{ans.question_text}</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.5, color: 'white' }}>Student: <span style={{ color: ans.is_correct ? '#4ade80' : '#f87171' }}>{ans.student_answer}</span> | Correct: {ans.correct_answer}</div>
+                    </div>
+                    <i className={`fa-solid ${ans.is_correct ? 'fa-circle-check' : 'fa-circle-xmark'}`} style={{ color: ans.is_correct ? '#4ade80' : '#f87171', fontSize: '1.2rem' }}></i>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Question Editor Modal */}
+      {isEditingQuestion && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-dark" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative' }}>
+            <button onClick={() => setIsEditingQuestion(false)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
+            <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '3rem', fontFamily: 'var(--font-serif)' }}>{currentQuestion.id ? 'Edit Question' : 'Add New Question'}</h2>
+            
+            <div style={{ display: 'grid', gap: '2rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>QUESTION TEXT</label>
+                <textarea 
+                  value={currentQuestion.question} 
+                  onChange={(e) => setCurrentQuestion({...currentQuestion, question: e.target.value})}
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white', resize: 'none', height: '100px' }}
+                />
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>PART (1-3)</label>
+                  <input type="number" value={currentQuestion.part} onChange={(e) => setCurrentQuestion({...currentQuestion, part: parseInt(e.target.value)})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>CEFR LEVEL</label>
+                  <select value={currentQuestion.level} onChange={(e) => setCurrentQuestion({...currentQuestion, level: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }}>
+                    {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>OPTIONS (Comma separated)</label>
+                <input 
+                  type="text" 
+                  value={currentQuestion.options?.join(', ')} 
+                  onChange={(e) => setCurrentQuestion({...currentQuestion, options: e.target.value.split(',').map(o => o.trim())})}
+                  placeholder="Option 1, Option 2, Option 3, Option 4"
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }} 
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>CORRECT ANSWER</label>
+                <input type="text" value={currentQuestion.correct_answer} onChange={(e) => setCurrentQuestion({...currentQuestion, correct_answer: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }} />
+              </div>
+
+              <button onClick={handleSaveQuestion} className="btn-master btn-gold" style={{ width: '100%', marginTop: '2rem', justifyContent: 'center' }}>SAVE QUESTION</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       
       <style jsx>{`
         .hover-lift:hover {

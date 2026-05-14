@@ -48,7 +48,7 @@ export const placementQuestions: Question[] = [
   { id: 37, part: 1, category: 'grammar', question: "I hate ………on weekends.", options: ["work", "to work", "working"], correctAnswer: "working" },
   { id: 38, part: 1, category: 'grammar', question: "Taxes …………………this year ,however, they ………………..last year.", options: ["are going to be raised- were raised", "are rising- raised", "will raise- have been raised"], correctAnswer: "are going to be raised- were raised" },
   { id: 39, part: 1, category: 'grammar', question: "I was thinking a lot and decided that I …………………….travel to London on the next summer vacation.", options: ["will", "am going to", "do"], correctAnswer: "am going to" },
-  { id: 40, part: 1, category: 'grammar', question: "The bill was …………to ring, while I was studying for ………….my ex-girlfriend.", options: ["able – about", "about – of", "going – in"], correctAnswer: "about – of" },
+  { id: 40, part: 1, category: 'grammar', question: "The doorbell was …………to ring, while I was talking …………. my girlfriend.", options: ["able – about", "about – to", "going – in"], correctAnswer: "about – to" },
 
   // PART 2: Vocabulary & Advanced (20 Questions)
   { id: 41, part: 2, category: 'vocabulary', question: "What is the opposite of 'hot'?", options: ["warm", "cold", "sunny", "wet"], correctAnswer: "cold" },
