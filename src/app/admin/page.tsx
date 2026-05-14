@@ -121,7 +121,7 @@ export default function AdminDashboard() {
         'Score': `${l.score}/${l.total_questions}`,
         'Percentage': `${l.total_questions > 0 ? Math.round((l.score / l.total_questions) * 100) : 0}%`,
         'CEFR Level': l.level,
-        'Age Range': (l.age_range || 'N/A').toUpperCase(),
+        'Age': l.age_range || 'N/A',
         'Date': l.created_at.split('T')[0],
         'Time': l.created_at.split('T')[1].split('.')[0]
       }));
@@ -364,16 +364,18 @@ export default function AdminDashboard() {
               </div>
 
               <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
-                <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Age Range Distribution</h3>
+                <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Age Distribution</h3>
                 <div style={{ height: '300px' }}>
                   {mounted && (
                     <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={['kids', 'teens', 'adults'].map(age => ({
-                          name: age.toUpperCase(),
-                          value: leads.filter(l => l.age_range === age).length
-                        }))}
+                        data={[
+                          { name: 'Under 18', value: leads.filter(l => parseInt(l.age_range) < 18).length },
+                          { name: '18-30', value: leads.filter(l => parseInt(l.age_range) >= 18 && parseInt(l.age_range) <= 30).length },
+                          { name: '30-50', value: leads.filter(l => parseInt(l.age_range) > 30 && parseInt(l.age_range) <= 50).length },
+                          { name: '50+', value: leads.filter(l => parseInt(l.age_range) > 50).length }
+                        ].filter(d => d.value > 0)}
                         cx="50%" cy="50%"
                         innerRadius={60}
                         outerRadius={80}
