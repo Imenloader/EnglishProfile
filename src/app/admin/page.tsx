@@ -122,18 +122,18 @@ export default function AdminDashboard() {
 
       // Filter by Date
       if (filterStartDate) {
-        filteredLeads = filteredLeads.filter(l => l.created_at >= filterStartDate);
+        filteredLeads = filteredLeads.filter((l: any) => l.created_at >= filterStartDate);
       }
       if (filterEndDate) {
         const nextDay = new Date(filterEndDate);
         nextDay.setDate(nextDay.getDate() + 1);
         const nextDayStr = nextDay.toISOString().split('T')[0];
-        filteredLeads = filteredLeads.filter(l => l.created_at < nextDayStr);
+        filteredLeads = filteredLeads.filter((l: any) => l.created_at < nextDayStr);
       }
 
       // Filter by Age
       if (filterMinAge || filterMaxAge) {
-        filteredLeads = filteredLeads.filter(l => {
+        filteredLeads = filteredLeads.filter((l: any) => {
           const age = parseInt(l.age_range);
           if (isNaN(age)) return false; 
           const min = filterMinAge ? parseInt(filterMinAge) : 0;
@@ -149,8 +149,8 @@ export default function AdminDashboard() {
 
       const workbook = XLSX.utils.book_new();
       
-      // 1. MASTER STUDENTS SUMMARY (High-level overview)
-      const summaryData = filteredLeads.map(l => ({
+      // 1. MASTER STUDENTS SUMMARY
+      const summaryData = filteredLeads.map((l: any) => ({
         'ID': l.id.slice(0, 8),
         'Student Name': l.name,
         'Email': l.email,
@@ -165,10 +165,10 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
-      // 2. STUDENT-QUESTION MATRIX (Deep Granular Tracking)
-      const uniqueQuestions = Array.from(new Set((answersData || []).map(a => a.question_text)));
-      const matrixData = filteredLeads.map(l => {
-        const studentAnswers = (answersData || []).filter(a => a.lead_id === l.id);
+      // 2. STUDENT-QUESTION MATRIX
+      const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+      const matrixData = filteredLeads.map((l: any) => {
+        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -177,35 +177,27 @@ export default function AdminDashboard() {
           'Total Score': l.score,
           'Level': l.level
         };
-        uniqueQuestions.forEach(q => {
-          const ans = studentAnswers.find(a => a.question_text === q);
+        uniqueQuestions.forEach((q: any) => {
+          const ans = studentAnswers.find((a: any) => a.question_text === q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
       });
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
+
+      // 3. DETAILED ANSWERS
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+        'Student': a.student_name,
+        'Question': a.question_text,
+        'Answer': a.student_answer,
+        'Correct': a.correct_answer,
         'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
         'Date': a.created_at
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(detailedAnswers), "Detailed Answers");
 
-
-      // 3. QUESTION DIFFICULTY ANALYSIS (Curriculum Insights)
-      const questionAnalysis = uniqueQuestions.map(q => {
-        const relevantAnswers = (answersData || []).filter(a => a.question_text === q);
-        const correctCount = relevantAnswers.filter(a => a.is_correct).length;
-        const totalAttempts = relevantAnswers.length;
-        return {
-          'Question Text': q,
-          'Total Attempts': totalAttempts,
-          'Correct Answers': correctCount,
-          'Success Rate (%)': totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0,
-          'Difficulty Rating': totalAttempts === 0 ? 'N/A' : (correctCount / totalAttempts > 0.7 ? 'EASY' : correctCount / totalAttempts > 0.4 ? 'MODERATE' : 'HARD')
-        };
-      }).sort((a, b) => a['Success Rate (%)'] - b['Success Rate (%)']);
-      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(questionAnalysis), "Question Difficulty");
-
-      // 4. DEDICATED WRITING ASSESSMENT PORTAL
-      const writingData = (leadsData || []).filter(l => l.writing_response).map(l => ({
+      // 4. WRITING PORTAL
+      const writingData = filteredLeads.filter((l: any) => l.writing_response).map((l: any) => ({
         'Student Name': l.name,
         'Email': l.email,
         'Phone': l.phone || 'N/A',
@@ -213,29 +205,27 @@ export default function AdminDashboard() {
         'Age': l.age_range || 'N/A',
         'CEFR (Predicted)': l.level,
         'Writing Content': l.writing_response,
-        'Instructor Grade': '',
-        'Instructor Comments': '',
         'Status': 'PENDING REVIEW'
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(writingData), "Writing Review Portal");
 
-      // 5. CEFR LEVEL DISTRIBUTION (Institutional Stats)
-      const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-      const cefrStats = levels.map(lvl => {
-        const matchingLeads = (leadsData || []).filter(l => l.level === lvl);
+      // 5. LEVEL DISTRIBUTION
+      const levelsList = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+      const cefrStats = levelsList.map(lvl => {
+        const matchingLeads = filteredLeads.filter((l: any) => l.level === lvl);
         return {
           'CEFR Level': lvl,
           'Count': matchingLeads.length,
-          'Percentage': leadsData?.length ? `${Math.round((matchingLeads.length / leadsData.length) * 100)}%` : '0%',
-          'Average Score': matchingLeads.length ? Math.round(matchingLeads.reduce((a, b) => a + (b.score || 0), 0) / matchingLeads.length) : 0
+          'Percentage': filteredLeads.length ? `${Math.round((matchingLeads.length / filteredLeads.length) * 100)}%` : '0%',
+          'Average Score': matchingLeads.length ? Math.round(matchingLeads.reduce((acc: number, curr: any) => acc + (curr.score || 0), 0) / matchingLeads.length) : 0
         };
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cefrStats), "Level Distribution");
 
-      XLSX.writeFile(workbook, `LINGUAPLANET_ULTIMATE_EXPORT_${new Date().toISOString().split('T')[0]}.xlsx`);
+      XLSX.writeFile(workbook, `LINGUAPLANET_FILTERED_EXPORT_${new Date().toISOString().split('T')[0]}.xlsx`);
     } catch (error) {
-      console.error("Ultimate Excel export failed:", error);
-      alert("Failed to generate advanced Excel file.");
+      console.error("Excel export failed:", error);
+      alert("Failed to generate Excel file.");
     }
   };
 
