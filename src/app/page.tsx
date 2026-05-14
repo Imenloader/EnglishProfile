@@ -119,24 +119,15 @@ export default function Home() {
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                   >
-                    {partner.logo ? (
-                      <img 
-                        src={partner.logo} 
-                        alt={partner.name} 
-                        style={{ 
-                          maxWidth: '100%', 
-                          maxHeight: '100%', 
-                          objectFit: 'contain'
-                        }} 
-                      />
-                    ) : (
-                      <>
-                        <div style={{ width: '40px', height: '40px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <i className="fa-solid fa-building" style={{ opacity: 0.2 }}></i>
-                        </div>
-                        <span style={{ fontWeight: 800, color: 'var(--text-color)', fontSize: '0.85rem', letterSpacing: '1px' }}>{partner.name.toUpperCase()}</span>
-                      </>
-                    )}
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name} 
+                      style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%', 
+                        objectFit: 'contain'
+                      }} 
+                    />
                   </div>
                 ));
               })()}
