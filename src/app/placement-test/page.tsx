@@ -227,7 +227,7 @@ export default function PlacementTest() {
             <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px' }}>
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('secureResults')}</span>
-                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('finalStep')}</h2>
+                <h2 style={{ color: 'var(--text-color)', fontSize: '2.5rem', marginTop: '1rem' }}>{t('finalStep')}</h2>
               </div>
               <form onSubmit={handleLeadSubmit} style={{ display: 'grid', gap: '2.5rem' }}>
                 <div className="form-group">
@@ -310,7 +310,7 @@ export default function PlacementTest() {
                   fontFamily: 'var(--font-serif)',
                   pointerEvents: 'none'
                 }}>?</div>
-                <h2 dir="ltr" style={{ color: 'white', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                <h2 dir="ltr" style={{ color: 'var(--text-color)', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', lineHeight: 1.4, marginBottom: '4rem', fontWeight: 500, textAlign: 'center', position: 'relative', zIndex: 1 }}>
                   {q.question}
                 </h2>
               </div>
@@ -333,7 +333,7 @@ export default function PlacementTest() {
             <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', borderRadius: '40px', textAlign: 'center' }}>
               <div style={{ marginBottom: '4rem' }}>
                 <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>{t('finalAssessment')}</span>
-                <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem' }}>{t('writingEvaluation')}</h2>
+                <h2 style={{ color: 'var(--text-color)', fontSize: '2.5rem', marginTop: '1rem' }}>{t('writingEvaluation')}</h2>
               </div>
               <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '2rem', borderRadius: '15px', border: '1px solid var(--accent-gold)', marginBottom: '3rem', color: 'rgba(255,255,255,0.8)', textAlign: 'center' }}>
                 <p style={{ marginBottom: '1rem' }}>{t('writingPrompt')}</p>
@@ -368,18 +368,22 @@ export default function PlacementTest() {
           font-size: 0.65rem;
           letter-spacing: 3px;
           font-weight: 800;
-          color: rgba(255,255,255,0.6);
+          color: var(--text-color-muted);
           margin-bottom: 1.2rem;
         }
         .immortal-input {
           width: 100%;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(128,128,128,0.05);
+          border: 1px solid var(--border-color);
           padding: 1.2rem 1.5rem;
           border-radius: 12px;
-          color: white;
+          color: var(--text-color);
           font-size: 1rem;
           transition: all 0.3s ease;
+        }
+        .immortal-input::placeholder {
+          color: var(--text-color-muted);
+          opacity: 0.5;
         }
         .immortal-input:focus {
           outline: none;
@@ -389,11 +393,11 @@ export default function PlacementTest() {
         .immortal-textarea {
           width: 100%;
           height: 300px;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: rgba(128,128,128,0.05);
+          border: 1px solid var(--border-color);
           padding: 2rem;
           border-radius: 15px;
-          color: white;
+          color: var(--text-color);
           font-size: 1.1rem;
           line-height: 1.8;
           margin-bottom: 3rem;
@@ -409,13 +413,13 @@ export default function PlacementTest() {
           align-items: center;
           gap: 2rem;
           padding: 1.8rem 2.5rem;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.05);
+          background: rgba(128,128,128,0.05);
+          border: 1px solid var(--border-color);
           border-radius: 20px;
           cursor: pointer;
           transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           text-align: left;
-          color: rgba(255,255,255,0.8);
+          color: var(--text-color);
         }
         .choice-card:hover {
           background: rgba(255,255,255,0.05);
