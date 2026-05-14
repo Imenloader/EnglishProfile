@@ -131,19 +131,21 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 alt="Linguaplanet" 
                 style={{ 
                   height: '100%', 
-                  filter: (theme === 'dark' || (isDarkPage && !scrolled && !isOpen)) ? 'brightness(0) invert(1)' : 'none',
-                  mixBlendMode: (theme === 'light' && !isDarkPage) ? 'multiply' : 'normal'
+                  filter: (theme === 'dark' || (isDarkPage && !scrolled && !isOpen)) ? 'invert(1) brightness(1.5)' : 'none',
+                  mixBlendMode: (theme === 'dark' || (isDarkPage && !scrolled && !isOpen)) ? 'screen' : 'multiply',
+                  transition: 'all 0.5s ease'
                 }} 
               />
             </div>
             <span style={{ 
-              fontSize: '0.65rem', 
+              fontSize: '0.6rem', 
               color: effectiveTextColor, 
-              opacity: 0.6, 
-              letterSpacing: '1.5px',
-              fontWeight: 600,
+              opacity: 0.8, 
+              letterSpacing: '2px',
+              fontWeight: 800,
               textTransform: 'uppercase',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              transition: 'all 0.5s ease'
             }}>{language === 'ar' ? 'حيث يصبح النجاح عادة' : 'Where Success Becomes A Habit'}</span>
           </div>
         </Link>
