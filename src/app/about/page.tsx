@@ -63,30 +63,41 @@ export default function AboutPage() {
             <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: 'white', marginTop: '1.5rem' }}>{t('professionalTrajectory')}</h2>
           </div>
 
-          <div style={{ position: 'relative', height: '400px', width: '100%', maxWidth: '1000px', margin: '0 auto' }} data-aos="zoom-in">
-            <svg viewBox="0 0 1000 400" fill="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-              <path d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="rgba(255,255,255,0.05)" strokeWidth="12" strokeLinecap="round" />
-              <path className="journey-path" d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" strokeDasharray="1000" strokeDashoffset="1000" />
-            </svg>
+          <div style={{ 
+            position: 'relative', 
+            height: '400px', 
+            width: '100%', 
+            maxWidth: '1000px', 
+            margin: '0 auto',
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            WebkitOverflowScrolling: 'touch'
+          }} data-aos="zoom-in">
+            <div style={{ minWidth: '800px', height: '100%', position: 'relative' }}>
+              <svg viewBox="0 0 1000 400" fill="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                <path d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="rgba(255,255,255,0.05)" strokeWidth="12" strokeLinecap="round" />
+                <path className="journey-path" d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" strokeDasharray="1000" strokeDashoffset="1000" />
+              </svg>
 
-            {[
-              { id: 'A1', x: '5%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
-              { id: 'A2', x: '25%', y: '87%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
-              { id: 'B1', x: '40%', y: '50%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
-              { id: 'B2', x: '65%', y: '50%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-              { id: 'C1', x: '82%', y: '35%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
-              { id: 'C2', x: '95%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
-            ].map((m) => (
-              <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
-                <div className="milestone-circle">
-                  {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
-                  <div className="milestone-tooltip">
-                    <span style={{ fontWeight: 800, color: 'var(--accent-gold)', display: 'block', fontSize: '0.9rem' }}>{m.id} / {m.label}</span>
-                    <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8, color: 'white' }}>{m.desc}</p>
+              {[
+                { id: 'A1', x: '5%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
+                { id: 'A2', x: '25%', y: '87%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
+                { id: 'B1', x: '40%', y: '50%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+                { id: 'B2', x: '65%', y: '50%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+                { id: 'C1', x: '82%', y: '35%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
+                { id: 'C2', x: '95%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+              ].map((m) => (
+                <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
+                  <div className="milestone-circle">
+                    {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
+                    <div className="milestone-tooltip">
+                      <span style={{ fontWeight: 800, color: 'var(--accent-gold)', display: 'block', fontSize: '0.9rem' }}>{m.id} / {m.label}</span>
+                      <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8, color: 'white' }}>{m.desc}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

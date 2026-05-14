@@ -207,14 +207,43 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               {language.toUpperCase()}
             </button>
 
+            <Link 
+              href="/login"
+              style={{
+                textDecoration: 'none',
+                color: effectiveTextColor,
+                padding: '0.6rem 1.2rem',
+                borderRadius: '12px',
+                border: scrolled ? '1px solid var(--primary-navy)' : '1px solid rgba(255,255,255,0.3)',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                letterSpacing: '1px',
+                transition: 'all 0.4s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = effectiveTextColor;
+                e.currentTarget.style.color = (theme === 'dark' || (isDarkPage && !scrolled)) ? 'var(--primary-navy)' : 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'none';
+                e.currentTarget.style.color = effectiveTextColor;
+              }}
+            >
+              <i className="fa-solid fa-user-circle"></i>
+              {t('login') || 'LOGIN'}
+            </Link>
+
             <button
               onClick={toggleTheme}
               style={{
                 background: 'none',
                 border: scrolled ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
                 color: effectiveTextColor,
-                width: '32px',
-                height: '32px',
+                width: '40px',
+                height: '40px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
@@ -223,7 +252,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 transition: 'all 0.3s ease'
               }}
             >
-              <i className={`fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`}></i>
+              <i className={`fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`} style={{ fontSize: '1rem' }}></i>
             </button>
           </div>
         </div>
@@ -273,7 +302,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             width: '85%',
             maxWidth: '350px',
             height: '100vh',
-            background: isDarkPage ? 'var(--primary-navy)' : 'white',
+            background: (theme === 'dark' || isDarkPage) ? 'var(--primary-navy)' : 'white',
             padding: '6rem 2.5rem 3rem',
             display: 'flex',
             flexDirection: 'column',
@@ -314,7 +343,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 onClick={() => setIsOpen(false)}
                 style={{
                   textDecoration: 'none',
-                  color: isDarkPage ? 'white' : 'var(--primary-navy)',
+                  color: (theme === 'dark' || isDarkPage) ? 'white' : 'var(--primary-navy)',
                   fontSize: '1.2rem',
                   fontWeight: 700,
                   textTransform: 'uppercase',
@@ -326,6 +355,25 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                 {item.name}
               </Link>
             ))}
+
+            <Link 
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                style={{
+                  textDecoration: 'none',
+                  color: 'var(--accent-gold)',
+                  fontSize: '1.2rem',
+                  fontWeight: 800,
+                  textTransform: 'uppercase',
+                  letterSpacing: '3px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem'
+                }}
+              >
+                <i className="fa-solid fa-user-lock"></i>
+                {t('login') || 'LOGIN'}
+              </Link>
             
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button
