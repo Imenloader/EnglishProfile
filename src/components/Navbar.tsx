@@ -102,9 +102,7 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
           <div className="nav-logo" style={{ 
             width: scrolled ? '44px' : '52px', 
             height: scrolled ? '44px' : '52px', 
-            background: 'white', 
             borderRadius: '12px', 
-            padding: '6px', 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
@@ -116,7 +114,12 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             <img 
               src="/images/logo/logo-icon.jpg" 
               alt="Linguaplanet Logo" 
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain',
+                mixBlendMode: 'multiply'
+              }} 
             />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
