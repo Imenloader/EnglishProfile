@@ -47,6 +47,12 @@ export default function AdminDashboard() {
     level: 'A1'
   });
 
+  // Export Filters
+  const [filterStartDate, setFilterStartDate] = useState('');
+  const [filterEndDate, setFilterEndDate] = useState('');
+  const [filterMinAge, setFilterMinAge] = useState('');
+  const [filterMaxAge, setFilterMaxAge] = useState('');
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -112,10 +118,39 @@ export default function AdminDashboard() {
       const { data: leadsData } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
       const { data: answersData } = await supabase.from('lead_answers').select('*').order('created_at', { ascending: false });
 
+      let filteredLeads = leadsData || [];
+
+      // Filter by Date
+      if (filterStartDate) {
+        filteredLeads = filteredLeads.filter(l => l.created_at >= filterStartDate);
+      }
+      if (filterEndDate) {
+        const nextDay = new Date(filterEndDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        const nextDayStr = nextDay.toISOString().split('T')[0];
+        filteredLeads = filteredLeads.filter(l => l.created_at < nextDayStr);
+      }
+
+      // Filter by Age
+      if (filterMinAge || filterMaxAge) {
+        filteredLeads = filteredLeads.filter(l => {
+          const age = parseInt(l.age_range);
+          if (isNaN(age)) return false; 
+          const min = filterMinAge ? parseInt(filterMinAge) : 0;
+          const max = filterMaxAge ? parseInt(filterMaxAge) : 999;
+          return age >= min && age <= max;
+        });
+      }
+
+      if (filteredLeads.length === 0) {
+        alert("No leads found with the current filters.");
+        return;
+      }
+
       const workbook = XLSX.utils.book_new();
       
       // 1. MASTER STUDENTS SUMMARY (High-level overview)
-      const summaryData = (leadsData || []).map(l => ({
+      const summaryData = filteredLeads.map(l => ({
         'ID': l.id.slice(0, 8),
         'Student Name': l.name,
         'Email': l.email,
@@ -131,9 +166,8 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
       // 2. STUDENT-QUESTION MATRIX (Deep Granular Tracking)
-      // This creates a grid where rows are students and columns are individual questions
       const uniqueQuestions = Array.from(new Set((answersData || []).map(a => a.question_text)));
-      const matrixData = (leadsData || []).map(l => {
+      const matrixData = filteredLeads.map(l => {
         const studentAnswers = (answersData || []).filter(a => a.lead_id === l.id);
         const row: any = {
           'Student Name': l.name,
@@ -149,14 +183,6 @@ export default function AdminDashboard() {
         });
         return row;
       });
-      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Student-Question Matrix");
-
-      // 2.5 INDIVIDUAL LEAD ANSWERS
-      const detailedAnswers = (answersData || []).map(a => ({
-        'Student': a.student_name,
-        'Question': a.question_text,
-        'Answer': a.student_answer,
-        'Correct': a.correct_answer,
         'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
         'Date': a.created_at
       }));
@@ -313,7 +339,7 @@ export default function AdminDashboard() {
             <div style={{ height: '3px', width: '60px', background: 'var(--accent-gold)', marginTop: '1rem' }}></div>
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            {activeTab === 'leads' && (
+            {(activeTab === 'leads' || activeTab === 'analytics') && (
               <button className="btn-master btn-gold" onClick={handleExportExcel}>MASTER EXCEL <i className="fa-solid fa-file-excel" style={{ marginLeft: '1rem' }}></i></button>
             )}
             {activeTab === 'test' && (
@@ -324,6 +350,34 @@ export default function AdminDashboard() {
             )}
           </div>
         </header>
+
+        {/* Export Filters UI */}
+        {(activeTab === 'analytics' || activeTab === 'leads') && (
+          <div className="glass-dark" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', padding: '2rem', borderRadius: '20px', marginBottom: '3rem', alignItems: 'flex-end', border: '1px solid rgba(255,255,255,0.05)', background: 'var(--primary-navy)' }}>
+            <div style={{ flex: 1, minWidth: '150px' }}>
+              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>FROM DATE</label>
+              <input type="date" value={filterStartDate} onChange={(e) => setFilterStartDate(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+            </div>
+            <div style={{ flex: 1, minWidth: '150px' }}>
+              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>TO DATE</label>
+              <input type="date" value={filterEndDate} onChange={(e) => setFilterEndDate(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+            </div>
+            <div style={{ flex: 1, minWidth: '100px' }}>
+              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>MIN AGE</label>
+              <input type="number" placeholder="0" value={filterMinAge} onChange={(e) => setFilterMinAge(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+            </div>
+            <div style={{ flex: 1, minWidth: '100px' }}>
+              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>MAX AGE</label>
+              <input type="number" placeholder="100" value={filterMaxAge} onChange={(e) => setFilterMaxAge(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+            </div>
+            <button 
+              onClick={() => { setFilterStartDate(''); setFilterEndDate(''); setFilterMinAge(''); setFilterMaxAge(''); }}
+              style={{ background: 'none', border: 'none', color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '1px', cursor: 'pointer', padding: '0.8rem' }}
+            >
+              RESET FILTERS
+            </button>
+          </div>
+        )}
 
         <div>
           {activeTab === 'analytics' && (
