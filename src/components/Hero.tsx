@@ -40,6 +40,7 @@ export default function Hero() {
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
+      padding: '12rem 0 6rem',
       position: 'relative',
       backgroundColor: 'var(--bg-color)',
       overflow: 'hidden',
@@ -100,9 +101,9 @@ export default function Hero() {
               {t('worldClassAcademy')}
             </span>
             <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 10vw, 6rem)', 
+              fontSize: 'clamp(2.2rem, 6vw, 4.2rem)', 
               color: 'var(--text-color)',
-              lineHeight: 1.1,
+              lineHeight: 1.15,
               marginBottom: '2.5rem',
               fontFamily: 'var(--font-serif)'
             }}>
