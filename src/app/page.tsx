@@ -411,9 +411,9 @@ export default function Home() {
             gap: '3rem' 
           }}>
             {[
-              { name: 'Maged Shabana', role: t('roleGM'), img: '/images/GM-new.png' },
-              { name: 'Muhammad Raafat', role: 'Recruitment and Talent Acquisition Manager', img: '/images/Recruitment-new.png' },
-              { name: 'Ibrahim ElEmam', role: t('roleMarketing'), img: '/images/Marketing-new.png' }
+              { name: t('memberMaged'), role: t('roleGM'), img: '/images/GM-new.png' },
+              { name: t('memberRaafat'), role: t('roleRecruitment'), img: '/images/Recruitment-new.png' },
+              { name: t('memberIbrahim'), role: t('roleMarketing'), img: '/images/Marketing-new.png' }
             ].map((member, i) => (
               <div key={i} className="team-card" data-aos="fade-up" data-aos-delay={i * 100} style={{ textAlign: 'center' }}>
                 <div style={{ 
