@@ -378,10 +378,44 @@ export default function AdminDashboard() {
                     <PieChart>
                       <Pie
                         data={[
-                          { name: 'Under 18', value: leads.filter(l => parseInt(l.age_range) < 18).length },
-                          { name: '18-30', value: leads.filter(l => parseInt(l.age_range) >= 18 && parseInt(l.age_range) <= 30).length },
-                          { name: '30-50', value: leads.filter(l => parseInt(l.age_range) > 30 && parseInt(l.age_range) <= 50).length },
-                          { name: '50+', value: leads.filter(l => parseInt(l.age_range) > 50).length }
+                          { 
+                            name: 'Under 18', 
+                            value: leads.filter(l => {
+                              const age = l.age_range;
+                              if (!age) return false;
+                              if (age === 'kids' || age === 'teens') return true;
+                              const num = parseInt(age);
+                              return !isNaN(num) && num < 18;
+                            }).length 
+                          },
+                          { 
+                            name: '18-30', 
+                            value: leads.filter(l => {
+                              const age = l.age_range;
+                              if (!age) return false;
+                              if (age === 'adults') return true; // Legacy adults fallback
+                              const num = parseInt(age);
+                              return !isNaN(num) && num >= 18 && num <= 30;
+                            }).length 
+                          },
+                          { 
+                            name: '30-50', 
+                            value: leads.filter(l => {
+                              const age = l.age_range;
+                              if (!age) return false;
+                              const num = parseInt(age);
+                              return !isNaN(num) && num > 30 && num <= 50;
+                            }).length 
+                          },
+                          { 
+                            name: '50+', 
+                            value: leads.filter(l => {
+                              const age = l.age_range;
+                              if (!age) return false;
+                              const num = parseInt(age);
+                              return !isNaN(num) && num > 50;
+                            }).length 
+                          }
                         ].filter(d => d.value > 0)}
                         cx="50%" cy="50%"
                         innerRadius={60}
