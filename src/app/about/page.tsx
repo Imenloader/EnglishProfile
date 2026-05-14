@@ -107,7 +107,7 @@ export default function AboutPage() {
         <div className="container">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div className="glass-dark" style={{ padding: '5rem', borderRadius: '40px' }} data-aos="fade-up">
-              <h2 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '3.5rem', textAlign: 'center' }}>{t('sendMessage')}</h2>
+              <h2 style={{ fontSize: '2.5rem', color: 'var(--text-color)', marginBottom: '3.5rem', textAlign: 'center' }}>{t('sendMessage')}</h2>
               
               <AboutContactForm onSave={db.saveInquiry} t={t} />
             </div>
@@ -278,24 +278,28 @@ function AboutContactForm({ onSave, t }: { onSave: any, t: any }) {
           font-size: 0.7rem; 
           letter-spacing: 2px; 
           font-weight: 800; 
-          color: rgba(255,255,255,0.4); 
-          marginBottom: 1rem; 
+          color: var(--text-color-muted); 
+          margin-bottom: 1rem; 
           display: block;
         }
         .form-input {
           width: 100%;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: rgba(128,128,128,0.05);
+          border: 1px solid var(--border-color);
           padding: 1.2rem 1.5rem;
           border-radius: 12px;
-          color: white;
+          color: var(--text-color);
           font-size: 1rem;
           transition: all 0.3s ease;
+        }
+        .form-input::placeholder {
+          color: var(--text-color-muted);
+          opacity: 0.5;
         }
         .form-input:focus {
           outline: none;
           border-color: var(--accent-gold);
-          background: rgba(255,255,255,0.05);
+          background: rgba(128,128,128,0.08);
         }
       `}</style>
     </form>
