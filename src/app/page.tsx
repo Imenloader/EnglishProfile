@@ -86,10 +86,7 @@ export default function Home() {
                   { name: 'Suez', logo: '/images/partners/suez.jpg' },
                   { name: 'Al-Azhar Graduates', logo: '/images/partners/alazhar.jpg' },
                   { name: 'Tamayyoz', logo: '/images/partners/tamayyoz.jpg' },
-                  { name: 'GHC', logo: '/images/partners/ghc.jpg' },
-                  { name: 'Magrabi Hospitals', logo: '' },
-                  { name: 'Dar Al-Fouad', logo: '' },
-                  { name: 'Egyptian Ministry of Education', logo: '' }
+                  { name: 'GHC', logo: '/images/partners/ghc.jpg' }
                 ];
                 // Multiply for infinite marquee
                 const triplePartners = [...partners, ...partners, ...partners];
