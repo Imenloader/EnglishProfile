@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { db, Lead, SiteSettings } from '@/data/db';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import { useLanguage } from '@/contexts/LanguageContext';
 import * as XLSX from 'xlsx';
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area, Cell, PieChart, Pie
 } from 'recharts';
 
@@ -54,6 +54,7 @@ export default function AdminDashboard() {
   const [filterMaxAge, setFilterMaxAge] = useState('');
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -73,12 +74,6 @@ export default function AdminDashboard() {
     webhookUrl: ''
   });
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchData();
-    }
-  }, [isAuthenticated, activeTab]);
-
   const fetchData = async () => {
     try {
       const [l, s] = await Promise.all([db.getLeads(), db.getSettings()]);
@@ -88,7 +83,7 @@ export default function AdminDashboard() {
         .from('leads')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (!leadsError) setLeads(rawLeads || []);
 
       if (activeTab === 'test') {
@@ -102,6 +97,14 @@ export default function AdminDashboard() {
       console.error("Dashboard failed to fetch data:", error);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, activeTab]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,7 +138,7 @@ export default function AdminDashboard() {
       if (filterMinAge || filterMaxAge) {
         filteredLeads = filteredLeads.filter((l: any) => {
           const age = parseInt(l.age_range);
-          if (isNaN(age)) return false; 
+          if (isNaN(age)) return false;
           const min = filterMinAge ? parseInt(filterMinAge) : 0;
           const max = filterMaxAge ? parseInt(filterMaxAge) : 999;
           return age >= min && age <= max;
@@ -148,7 +151,7 @@ export default function AdminDashboard() {
       }
 
       const workbook = XLSX.utils.book_new();
-      
+
       // 1. MASTER STUDENTS SUMMARY
       const summaryData = filteredLeads.map((l: any) => ({
         'ID': l.id.slice(0, 8),
@@ -230,10 +233,10 @@ export default function AdminDashboard() {
   };
 
   const handleSaveQuestion = async () => {
-    const { error } = currentQuestion.id 
+    const { error } = currentQuestion.id
       ? await supabase.from('questions').update(currentQuestion).eq('id', currentQuestion.id)
       : await supabase.from('questions').insert([currentQuestion]);
-    
+
     if (!error) {
       setIsEditingQuestion(false);
       fetchData();
@@ -246,10 +249,10 @@ export default function AdminDashboard() {
       fetchData();
     }
   };
-  
+
   const handleSyncQuestions = async () => {
     if (!confirm('This will upload 60 static questions to the database. Continue?')) return;
-    
+
     const formatted = placementQuestions.map(q => ({
       question: q.question,
       options: q.options,
@@ -257,7 +260,7 @@ export default function AdminDashboard() {
       part: q.part,
       level: q.category === 'advanced' ? 'B2' : (q.category === 'vocabulary' ? 'A2' : 'A1')
     }));
-    
+
     const { error } = await supabase.from('questions').insert(formatted);
     if (!error) {
       alert('Questions synchronized successfully!');
@@ -274,7 +277,110 @@ export default function AdminDashboard() {
     alert('Settings saved successfully!');
   };
 
+
+  // Consolidate analytics calculations to prevent unnecessary re-renders and multiple passes
+  const analyticsData = useMemo(() => {
+    let totalAssessments = leads.length;
+    let highAchievers = 0;
+    let totalScore = 0;
+    let totalQuestions = 0;
+
+    const proficiencyCounts: Record<string, number> = {
+      'A1': 0, 'A2': 0, 'B1': 0, 'B2': 0, 'C1': 0, 'C2': 0
+    };
+
+    const dailyCounts: Record<string, number> = {};
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - (6 - i));
+      const dateStr = d.toISOString().split('T')[0];
+      dailyCounts[dateStr] = 0;
+    }
+
+    let ageUnder18 = 0;
+    let age18to30 = 0;
+    let age30to50 = 0;
+    let ageOver50 = 0;
+
+    leads.forEach((l: any) => {
+      // High Achievers
+      if (l.level && l.level.includes('C')) {
+        highAchievers++;
+      }
+
+      // Score
+      totalScore += (l.score || 0);
+      totalQuestions += (l.total_questions || 1);
+
+      // Proficiency
+      if (l.level) {
+        if (proficiencyCounts[l.level] !== undefined) {
+          proficiencyCounts[l.level]++;
+        } else if (l.level === 'C1/C2') {
+          // Sometimes level is combined in the DB
+          proficiencyCounts['C1']++;
+        }
+      }
+
+      // Daily Volume
+      if (l.created_at) {
+        const dateStr = l.created_at.split('T')[0];
+        if (dailyCounts[dateStr] !== undefined) {
+          dailyCounts[dateStr]++;
+        }
+      }
+
+      // Age
+      if (l.age_range) {
+        const age = l.age_range;
+        if (age === 'kids' || age === 'teens') {
+          ageUnder18++;
+        } else if (age === 'adults') {
+          age18to30++;
+        } else {
+          const num = parseInt(age);
+          if (!isNaN(num)) {
+            if (num < 18) ageUnder18++;
+            else if (num >= 18 && num <= 30) age18to30++;
+            else if (num > 30 && num <= 50) age30to50++;
+            else if (num > 50) ageOver50++;
+          }
+        }
+      }
+    });
+
+    const avgScorePercent = totalAssessments > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
+
+    const proficiencyData = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => ({
+      name: lvl,
+      count: proficiencyCounts[lvl] || 0
+    }));
+
+    const dailyVolumeData = Object.keys(dailyCounts).sort().map(dateStr => ({
+      date: dateStr.split('-').slice(1).join('/'),
+      count: dailyCounts[dateStr]
+    }));
+
+    const ageData = [
+      { name: 'Under 18', value: ageUnder18 },
+      { name: '18-30', value: age18to30 },
+      { name: '30-50', value: age30to50 },
+      { name: '50+', value: ageOver50 }
+    ].filter(d => d.value > 0);
+
+    return {
+      totalAssessments,
+      highAchievers,
+      avgScorePercent,
+      proficiencyData,
+      dailyVolumeData,
+      ageData
+    };
+  }, [leads]);
+
   if (!isAuthenticated) {
+
     return (
       <main className="marble-pattern" style={{ minHeight: '100vh', background: 'var(--primary-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <form className="glass-dark" style={{ padding: '4rem', width: '100%', maxWidth: '450px', borderRadius: '32px', textAlign: 'center' }} onSubmit={handleLogin}>
@@ -282,9 +388,9 @@ export default function AdminDashboard() {
             <i className="fa-solid fa-lock" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
           </div>
           <h2 style={{ color: 'white', marginBottom: '1rem', fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>Admin Access</h2>
-          <input 
-            type="password" 
-            placeholder="SECURITY PASSWORD" 
+          <input
+            type="password"
+            placeholder="SECURITY PASSWORD"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', marginBottom: '2rem', borderRadius: '12px', color: 'white', textAlign: 'center', letterSpacing: '4px' }}
@@ -298,14 +404,14 @@ export default function AdminDashboard() {
   return (
     <main className="marble-pattern" style={{ display: 'flex', minHeight: '100vh', background: 'var(--marble-white)' }}>
       <Navbar />
-      
+
       {/* Sidebar */}
       <div style={{ width: '320px', background: 'var(--primary-navy)', color: 'white', padding: '10rem 2rem 2rem', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh', zIndex: 100 }}>
         <div style={{ marginBottom: '4rem' }}>
           <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '4px' }}>ADMINISTRATION</span>
           <h2 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-serif)', marginTop: '0.5rem' }}>Elite Control</h2>
         </div>
-        
+
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {[
             { id: 'analytics', label: 'ANALYTICS', icon: 'fa-chart-line' },
@@ -360,7 +466,7 @@ export default function AdminDashboard() {
               <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>MAX AGE</label>
               <input type="number" placeholder="100" value={filterMaxAge} onChange={(e) => setFilterMaxAge(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
             </div>
-            <button 
+            <button
               onClick={() => { setFilterStartDate(''); setFilterEndDate(''); setFilterMinAge(''); setFilterMaxAge(''); }}
               style={{ background: 'none', border: 'none', color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '1px', cursor: 'pointer', padding: '0.8rem' }}
             >
@@ -375,15 +481,15 @@ export default function AdminDashboard() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '4rem' }}>
                 <div className="card-premium" style={{ textAlign: 'center', background: 'white', border: '1px solid rgba(0,0,0,0.05)', color: 'var(--primary-navy)' }}>
                   <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800 }}>TOTAL ASSESSMENTS</span>
-                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0' }}>{leads.length}</div>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0' }}>{analyticsData.totalAssessments}</div>
                 </div>
                 <div className="card-premium" style={{ textAlign: 'center', background: 'white', border: '1px solid rgba(0,0,0,0.05)', color: 'var(--primary-navy)' }}>
                   <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800 }}>HIGH ACHIEVERS</span>
-                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--accent-gold)' }}>{leads.filter(l => l.level && l.level.includes('C')).length}</div>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--accent-gold)' }}>{analyticsData.highAchievers}</div>
                 </div>
                 <div className="card-premium" style={{ textAlign: 'center', background: 'white', border: '1px solid rgba(0,0,0,0.05)', color: 'var(--primary-navy)' }}>
                   <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800 }}>AVG SCORE %</span>
-                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--accent-blue)' }}>{leads.length > 0 ? Math.round((leads.reduce((a,b) => a + (b.score || 0), 0) / leads.reduce((a,b) => a + (b.total_questions || 1), 0)) * 100) : 0}%</div>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--accent-blue)' }}>{analyticsData.avgScorePercent}%</div>
                 </div>
               </div>
 
@@ -393,10 +499,7 @@ export default function AdminDashboard() {
                   <div style={{ height: '300px' }}>
                     {mounted && (
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => ({
-                          name: lvl,
-                          count: leads.filter(l => l.level === lvl || (lvl === 'C1/C2' && (l.level === 'C1' || l.level === 'C2'))).length
-                        }))}>
+                        <BarChart data={analyticsData.proficiencyData}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
                           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700 }} />
                           <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
@@ -413,15 +516,7 @@ export default function AdminDashboard() {
                   <div style={{ height: '300px' }}>
                     {mounted && (
                       <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={Array.from({ length: 7 }).map((_, i) => {
-                          const d = new Date();
-                          d.setDate(d.getDate() - (6 - i));
-                          const dateStr = d.toISOString().split('T')[0];
-                          return {
-                            date: dateStr.split('-').slice(1).join('/'),
-                            count: leads.filter(l => l.created_at.startsWith(dateStr)).length
-                          };
-                        })}>
+                        <AreaChart data={analyticsData.dailyVolumeData}>
                           <defs>
                             <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.3}/>
@@ -447,46 +542,7 @@ export default function AdminDashboard() {
                     <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={[
-                          { 
-                            name: 'Under 18', 
-                            value: leads.filter(l => {
-                              const age = l.age_range;
-                              if (!age) return false;
-                              if (age === 'kids' || age === 'teens') return true;
-                              const num = parseInt(age);
-                              return !isNaN(num) && num < 18;
-                            }).length 
-                          },
-                          { 
-                            name: '18-30', 
-                            value: leads.filter(l => {
-                              const age = l.age_range;
-                              if (!age) return false;
-                              if (age === 'adults') return true; // Legacy adults fallback
-                              const num = parseInt(age);
-                              return !isNaN(num) && num >= 18 && num <= 30;
-                            }).length 
-                          },
-                          { 
-                            name: '30-50', 
-                            value: leads.filter(l => {
-                              const age = l.age_range;
-                              if (!age) return false;
-                              const num = parseInt(age);
-                              return !isNaN(num) && num > 30 && num <= 50;
-                            }).length 
-                          },
-                          { 
-                            name: '50+', 
-                            value: leads.filter(l => {
-                              const age = l.age_range;
-                              if (!age) return false;
-                              const num = parseInt(age);
-                              return !isNaN(num) && num > 50;
-                            }).length 
-                          }
-                        ].filter(d => d.value > 0)}
+                        data={analyticsData.ageData}
                         cx="50%" cy="50%"
                         innerRadius={60}
                         outerRadius={80}
@@ -612,17 +668,17 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
-              
+
               <div style={{ borderTop: '1px solid var(--soft-gray)', paddingTop: '3rem', marginTop: '1rem', marginBottom: '3rem' }}>
                 <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>AUTOMATION</h4>
                 <div style={{ marginBottom: '2rem' }}>
                   <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>NOTIFICATIONS WEBHOOK URL (ZAPIER / MAKE)</label>
-                  <input 
-                    type="url" 
+                  <input
+                    type="url"
                     placeholder="https://hooks.zapier.com/..."
-                    value={settings.webhookUrl || ''} 
-                    onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })} 
-                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }} 
+                    value={settings.webhookUrl || ''}
+                    onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })}
+                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }}
                   />
                 </div>
               </div>
@@ -666,7 +722,7 @@ export default function AdminDashboard() {
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
           <div className="glass-dark" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
             <button onClick={() => setSelectedLead(null)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
-            
+
             <div style={{ marginBottom: '4rem' }}>
               <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>STUDENT DOSSIER</span>
               <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem', fontFamily: 'var(--font-serif)' }}>{selectedLead.name}</h2>
@@ -723,17 +779,17 @@ export default function AdminDashboard() {
           <div className="glass-dark" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative' }}>
             <button onClick={() => setIsEditingQuestion(false)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
             <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '3rem', fontFamily: 'var(--font-serif)' }}>{currentQuestion.id ? 'Edit Question' : 'Add New Question'}</h2>
-            
+
             <div style={{ display: 'grid', gap: '2rem' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>QUESTION TEXT</label>
-                <textarea 
-                  value={currentQuestion.question} 
+                <textarea
+                  value={currentQuestion.question}
                   onChange={(e) => setCurrentQuestion({...currentQuestion, question: e.target.value})}
                   style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white', resize: 'none', height: '100px' }}
                 />
               </div>
-              
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>PART (1-3)</label>
@@ -749,12 +805,12 @@ export default function AdminDashboard() {
 
               <div>
                 <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>OPTIONS (Comma separated)</label>
-                <input 
-                  type="text" 
-                  value={currentQuestion.options?.join(', ')} 
+                <input
+                  type="text"
+                  value={currentQuestion.options?.join(', ')}
                   onChange={(e) => setCurrentQuestion({...currentQuestion, options: e.target.value.split(',').map(o => o.trim())})}
                   placeholder="Option 1, Option 2, Option 3, Option 4"
-                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }} 
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }}
                 />
               </div>
 
@@ -769,7 +825,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      
+
       <style jsx>{`
         .hover-lift:hover {
           transform: translateY(-5px);
