@@ -58,10 +58,6 @@ export default function AboutPage() {
       {/* 03: The Mastery Journey (CEFR Path) */}
       <section style={{ padding: '8rem 0', position: 'relative', overflow: 'hidden' }}>
         <div className="container">
-          <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
-            <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px' }}>{t('learningEvolution')}</span>
-            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: 'white', marginTop: '1.5rem' }}>{t('professionalTrajectory')}</h2>
-          </div>
 
           {/* Desktop Trajectory */}
           <div className="desktop-trajectory" data-aos="zoom-in">
