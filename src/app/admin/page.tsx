@@ -168,10 +168,22 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // Pre-compute maps and sets for O(1) lookups to avoid O(N^2) complexity
+      const validLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const answersByLeadAndQuestion = new Map();
+
+      (answersData || []).forEach((a: any) => {
+        if (!validLeadIds.has(a.lead_id)) return;
+        if (!answersByLeadAndQuestion.has(a.lead_id)) {
+          answersByLeadAndQuestion.set(a.lead_id, new Map());
+        }
+        answersByLeadAndQuestion.get(a.lead_id).set(a.question_text, a);
+      });
+
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswers = answersByLeadAndQuestion.get(l.id) || new Map();
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -181,7 +193,7 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswers.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -189,7 +201,7 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      const detailedAnswers = (answersData || []).filter((a: any) => validLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
@@ -213,14 +225,26 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(writingData), "Writing Review Portal");
 
       // 5. LEVEL DISTRIBUTION
+      const levelStatsMap = new Map();
+      filteredLeads.forEach((l: any) => {
+        const lvl = l.level;
+        if (!lvl) return;
+        if (!levelStatsMap.has(lvl)) {
+          levelStatsMap.set(lvl, { count: 0, totalScore: 0 });
+        }
+        const stats = levelStatsMap.get(lvl);
+        stats.count++;
+        stats.totalScore += (l.score || 0);
+      });
+
       const levelsList = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
       const cefrStats = levelsList.map(lvl => {
-        const matchingLeads = filteredLeads.filter((l: any) => l.level === lvl);
+        const stats = levelStatsMap.get(lvl) || { count: 0, totalScore: 0 };
         return {
           'CEFR Level': lvl,
-          'Count': matchingLeads.length,
-          'Percentage': filteredLeads.length ? `${Math.round((matchingLeads.length / filteredLeads.length) * 100)}%` : '0%',
-          'Average Score': matchingLeads.length ? Math.round(matchingLeads.reduce((acc: number, curr: any) => acc + (curr.score || 0), 0) / matchingLeads.length) : 0
+          'Count': stats.count,
+          'Percentage': filteredLeads.length ? `${Math.round((stats.count / filteredLeads.length) * 100)}%` : '0%',
+          'Average Score': stats.count > 0 ? Math.round(stats.totalScore / stats.count) : 0
         };
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cefrStats), "Level Distribution");
