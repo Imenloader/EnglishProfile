@@ -6,3 +6,6 @@
 ## 2024-05-15 - React Performance in AdminDashboard
 **Learning:** Consolidating multiple expensive inline array operations (`.filter`, `.reduce`, `.map`) on the `leads` array into a single `O(N)` pass inside a `useMemo` hook effectively prevents redundant calculations on every render, especially when there are input fields (like date filters) that trigger re-renders on keystrokes.
 **Action:** Always look for multiple inline array iterations in large components and move them into a single `useMemo` block. Also, be careful not to accidentally commit scratchpad scripts or `node_modules` modifications.
+## 2024-05-18 - Admin Export O(N^2) Bottleneck
+**Learning:** Generating the Excel export payload in `src/app/admin/page.tsx` was blocking due to O(N^2) nested array iterations `.filter()`, `.find()`, and `.some()` over large unpaginated arrays (`leads` and `answersData`).
+**Action:** Use pre-computed `Set` for validity checks and multi-level `Map` (`Map<leadId, Map<questionId, Answer>>`) for $O(1)$ lookups during map loops and CSV sheet generation.
