@@ -170,8 +170,18 @@ export default function AdminDashboard() {
 
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+
+      // Optimization: Create a Hash Map for O(1) lookups of student answers to prevent O(N^2) iterations
+      const answersByLeadId = new Map<string, Map<string, any>>();
+      (answersData || []).forEach((a: any) => {
+        if (!answersByLeadId.has(a.lead_id)) {
+          answersByLeadId.set(a.lead_id, new Map());
+        }
+        answersByLeadId.get(a.lead_id)!.set(a.question_text, a);
+      });
+
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswersMap = answersByLeadId.get(l.id) || new Map();
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -181,15 +191,17 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
-          row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
+          const ans = studentAnswersMap.get(q as string);
+          row[q as string] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // Optimization: Use a Set for O(1) existence checks instead of Array.some() O(N)
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
@@ -280,7 +292,7 @@ export default function AdminDashboard() {
 
   // Consolidate analytics calculations to prevent unnecessary re-renders and multiple passes
   const analyticsData = useMemo(() => {
-    let totalAssessments = leads.length;
+    const totalAssessments = leads.length;
     let highAchievers = 0;
     let totalScore = 0;
     let totalQuestions = 0;
