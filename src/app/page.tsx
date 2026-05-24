@@ -117,9 +117,11 @@ export default function Home() {
                   }}
                   >
                     {partner.logo ? (
-                      <img 
+                      <Image
                         src={partner.logo} 
                         alt={partner.name} 
+                        width={220}
+                        height={140}
                         style={{ 
                           maxWidth: '100%', 
                           maxHeight: '100%', 

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useEffect, useState } from 'react';
 import { db } from '@/data/db';
@@ -36,18 +37,23 @@ export default function Footer() {
                 overflow: 'hidden',
                 padding: '5px'
               }}>
-                <img 
+                <Image
                   src="/images/logo/logo-icon.jpg" 
                   alt="Linguaplanet" 
+                  width={60}
+                  height={60}
                   style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <img 
+                <Image
                   src="/images/logo/logo-text.jpg" 
                   alt="Linguaplanet" 
+                  width={118}
+                  height={30}
                   style={{ 
                     height: '30px', 
+                    width: 'auto',
                     filter: 'invert(1) hue-rotate(180deg)',
                     mixBlendMode: 'screen',
                     opacity: 1
