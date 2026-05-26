@@ -6,3 +6,6 @@
 ## 2024-05-15 - React Performance in AdminDashboard
 **Learning:** Consolidating multiple expensive inline array operations (`.filter`, `.reduce`, `.map`) on the `leads` array into a single `O(N)` pass inside a `useMemo` hook effectively prevents redundant calculations on every render, especially when there are input fields (like date filters) that trigger re-renders on keystrokes.
 **Action:** Always look for multiple inline array iterations in large components and move them into a single `useMemo` block. Also, be careful not to accidentally commit scratchpad scripts or `node_modules` modifications.
+## 2026-05-26 - O(N^2) to O(N) Array Iteration
+**Learning:** Found an O(N^2) bottleneck when exporting the Student-Question Matrix in `src/app/admin/page.tsx`. The previous implementation was filtering inside a map block, performing `.filter()` on answers inside the `.map()` of leads, taking O(Leads * Answers) time, and then running a `.find()` for each question inside the loop taking O(Leads * Questions * Answers).
+**Action:** Replaced nested `.filter()` and `.find()` with an O(N) `Hash Map` group logic by `lead_id` and `question_text`. Replaced `.some()` operations with `Set.has()` for O(1) checks during the generation of the Detailed Answers Matrix.
