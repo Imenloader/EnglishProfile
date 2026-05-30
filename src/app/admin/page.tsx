@@ -434,14 +434,14 @@ export default function AdminDashboard() {
       <Navbar />
 
       {/* Horizontal Top Header & Tab Menu */}
-      <div style={{ padding: '8rem 4rem 2rem', background: 'var(--primary-navy)', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 10 }}>
+      <div style={{ padding: '8rem 4rem 2rem', background: 'var(--bg-color-alt)', color: 'var(--text-color)', borderBottom: '1px solid var(--border-color)', position: 'relative', zIndex: 10 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
           <div>
             <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '4px' }}>ADMINISTRATION</span>
-            <h2 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-serif)', marginTop: '0.5rem', fontWeight: 700 }}>Elite Control</h2>
+            <h2 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-serif)', marginTop: '0.5rem', fontWeight: 700, color: 'var(--text-color)' }}>Elite Control</h2>
           </div>
           
-          <nav style={{ display: 'flex', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.4rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <nav style={{ display: 'flex', gap: '0.5rem', background: 'var(--bg-color)', padding: '0.4rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
             {[
               { id: 'analytics', label: 'ANALYTICS', icon: 'fa-chart-line' },
               { id: 'leads', label: 'STUDENT LEADS', icon: 'fa-users' },
@@ -453,7 +453,7 @@ export default function AdminDashboard() {
                 onClick={() => setActiveTab(item.id)} 
                 style={{ 
                   background: activeTab === item.id ? 'var(--accent-gold)' : 'transparent', 
-                  color: activeTab === item.id ? 'var(--primary-navy)' : 'rgba(255,255,255,0.8)', 
+                  color: activeTab === item.id ? 'var(--primary-navy)' : 'var(--text-color)', 
                   border: 'none',
                   padding: '0.8rem 1.8rem', 
                   borderRadius: '12px', 
@@ -483,7 +483,7 @@ export default function AdminDashboard() {
             <div style={{ height: '3px', width: '60px', background: 'var(--accent-gold)', marginTop: '1rem' }}></div>
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            {(activeTab === 'leads' || activeTab === 'analytics') && (
+            {activeTab === 'leads' && (
               <button className="btn-master btn-gold" onClick={handleExportExcel}>MASTER EXCEL <i className="fa-solid fa-file-excel" style={{ marginLeft: '1rem' }}></i></button>
             )}
             {activeTab === 'test' && (
@@ -496,27 +496,27 @@ export default function AdminDashboard() {
         </header>
 
         {/* Export Filters UI */}
-        {(activeTab === 'analytics' || activeTab === 'leads') && (
-          <div className="glass-dark" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', padding: '2rem', borderRadius: '20px', marginBottom: '3rem', alignItems: 'flex-end', border: '1px solid rgba(255,255,255,0.05)', background: 'var(--primary-navy)' }}>
+        {activeTab === 'leads' && (
+          <div className="glass-card animate-reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', padding: '2.5rem', borderRadius: '24px', marginBottom: '3rem', alignItems: 'flex-end', border: '1px solid var(--border-color)' }}>
             <div style={{ flex: 1, minWidth: '150px' }}>
-              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>FROM DATE</label>
-              <input type="date" value={filterStartDate} onChange={(e) => setFilterStartDate(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+              <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-color)', opacity: 0.6, letterSpacing: '2px', marginBottom: '0.8rem' }}>FROM DATE</label>
+              <input type="date" value={filterStartDate} onChange={(e) => setFilterStartDate(e.target.value)} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '0.8rem', borderRadius: '8px', color: 'var(--text-color)', fontSize: '0.9rem' }} />
             </div>
             <div style={{ flex: 1, minWidth: '150px' }}>
-              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>TO DATE</label>
-              <input type="date" value={filterEndDate} onChange={(e) => setFilterEndDate(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+              <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-color)', opacity: 0.6, letterSpacing: '2px', marginBottom: '0.8rem' }}>TO DATE</label>
+              <input type="date" value={filterEndDate} onChange={(e) => setFilterEndDate(e.target.value)} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '0.8rem', borderRadius: '8px', color: 'var(--text-color)', fontSize: '0.9rem' }} />
             </div>
             <div style={{ flex: 1, minWidth: '100px' }}>
-              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>MIN AGE</label>
-              <input type="number" placeholder="0" value={filterMinAge} onChange={(e) => setFilterMinAge(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+              <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-color)', opacity: 0.6, letterSpacing: '2px', marginBottom: '0.8rem' }}>MIN AGE</label>
+              <input type="number" placeholder="0" value={filterMinAge} onChange={(e) => setFilterMinAge(e.target.value)} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '0.8rem', borderRadius: '8px', color: 'var(--text-color)', fontSize: '0.9rem' }} />
             </div>
             <div style={{ flex: 1, minWidth: '100px' }}>
-              <label style={{ display: 'block', fontSize: '0.6rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '0.8rem' }}>MAX AGE</label>
-              <input type="number" placeholder="100" value={filterMaxAge} onChange={(e) => setFilterMaxAge(e.target.value)} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.8rem', borderRadius: '8px', color: 'white', fontSize: '0.9rem' }} />
+              <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-color)', opacity: 0.6, letterSpacing: '2px', marginBottom: '0.8rem' }}>MAX AGE</label>
+              <input type="number" placeholder="100" value={filterMaxAge} onChange={(e) => setFilterMaxAge(e.target.value)} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '0.8rem', borderRadius: '8px', color: 'var(--text-color)', fontSize: '0.9rem' }} />
             </div>
             <button
               onClick={() => { setFilterStartDate(''); setFilterEndDate(''); setFilterMinAge(''); setFilterMaxAge(''); }}
-              style={{ background: 'none', border: 'none', color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '1px', cursor: 'pointer', padding: '0.8rem' }}
+              style={{ background: 'none', border: 'none', color: 'var(--accent-gold)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px', cursor: 'pointer', padding: '0.8rem' }}
             >
               RESET FILTERS
             </button>
