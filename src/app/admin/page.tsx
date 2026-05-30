@@ -430,36 +430,56 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="marble-pattern" style={{ display: 'flex', minHeight: '100vh', background: 'var(--marble-white)' }}>
+    <main className="marble-pattern" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--bg-color)', color: 'var(--text-color)' }}>
       <Navbar />
 
-      {/* Sidebar */}
-      <div style={{ width: '320px', background: 'var(--primary-navy)', color: 'white', padding: '10rem 2rem 2rem', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh', zIndex: 100 }}>
-        <div style={{ marginBottom: '4rem' }}>
-          <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '4px' }}>ADMINISTRATION</span>
-          <h2 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-serif)', marginTop: '0.5rem' }}>Elite Control</h2>
+      {/* Horizontal Top Header & Tab Menu */}
+      <div style={{ padding: '8rem 4rem 2rem', background: 'var(--primary-navy)', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+          <div>
+            <span style={{ color: 'var(--accent-gold)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '4px' }}>ADMINISTRATION</span>
+            <h2 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-serif)', marginTop: '0.5rem', fontWeight: 700 }}>Elite Control</h2>
+          </div>
+          
+          <nav style={{ display: 'flex', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.4rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
+            {[
+              { id: 'analytics', label: 'ANALYTICS', icon: 'fa-chart-line' },
+              { id: 'leads', label: 'STUDENT LEADS', icon: 'fa-users' },
+              { id: 'content', label: 'CONTENT MANAGER', icon: 'fa-pen' },
+              { id: 'test', label: 'TEST MANAGER', icon: 'fa-list' }
+            ].map(item => (
+              <button 
+                key={item.id} 
+                onClick={() => setActiveTab(item.id)} 
+                style={{ 
+                  background: activeTab === item.id ? 'var(--accent-gold)' : 'transparent', 
+                  color: activeTab === item.id ? 'var(--primary-navy)' : 'rgba(255,255,255,0.8)', 
+                  border: 'none',
+                  padding: '0.8rem 1.8rem', 
+                  borderRadius: '12px', 
+                  cursor: 'pointer', 
+                  fontWeight: 800, 
+                  fontSize: '0.75rem', 
+                  letterSpacing: '1px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.8rem',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              >
+                <i className={`fa-solid ${item.icon}`} style={{ fontSize: '0.9rem' }}></i>
+                {item.label}
+              </button>
+            ))}
+          </nav>
         </div>
-
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {[
-            { id: 'analytics', label: 'ANALYTICS', icon: 'fa-chart-line' },
-            { id: 'leads', label: 'STUDENT LEADS', icon: 'fa-users' },
-            { id: 'content', label: 'CONTENT MANAGER', icon: 'fa-pen' },
-            { id: 'test', label: 'TEST MANAGER', icon: 'fa-list' }
-          ].map(item => (
-            <button key={item.id} onClick={() => setActiveTab(item.id)} style={{ background: activeTab === item.id ? 'rgba(197, 160, 89, 0.1)' : 'transparent', color: activeTab === item.id ? 'var(--accent-gold)' : 'rgba(255,255,255,0.6)', border: 'none', padding: '1.2rem 1.5rem', textAlign: 'left', borderRadius: '12px', cursor: 'pointer', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '2px', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <i className={`fa-solid ${item.icon}`} style={{ fontSize: '1rem', width: '20px' }}></i>
-              {item.label}
-            </button>
-          ))}
-        </nav>
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, padding: '10rem 4rem 4rem', position: 'relative', color: 'var(--primary-navy)' }}>
+      <div style={{ flex: 1, padding: '4rem', position: 'relative', color: 'var(--text-color)', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem' }}>
           <div>
-            <h1 style={{ fontSize: '3rem', fontFamily: 'var(--font-serif)', textTransform: 'capitalize', color: 'var(--primary-navy)' }}>{activeTab}</h1>
+            <h1 style={{ fontSize: '3rem', fontFamily: 'var(--font-serif)', textTransform: 'capitalize', color: 'var(--text-color)' }}>{activeTab}</h1>
             <div style={{ height: '3px', width: '60px', background: 'var(--accent-gold)', marginTop: '1rem' }}></div>
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
@@ -632,17 +652,18 @@ export default function AdminDashboard() {
 
 
           {activeTab === 'content' && (
-            <form onSubmit={handleSettingsSave} className="glass-card" style={{ padding: '4rem', background: 'white', borderRadius: '32px', color: 'var(--primary-navy)' }}>
+            <form onSubmit={handleSettingsSave} className="glass-card animate-reveal" style={{ padding: '4rem', borderRadius: '32px', color: 'var(--text-color)' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', marginBottom: '3rem' }}>
                 {/* English Content */}
                 <div>
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>GLOBAL (EN)</h4>
                   <div style={{ marginBottom: '2rem' }}>
-                    <input type="text" value={settings.heroHeadlineEn} onChange={(e) => setSettings({ ...settings, heroHeadlineEn: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.6 }}>HERO HEADLINE</label>
+                    <input type="text" value={settings.heroHeadlineEn} onChange={(e) => setSettings({ ...settings, heroHeadlineEn: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', fontWeight: 600, color: 'var(--text-color)' }} />
                   </div>
                   <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>HERO SUBHEADLINE</label>
-                    <textarea value={settings.heroSubheadlineEn} onChange={(e) => setSettings({ ...settings, heroSubheadlineEn: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, resize: 'none', color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.6 }}>HERO SUBHEADLINE</label>
+                    <textarea value={settings.heroSubheadlineEn} onChange={(e) => setSettings({ ...settings, heroSubheadlineEn: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', fontWeight: 600, resize: 'none', color: 'var(--text-color)' }} />
                   </div>
                 </div>
 
@@ -650,27 +671,27 @@ export default function AdminDashboard() {
                 <div style={{ direction: 'rtl' }}>
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>المحتوى العربي (AR)</h4>
                   <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>العنوان الرئيسي</label>
-                    <input type="text" value={settings.heroHeadlineAr} onChange={(e) => setSettings({ ...settings, heroHeadlineAr: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.6 }}>العنوان الرئيسي</label>
+                    <input type="text" value={settings.heroHeadlineAr} onChange={(e) => setSettings({ ...settings, heroHeadlineAr: e.target.value })} style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', fontWeight: 600, color: 'var(--text-color)' }} />
                   </div>
                   <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>العنوان الفرعي</label>
-                    <textarea value={settings.heroSubheadlineAr} onChange={(e) => setSettings({ ...settings, heroSubheadlineAr: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, resize: 'none', color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.6 }}>العنوان الفرعي</label>
+                    <textarea value={settings.heroSubheadlineAr} onChange={(e) => setSettings({ ...settings, heroSubheadlineAr: e.target.value })} style={{ width: '100%', height: '100px', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', fontWeight: 600, resize: 'none', color: 'var(--text-color)' }} />
                   </div>
                 </div>
               </div>
 
               {/* Contact & Socials */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--soft-gray)', marginBottom: '3rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)', marginBottom: '3rem' }}>
                 <div>
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>CONTACT INFO</h4>
                   <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>WHATSAPP NUMBER</label>
-                    <input type="text" value={settings.whatsappNumber} onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.6 }}>WHATSAPP NUMBER</label>
+                    <input type="text" value={settings.whatsappNumber} onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', color: 'var(--text-color)' }} />
                   </div>
                   <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>CONTACT EMAIL</label>
-                    <input type="email" value={settings.contactEmail} onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.6 }}>CONTACT EMAIL</label>
+                    <input type="email" value={settings.contactEmail} onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', color: 'var(--text-color)' }} />
                   </div>
                 </div>
 
@@ -678,35 +699,35 @@ export default function AdminDashboard() {
                   <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>SOCIAL CHANNELS</h4>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>FACEBOOK</label>
-                      <input type="text" value={settings.facebookLink || ''} onChange={(e) => setSettings({ ...settings, facebookLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.6 }}>FACEBOOK</label>
+                      <input type="text" value={settings.facebookLink || ''} onChange={(e) => setSettings({ ...settings, facebookLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', color: 'var(--text-color)' }} />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>INSTAGRAM</label>
-                      <input type="text" value={settings.instagramLink || ''} onChange={(e) => setSettings({ ...settings, instagramLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.6 }}>INSTAGRAM</label>
+                      <input type="text" value={settings.instagramLink || ''} onChange={(e) => setSettings({ ...settings, instagramLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', color: 'var(--text-color)' }} />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>LINKEDIN</label>
-                      <input type="text" value={settings.linkedinLink || ''} onChange={(e) => setSettings({ ...settings, linkedinLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.6 }}>LINKEDIN</label>
+                      <input type="text" value={settings.linkedinLink || ''} onChange={(e) => setSettings({ ...settings, linkedinLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', color: 'var(--text-color)' }} />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.4 }}>TIKTOK</label>
-                      <input type="text" value={settings.tiktokLink || ''} onChange={(e) => setSettings({ ...settings, tiktokLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', color: 'var(--primary-navy)' }} />
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.7rem', opacity: 0.6 }}>TIKTOK</label>
+                      <input type="text" value={settings.tiktokLink || ''} onChange={(e) => setSettings({ ...settings, tiktokLink: e.target.value })} style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', color: 'var(--text-color)' }} />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid var(--soft-gray)', paddingTop: '3rem', marginTop: '1rem', marginBottom: '3rem' }}>
+              <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '3rem', marginTop: '1rem', marginBottom: '3rem' }}>
                 <h4 style={{ marginBottom: '2rem', color: 'var(--accent-gold)', letterSpacing: '2px', fontWeight: 800, fontSize: '0.8rem' }}>AUTOMATION</h4>
                 <div style={{ marginBottom: '2rem' }}>
-                  <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.4 }}>NOTIFICATIONS WEBHOOK URL (ZAPIER / MAKE)</label>
+                  <label style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, fontSize: '0.8rem', opacity: 0.6 }}>NOTIFICATIONS WEBHOOK URL (ZAPIER / MAKE)</label>
                   <input
                     type="url"
                     placeholder="https://hooks.zapier.com/..."
                     value={settings.webhookUrl || ''}
                     onChange={(e) => setSettings({ ...settings, webhookUrl: e.target.value })}
-                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.02)', fontWeight: 600, color: 'var(--primary-navy)' }}
+                    style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color-alt)', fontWeight: 600, color: 'var(--text-color)' }}
                   />
                 </div>
               </div>
@@ -747,14 +768,14 @@ export default function AdminDashboard() {
 
       {/* Lead Details Modal */}
       {selectedLead && (
-        <div data-theme="dark" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-          <div className="glass-dark" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', border: '1px solid rgba(255,255,255,0.08)', background: 'var(--primary-navy)' }}>
-            <button onClick={() => setSelectedLead(null)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.8)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-card animate-reveal" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', color: 'var(--text-color)' }}>
+            <button onClick={() => setSelectedLead(null)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'var(--text-color)', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
 
             <div style={{ marginBottom: '4rem' }}>
               <span style={{ color: 'var(--accent-gold)', letterSpacing: '4px', fontSize: '0.7rem', fontWeight: 800 }}>STUDENT DOSSIER</span>
-              <h2 style={{ color: 'white', fontSize: '2.5rem', marginTop: '1rem', fontFamily: 'var(--font-serif)' }}>{selectedLead.name}</h2>
-              <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem', opacity: 0.6, fontSize: '0.9rem', color: 'white' }}>
+              <h2 style={{ fontSize: '2.5rem', marginTop: '1rem', fontFamily: 'var(--font-serif)', color: 'var(--text-color)' }}>{selectedLead.name}</h2>
+              <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem', opacity: 0.6, fontSize: '0.9rem', color: 'var(--text-color)' }}>
                 <span><i className="fa-solid fa-envelope" style={{ marginRight: '0.5rem' }}></i>{selectedLead.email}</span>
                 <span><i className="fa-solid fa-phone" style={{ marginRight: '0.5rem' }}></i>{selectedLead.phone}</span>
                 {selectedLead.company && <span><i className="fa-solid fa-building" style={{ marginRight: '0.5rem' }}></i>{selectedLead.company}</span>}
@@ -762,35 +783,35 @@ export default function AdminDashboard() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
-              <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800, color: 'white' }}>ACADEMIC SCORE</span>
+              <div style={{ background: 'var(--bg-color-alt)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 800, color: 'var(--text-color)' }}>ACADEMIC SCORE</span>
                 <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-gold)', marginTop: '0.5rem' }}>{selectedLead.score}/{selectedLead.total_questions}</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800, color: 'white' }}>PREDICTED LEVEL</span>
+              <div style={{ background: 'var(--bg-color-alt)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 800, color: 'var(--text-color)' }}>PREDICTED LEVEL</span>
                 <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-blue)', marginTop: '0.5rem' }}>{selectedLead.level}</div>
               </div>
             </div>
 
             {selectedLead.writing_response && (
               <div style={{ marginBottom: '4rem' }}>
-                <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Writing Assessment</h4>
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '2.5rem', borderRadius: '24px', color: 'rgba(255,255,255,0.8)', lineHeight: 1.8, fontSize: '1.1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <h4 style={{ color: 'var(--text-color)', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Writing Assessment</h4>
+                <div style={{ background: 'var(--bg-color-alt)', padding: '2.5rem', borderRadius: '24px', color: 'var(--text-color)', lineHeight: 1.8, fontSize: '1.1rem', border: '1px solid var(--border-color)' }}>
                   {selectedLead.writing_response}
                 </div>
               </div>
             )}
 
-            <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Detailed Answers</h4>
+            <h4 style={{ color: 'var(--text-color)', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Detailed Answers</h4>
             <div style={{ display: 'grid', gap: '1rem' }}>
               {(!selectedLead.answers || selectedLead.answers.length === 0) ? (
-                <div style={{ padding: '2rem', textAlign: 'center', opacity: 0.3, color: 'white' }}>No detailed answer data found for this student.</div>
+                <div style={{ padding: '2rem', textAlign: 'center', opacity: 0.3, color: 'var(--text-color)' }}>No detailed answer data found for this student.</div>
               ) : (
                 selectedLead.answers.map((ans: any, i: number) => (
-                  <div key={i} style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div key={i} style={{ padding: '1.5rem', background: 'var(--bg-color-alt)', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '0.9rem', color: 'white', marginBottom: '0.5rem' }}>{ans.question_text}</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.5, color: 'white' }}>Student: <span style={{ color: ans.is_correct ? '#4ade80' : '#f87171' }}>{ans.student_answer}</span> | Correct: {ans.correct_answer}</div>
+                      <div style={{ fontSize: '0.9rem', color: 'var(--text-color)', marginBottom: '0.5rem' }}>{ans.question_text}</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.6, color: 'var(--text-color)' }}>Student: <span style={{ color: ans.is_correct ? '#4ade80' : '#f87171', fontWeight: 700 }}>{ans.student_answer}</span> | Correct: <span style={{ fontWeight: 700 }}>{ans.correct_answer}</span></div>
                     </div>
                     <i className={`fa-solid ${ans.is_correct ? 'fa-circle-check' : 'fa-circle-xmark'}`} style={{ color: ans.is_correct ? '#4ade80' : '#f87171', fontSize: '1.2rem' }}></i>
                   </div>
@@ -803,48 +824,48 @@ export default function AdminDashboard() {
 
       {/* Question Editor Modal */}
       {isEditingQuestion && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-          <div className="glass-dark" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative', background: 'var(--primary-navy)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <button onClick={() => setIsEditingQuestion(false)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
-            <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '3rem', fontFamily: 'var(--font-serif)' }}>{currentQuestion.id ? 'Edit Question' : 'Add New Question'}</h2>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.8)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-card animate-reveal" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative', color: 'var(--text-color)' }}>
+            <button onClick={() => setIsEditingQuestion(false)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'var(--text-color)', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
+            <h2 style={{ fontSize: '2rem', marginBottom: '3rem', fontFamily: 'var(--font-serif)', color: 'var(--text-color)' }}>{currentQuestion.id ? 'Edit Question' : 'Add New Question'}</h2>
 
             <div style={{ display: 'grid', gap: '2rem' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>QUESTION TEXT</label>
+                <label style={{ display: 'block', marginBottom: '1rem', color: 'var(--text-color)', opacity: 0.6, fontSize: '0.8rem', fontWeight: 800 }}>QUESTION TEXT</label>
                 <textarea
                   value={currentQuestion.question}
                   onChange={(e) => setCurrentQuestion({...currentQuestion, question: e.target.value})}
-                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white', resize: 'none', height: '100px' }}
+                  style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '1.2rem', borderRadius: '12px', color: 'var(--text-color)', resize: 'none', height: '100px' }}
                 />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>PART (1-3)</label>
-                  <input type="number" value={currentQuestion.part} onChange={(e) => setCurrentQuestion({...currentQuestion, part: parseInt(e.target.value)})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }} />
+                  <label style={{ display: 'block', marginBottom: '1rem', color: 'var(--text-color)', opacity: 0.6, fontSize: '0.8rem', fontWeight: 800 }}>PART (1-3)</label>
+                  <input type="number" value={currentQuestion.part} onChange={(e) => setCurrentQuestion({...currentQuestion, part: parseInt(e.target.value)})} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '1.2rem', borderRadius: '12px', color: 'var(--text-color)' }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>CEFR LEVEL</label>
-                  <select value={currentQuestion.level} onChange={(e) => setCurrentQuestion({...currentQuestion, level: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }}>
-                    {['A1', 'A2', 'B1', 'B1+', 'B2', 'C1'].map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
+                  <label style={{ display: 'block', marginBottom: '1rem', color: 'var(--text-color)', opacity: 0.6, fontSize: '0.8rem', fontWeight: 800 }}>CEFR LEVEL</label>
+                  <select value={currentQuestion.level} onChange={(e) => setCurrentQuestion({...currentQuestion, level: e.target.value})} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '1.2rem', borderRadius: '12px', color: 'var(--text-color)' }}>
+                    {['A1', 'A2', 'B1', 'B1+', 'B2', 'C1'].map(lvl => <option key={lvl} value={lvl} style={{ background: 'var(--bg-color)', color: 'var(--text-color)' }}>{lvl}</option>)}
                   </select>
                 </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>OPTIONS (Comma separated)</label>
+                <label style={{ display: 'block', marginBottom: '1rem', color: 'var(--text-color)', opacity: 0.6, fontSize: '0.8rem', fontWeight: 800 }}>OPTIONS (Comma separated)</label>
                 <input
                   type="text"
                   value={currentQuestion.options?.join(', ')}
                   onChange={(e) => setCurrentQuestion({...currentQuestion, options: e.target.value.split(',').map(o => o.trim())})}
                   placeholder="Option 1, Option 2, Option 3, Option 4"
-                  style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }}
+                  style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '1.2rem', borderRadius: '12px', color: 'var(--text-color)' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>CORRECT ANSWER</label>
-                <input type="text" value={currentQuestion.correct_answer} onChange={(e) => setCurrentQuestion({...currentQuestion, correct_answer: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }} />
+                <label style={{ display: 'block', marginBottom: '1rem', color: 'var(--text-color)', opacity: 0.6, fontSize: '0.8rem', fontWeight: 800 }}>CORRECT ANSWER</label>
+                <input type="text" value={currentQuestion.correct_answer} onChange={(e) => setCurrentQuestion({...currentQuestion, correct_answer: e.target.value})} style={{ width: '100%', background: 'var(--bg-color-alt)', border: '1px solid var(--border-color)', padding: '1.2rem', borderRadius: '12px', color: 'var(--text-color)' }} />
               </div>
 
               <button onClick={handleSaveQuestion} className="btn-master btn-gold" style={{ width: '100%', marginTop: '2rem', justifyContent: 'center' }}>SAVE QUESTION</button>
@@ -857,8 +878,8 @@ export default function AdminDashboard() {
       <style jsx>{`
         .hover-lift:hover {
           transform: translateY(-5px);
-          background: white !important;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+          background: var(--bg-color-alt) !important;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
         }
       `}</style>
     </main>
