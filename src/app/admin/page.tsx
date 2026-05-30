@@ -131,7 +131,8 @@ export default function AdminDashboard() {
         try {
           const resQuestions = await fetch('/api/questions');
           if (resQuestions.ok) {
-            const qData = await resQuestions.json();
+            let qData = await resQuestions.json();
+            if (qData && qData.questions) { qData = qData.questions; }
             setQuestions(qData || []);
           } else {
             throw new Error("Questions API failed");
@@ -368,10 +369,29 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDeleteAllQuestions = async () => {
+    if (!confirm('Are you ABSOLUTELY sure you want to delete ALL questions? This cannot be undone.')) return;
+    try {
+      const res = await fetch(`/api/questions?action=delete_all`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        fetchData();
+      } else {
+        throw new Error("Questions API failed");
+      }
+    } catch (e) {
+      console.warn("⚠️ Delete all question API failed, using direct Supabase fallback:", e);
+      await supabase.from('questions').delete().not('id', 'is', null);
+      fetchData();
+    }
+  };
+
   const handleSyncQuestions = async () => {
     if (!confirm('This will upload 60 static questions to the database. Continue?')) return;
 
-    const formatted = placementQuestions.map(q => ({
+    const formatted = placementQuestions.map((q, i) => ({
+      id: `static-q-${q.part}-${i}`,
       question: q.question,
       options: q.options,
       correct_answer: q.correctAnswer,
@@ -651,6 +671,7 @@ export default function AdminDashboard() {
             )}
             {activeTab === 'test' && (
               <div style={{ display: 'flex', gap: '1rem' }}>
+                <button className="btn-master" onClick={handleDeleteAllQuestions} style={{ background: 'rgba(255,50,50,0.1)', color: '#ff4d4d', borderColor: 'rgba(255,50,50,0.2)' }}>DELETE ALL <i className="fa-solid fa-trash-can" style={{ marginLeft: '1rem' }}></i></button>
                 <button className="btn-master btn-gold" onClick={handleSyncQuestions} style={{ background: 'rgba(255,255,255,0.05)', color: 'white', borderColor: 'rgba(255,255,255,0.1)' }}>SYNC FROM STATIC <i className="fa-solid fa-rotate" style={{ marginLeft: '1rem' }}></i></button>
                 <button className="btn-master btn-gold" onClick={() => { setCurrentQuestion({ question: '', options: ['', '', '', ''], correct_answer: '', part: 1, level: 'A1' }); setIsEditingQuestion(true); }}>ADD QUESTION <i className="fa-solid fa-plus" style={{ marginLeft: '1rem' }}></i></button>
               </div>
@@ -1011,7 +1032,7 @@ export default function AdminDashboard() {
       {/* Question Editor Modal */}
       {isEditingQuestion && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.8)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-          <div className="glass-card animate-reveal" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative', color: 'var(--text-color)' }}>
+          <div className="glass-card animate-reveal" style={{ width: '100%', maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', color: 'var(--text-color)' }}>
             <button onClick={() => setIsEditingQuestion(false)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'var(--text-color)', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
             <h2 style={{ fontSize: '2rem', marginBottom: '3rem', fontFamily: 'var(--font-serif)', color: 'var(--text-color)' }}>{currentQuestion.id ? 'Edit Question' : 'Add New Question'}</h2>
 

@@ -184,6 +184,22 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const action = searchParams.get('action');
+    if (action === 'delete_all') {
+      const result = await executeQuery({
+        d1Query: async (db) => {
+          await db.prepare("DELETE FROM questions").run();
+          return { success: true };
+        },
+        supabaseFallback: async () => {
+          const { error } = await supabase.from('questions').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+          if (error) throw error;
+          return { success: true };
+        }
+      });
+      return NextResponse.json(result);
+    }
+
     const id = searchParams.get('id');
 
     if (!id) {
