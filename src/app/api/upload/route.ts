@@ -1,7 +1,7 @@
 export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 // Utility helper to safely resolve the R2 Bucket binding
 const getR2Bucket = (): any => {
@@ -12,7 +12,7 @@ const getR2Bucket = (): any => {
     return (globalThis as any).env.BUCKET;
   }
   try {
-    const ctx = getRequestContext();
+    const ctx = getCloudflareContext();
     if ((ctx as any)?.env?.BUCKET) return (ctx as any).env.BUCKET;
   } catch (e) {}
   return null;

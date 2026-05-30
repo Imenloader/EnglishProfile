@@ -358,12 +358,11 @@ export default function PlacementTest() {
                   <label className="immortal-label">{isRtl ? 'طريقة الدراسة المفضلة' : 'PREFERRED CLASS FORMAT'}</label>
                   <select 
                     className="immortal-input" 
-                    style={{ appearance: 'none' }}
                     value={leadData.format}
                     onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
                   >
-                    <option value="online">{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
-                    <option value="offline">{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
+                    <option value="online" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
+                    <option value="offline" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
                   </select>
                 </div>
                 <div className="form-group" style={{ position: 'relative' }}>

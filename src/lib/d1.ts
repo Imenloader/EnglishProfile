@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 /**
  * Resilient Cloudflare D1 Database Binder
@@ -14,7 +14,7 @@ export const getD1Database = (): any => {
   }
   // next-on-pages context check
   try {
-    const ctx = getRequestContext();
+    const ctx = getCloudflareContext();
     if ((ctx as any)?.env?.DB) return (ctx as any).env.DB;
   } catch (e) {}
   return null;

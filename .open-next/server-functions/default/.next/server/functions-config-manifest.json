@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "functions": {
+    "/api/leads": {},
+    "/api/questions": {},
+    "/api/settings": {},
+    "/api/upload": {}
+  }
+}

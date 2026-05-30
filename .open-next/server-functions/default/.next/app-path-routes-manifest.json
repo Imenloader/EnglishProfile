@@ -1,0 +1,15 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/about/page": "/about",
+  "/admin/page": "/admin",
+  "/api/leads/route": "/api/leads",
+  "/api/questions/route": "/api/questions",
+  "/api/settings/route": "/api/settings",
+  "/api/upload/route": "/api/upload",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/placement-test/page": "/placement-test",
+  "/privacy/page": "/privacy",
+  "/terms/page": "/terms"
+}
