@@ -359,7 +359,7 @@ export default function PlacementTest() {
                   <div style={{ position: 'relative' }}>
                     <select 
                       className="immortal-input" 
-                      style={{ appearance: 'none', cursor: 'pointer' }}
+                      style={{ appearance: 'none', cursor: 'pointer', colorScheme: 'dark' }}
                       value={leadData.format}
                       onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
                     >
