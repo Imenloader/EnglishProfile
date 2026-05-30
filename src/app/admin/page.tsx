@@ -36,6 +36,7 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('analytics');
   const [leads, setLeads] = useState<any[]>([]);
+  const [answers, setAnswers] = useState<any[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedLead, setSelectedLead] = useState<any>(null);
   const [isEditingQuestion, setIsEditingQuestion] = useState(false);
@@ -76,22 +77,73 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [l, s] = await Promise.all([db.getLeads(), db.getSettings()]);
-      setSettings(s);
+      // 1. Fetch site settings
+      try {
+        const resSettings = await fetch('/api/settings');
+        if (resSettings.ok) {
+          const sData = await resSettings.json();
+          setSettings({
+            id: '1',
+            heroHeadlineEn: sData.hero_headline_en || '',
+            heroHeadlineAr: sData.hero_headline_ar || '',
+            heroSubheadlineEn: sData.hero_subheadline_en || '',
+            heroSubheadlineAr: sData.hero_subheadline_ar || '',
+            whatsappNumber: sData.whatsapp_number || '',
+            contactEmail: sData.contact_email || '',
+            facebookLink: sData.facebook_link || '',
+            instagramLink: sData.instagram_link || '',
+            linkedinLink: sData.linkedin_link || '',
+            tiktokLink: sData.tiktok_link || '',
+            updatedAt: new Date(sData.updated_at || Date.now()),
+            webhookUrl: sData.webhook_url || ""
+          });
+        } else {
+          throw new Error("Settings API failed");
+        }
+      } catch (e) {
+        console.warn("⚠️ Settings API failed, using db.getSettings() fallback:", e);
+        const s = await db.getSettings();
+        setSettings(s);
+      }
 
-      const { data: rawLeads, error: leadsError } = await supabase
-        .from('leads')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!leadsError) setLeads(rawLeads || []);
-
-      if (activeTab === 'test') {
-        const { data: q, error: qError } = await supabase
-          .from('questions')
+      // 2. Fetch leads & answers
+      try {
+        const resLeads = await fetch('/api/leads?include_answers=true');
+        if (resLeads.ok) {
+          const lData = await resLeads.json();
+          setLeads(lData.leads || []);
+          setAnswers(lData.answers || []);
+        } else {
+          throw new Error("Leads API failed");
+        }
+      } catch (e) {
+        console.warn("⚠️ Leads API failed, using direct Supabase fallback:", e);
+        const { data: rawLeads, error: leadsError } = await supabase
+          .from('leads')
           .select('*')
-          .order('part', { ascending: true });
-        if (!qError) setQuestions(q || []);
+          .order('created_at', { ascending: false });
+
+        if (!leadsError) setLeads(rawLeads || []);
+      }
+
+      // 3. Fetch questions (if active tab is test)
+      if (activeTab === 'test') {
+        try {
+          const resQuestions = await fetch('/api/questions');
+          if (resQuestions.ok) {
+            const qData = await resQuestions.json();
+            setQuestions(qData || []);
+          } else {
+            throw new Error("Questions API failed");
+          }
+        } catch (e) {
+          console.warn("⚠️ Questions API failed, using direct Supabase fallback:", e);
+          const { data: q, error: qError } = await supabase
+            .from('questions')
+            .select('*')
+            .order('part', { ascending: true });
+          if (!qError) setQuestions(q || []);
+        }
       }
     } catch (error) {
       console.error("Dashboard failed to fetch data:", error);
@@ -118,8 +170,25 @@ export default function AdminDashboard() {
 
   const handleExportExcel = async () => {
     try {
-      const { data: leadsData } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
-      const { data: answersData } = await supabase.from('lead_answers').select('*').order('created_at', { ascending: false });
+      let leadsData = [];
+      let answersData = [];
+
+      try {
+        const res = await fetch('/api/leads?include_answers=true');
+        if (res.ok) {
+          const data = await res.json();
+          leadsData = data.leads || [];
+          answersData = data.answers || [];
+        } else {
+          throw new Error("Leads API failed");
+        }
+      } catch (e) {
+        console.warn("⚠️ Export Excel API failed, using direct Supabase fallback:", e);
+        const { data: l } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+        const { data: a } = await supabase.from('lead_answers').select('*').order('created_at', { ascending: false });
+        leadsData = l || [];
+        answersData = a || [];
+      }
 
       let filteredLeads = leadsData || [];
 
@@ -247,18 +316,44 @@ export default function AdminDashboard() {
   };
 
   const handleSaveQuestion = async () => {
-    const { error } = currentQuestion.id
-      ? await supabase.from('questions').update(currentQuestion).eq('id', currentQuestion.id)
-      : await supabase.from('questions').insert([currentQuestion]);
+    try {
+      const res = await fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(currentQuestion)
+      });
+      if (res.ok) {
+        setIsEditingQuestion(false);
+        fetchData();
+      } else {
+        throw new Error("Questions API failed");
+      }
+    } catch (e) {
+      console.warn("⚠️ Save question API failed, using direct Supabase fallback:", e);
+      const { error } = currentQuestion.id
+        ? await supabase.from('questions').update(currentQuestion).eq('id', currentQuestion.id)
+        : await supabase.from('questions').insert([currentQuestion]);
 
-    if (!error) {
-      setIsEditingQuestion(false);
-      fetchData();
+      if (!error) {
+        setIsEditingQuestion(false);
+        fetchData();
+      }
     }
   };
 
   const handleDeleteQuestion = async (id: string) => {
-    if (confirm('Are you sure you want to delete this question?')) {
+    if (!confirm('Are you sure you want to delete this question?')) return;
+    try {
+      const res = await fetch(`/api/questions?id=${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        fetchData();
+      } else {
+        throw new Error("Questions API failed");
+      }
+    } catch (e) {
+      console.warn("⚠️ Delete question API failed, using direct Supabase fallback:", e);
       await supabase.from('questions').delete().eq('id', id);
       fetchData();
     }
@@ -275,20 +370,64 @@ export default function AdminDashboard() {
       level: q.category === 'advanced' ? 'B2' : (q.category === 'vocabulary' ? 'A2' : 'A1')
     }));
 
-    const { error } = await supabase.from('questions').insert(formatted);
-    if (!error) {
-      alert('Questions synchronized successfully!');
-      fetchData();
-    } else {
-      console.error("Sync error:", error);
-      alert('Failed to sync questions: ' + error.message);
+    try {
+      const res = await fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formatted)
+      });
+      if (res.ok) {
+        alert('Questions synchronized successfully!');
+        fetchData();
+      } else {
+        throw new Error("Sync API failed");
+      }
+    } catch (e) {
+      console.warn("⚠️ Questions Sync API failed, using direct Supabase fallback:", e);
+      const { error } = await supabase.from('questions').insert(formatted);
+      if (!error) {
+        alert('Questions synchronized successfully!');
+        fetchData();
+      } else {
+        console.error("Sync error:", error);
+        alert('Failed to sync questions: ' + error.message);
+      }
     }
   };
 
   const handleSettingsSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    await db.saveSettings(settings);
-    alert('Settings saved successfully!');
+
+    const payload = {
+      hero_headline_en: settings.heroHeadlineEn,
+      hero_headline_ar: settings.heroHeadlineAr,
+      hero_subheadline_en: settings.heroSubheadlineEn,
+      hero_subheadline_ar: settings.heroSubheadlineAr,
+      whatsapp_number: settings.whatsappNumber,
+      contact_email: settings.contactEmail,
+      facebook_link: settings.facebookLink,
+      instagram_link: settings.instagramLink,
+      linkedin_link: settings.linkedinLink,
+      tiktok_link: settings.tiktokLink,
+      webhook_url: settings.webhookUrl
+    };
+
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        alert('Settings saved successfully!');
+      } else {
+        throw new Error("Settings API failed");
+      }
+    } catch (err) {
+      console.warn("⚠️ Settings save API failed, using db.saveSettings() fallback:", err);
+      await db.saveSettings(settings);
+      alert('Settings saved successfully!');
+    }
   };
 
 
@@ -644,7 +783,15 @@ export default function AdminDashboard() {
                       const displayCompany = lead.company && lead.company.includes('Prefers:') ? lead.company.split('Prefers:')[0].replace('(', '').trim() || 'N/A' : lead.company || 'N/A';
                       return (
                         <tr key={lead.id} onClick={async () => {
-                          const { data: ans } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
+                          let ans = answers.filter((a: any) => a.lead_id === lead.id);
+                          if (ans.length === 0) {
+                            try {
+                              const { data } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
+                              ans = data || [];
+                            } catch (e) {
+                              console.warn("⚠️ Failed to load answers for lead from fallback:", e);
+                            }
+                          }
                           setSelectedLead({ ...lead, answers: ans });
                         }} style={{ background: 'rgba(128,128,128,0.05)', transition: 'all 0.3s ease', cursor: 'pointer' }} className="hover-lift">
                           <td style={{ padding: '1.5rem', borderRadius: '12px 0 0 12px' }}>

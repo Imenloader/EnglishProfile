@@ -36,15 +36,30 @@ export default function PlacementTest() {
 
   const fetchQuestions = async () => {
     try {
-      const { data, error } = await supabase
-        .from('questions')
-        .select('*')
-        .order('part', { ascending: true })
-        .order('id', { ascending: true });
-      
-      if (!error && data && data.length > 0) {
-        // Map DB fields to component fields if necessary
-        const formatted = data.map(q => ({
+      let qData = [];
+      try {
+        const res = await fetch('/api/questions');
+        if (res.ok) {
+          qData = await res.json();
+        } else {
+          throw new Error("Questions API failed");
+        }
+      } catch (err) {
+        console.warn("⚠️ Fetch questions API failed, using direct Supabase fallback:", err);
+        const { data, error } = await supabase
+          .from('questions')
+          .select('*')
+          .order('part', { ascending: true })
+          .order('id', { ascending: true });
+        if (!error) {
+          qData = data || [];
+        } else {
+          throw error;
+        }
+      }
+
+      if (qData && qData.length > 0) {
+        const formatted = qData.map((q: any) => ({
           ...q,
           correctAnswer: q.correct_answer || q.correctAnswer
         }));
@@ -115,42 +130,77 @@ export default function PlacementTest() {
         writing_response: writingResponse,
         age_range: ageRange,
         company: leadData.company,
-        class_format: leadData.format
+        class_format: leadData.format,
+        answers: detailedAnswers.map(ans => ({
+          question_text: ans.question_text,
+          student_answer: ans.student_answer,
+          correct_answer: ans.correct_answer,
+          is_correct: ans.is_correct
+        }))
       };
 
-      let { data: lead, error: leadError } = await supabase
-        .from('leads')
-        .insert([insertPayload])
-        .select()
-        .single();
-      
-      // Resilient fallback in case column class_format does not exist on remote database yet
-      if (leadError && leadError.code === '42703') {
-        console.warn("class_format column missing. Falling back to appending format to company name.");
-        const fallbackCompany = leadData.company
-          ? `${leadData.company} (Prefers: ${leadData.format.toUpperCase()})`
-          : `Prefers: ${leadData.format.toUpperCase()}`;
-        
-        delete insertPayload.class_format;
-        insertPayload.company = fallbackCompany;
+      let lead: any = null;
+      let submissionSuccess = false;
 
-        const fallbackResult = await supabase
+      try {
+        const res = await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(insertPayload)
+        });
+        if (res.ok) {
+          const resData = await res.json();
+          lead = resData.data;
+          submissionSuccess = true;
+        } else {
+          throw new Error("Leads POST API failed");
+        }
+      } catch (err) {
+        console.warn("⚠️ Leads API failed, falling back to direct Supabase client submission:", err);
+        // Supabase client fallback
+        const supabasePayload = { ...insertPayload };
+        delete supabasePayload.answers;
+
+        let { data, error: leadError } = await supabase
           .from('leads')
-          .insert([insertPayload])
+          .insert([supabasePayload])
           .select()
           .single();
-        lead = fallbackResult.data;
-        leadError = fallbackResult.error;
+
+        // Resilient fallback in case column class_format does not exist on remote database yet
+        if (leadError && leadError.code === '42703') {
+          console.warn("class_format column missing in Supabase. Falling back to company override.");
+          const fallbackCompany = leadData.company
+            ? `${leadData.company} (Prefers: ${leadData.format.toUpperCase()})`
+            : `Prefers: ${leadData.format.toUpperCase()}`;
+          
+          delete supabasePayload.class_format;
+          supabasePayload.company = fallbackCompany;
+
+          const fallbackResult = await supabase
+            .from('leads')
+            .insert([supabasePayload])
+            .select()
+            .single();
+          data = fallbackResult.data;
+          leadError = fallbackResult.error;
+        }
+
+        if (!leadError && data) {
+          lead = data;
+          const answersToSave = detailedAnswers.map(ans => ({
+            lead_id: lead.id,
+            student_name: leadData.name,
+            ...ans
+          }));
+          await supabase.from('lead_answers').insert(answersToSave);
+          submissionSuccess = true;
+        } else if (leadError) {
+          throw leadError;
+        }
       }
       
-      if (!leadError && lead) {
-        const answersToSave = detailedAnswers.map(ans => ({
-          lead_id: lead.id,
-          student_name: leadData.name,
-          ...ans
-        }));
-        await supabase.from('lead_answers').insert(answersToSave);
-
+      if (submissionSuccess && lead) {
         const settings = await db.getSettings();
         if (settings?.webhookUrl) {
           fetch(settings.webhookUrl, {
@@ -160,10 +210,10 @@ export default function PlacementTest() {
               event: 'new_lead',
               lead: {
                 id: lead.id,
-                name: lead.name,
-                email: lead.email,
-                phone: lead.phone,
-                company: lead.company,
+                name: lead.name || leadData.name,
+                email: lead.email || leadData.email,
+                phone: lead.phone || leadData.phone,
+                company: lead.company || leadData.company,
                 format: lead.class_format || leadData.format,
                 score: `${score}/${questions.length}`,
                 level: finalLevel,
@@ -180,6 +230,7 @@ export default function PlacementTest() {
       setIsFinished(true);
     } catch (error) {
       console.error("Submission failed:", error);
+      alert("There was an issue submitting your test. Please verify your internet connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
