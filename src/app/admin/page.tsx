@@ -697,7 +697,7 @@ export default function AdminDashboard() {
                     <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>ACTIONS</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{ color: 'var(--primary-navy)' }}>
                   {questions.map(q => (
                     <tr key={q.id} style={{ borderBottom: '1px solid var(--soft-gray)' }}>
                       <td style={{ padding: '1.5rem', fontWeight: 800 }}>P{q.part}</td>
