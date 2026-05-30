@@ -28,6 +28,7 @@ export default function PlacementTest() {
   const [honeypot, setHoneypot] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+  const [isFormatOpen, setIsFormatOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -357,27 +358,84 @@ export default function PlacementTest() {
                 <div className="form-group">
                   <label className="immortal-label">{isRtl ? 'طريقة الدراسة المفضلة' : 'PREFERRED CLASS FORMAT'}</label>
                   <div style={{ position: 'relative' }}>
-                    <select 
+                    <div 
                       className="immortal-input" 
-                      style={{ appearance: 'none', cursor: 'pointer', colorScheme: 'dark' }}
-                      value={leadData.format}
-                      onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
+                      style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      onClick={() => setIsFormatOpen(!isFormatOpen)}
                     >
-                      <option value="online">{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
-                      <option value="offline">{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
-                    </select>
-                    <i 
-                      className="fa-solid fa-chevron-down" 
-                      style={{ 
+                      <span style={{ color: 'var(--text-color)' }}>
+                        {leadData.format === 'online' 
+                          ? (isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)') 
+                          : (isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)')}
+                      </span>
+                      <i 
+                        className={`fa-solid fa-chevron-${isFormatOpen ? 'up' : 'down'}`} 
+                        style={{ color: 'var(--text-color-muted)', opacity: 0.5 }}
+                      ></i>
+                    </div>
+                    
+                    {isFormatOpen && (
+                      <div style={{ 
                         position: 'absolute', 
-                        top: '50%', 
-                        transform: 'translateY(-50%)', 
-                        [isRtl ? 'left' : 'right']: '1.5rem',
-                        color: 'var(--text-color-muted)',
-                        pointerEvents: 'none',
-                        opacity: 0.5
-                      }}
-                    ></i>
+                        top: '100%', 
+                        left: 0, 
+                        right: 0, 
+                        marginTop: '8px',
+                        background: '#0b162c', 
+                        border: '1px solid var(--border-color)', 
+                        borderRadius: '12px', 
+                        zIndex: 100,
+                        overflow: 'hidden',
+                        boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
+                      }}>
+                        <div 
+                          style={{ 
+                            padding: '1.2rem 1.5rem', 
+                            cursor: 'pointer', 
+                            background: leadData.format === 'online' ? 'var(--accent-gold)' : 'transparent',
+                            color: leadData.format === 'online' ? '#000' : '#fff',
+                            fontWeight: leadData.format === 'online' ? 'bold' : 'normal',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (leadData.format !== 'online') {
+                              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (leadData.format !== 'online') {
+                              e.currentTarget.style.background = 'transparent';
+                            }
+                          }}
+                          onClick={() => { setLeadData({ ...leadData, format: 'online' }); setIsFormatOpen(false); }}
+                        >
+                          {isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}
+                        </div>
+                        <div 
+                          style={{ 
+                            padding: '1.2rem 1.5rem', 
+                            cursor: 'pointer', 
+                            background: leadData.format === 'offline' ? 'var(--accent-gold)' : 'transparent',
+                            color: leadData.format === 'offline' ? '#000' : '#fff',
+                            fontWeight: leadData.format === 'offline' ? 'bold' : 'normal',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (leadData.format !== 'offline') {
+                              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (leadData.format !== 'offline') {
+                              e.currentTarget.style.background = 'transparent';
+                            }
+                          }}
+                          onClick={() => { setLeadData({ ...leadData, format: 'offline' }); setIsFormatOpen(false); }}
+                        >
+                          {isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="form-group" style={{ position: 'relative' }}>
