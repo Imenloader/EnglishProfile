@@ -39,24 +39,18 @@ export default function PlacementTest() {
     try {
       let qData = [];
       try {
-        const res = await fetch('/api/questions');
+        const res = await fetch('/api/questions.php');
         if (res.ok) {
           qData = await res.json();
+          // Adjust for our PHP API returning { questions: [...] }
+          if (qData.questions) {
+            qData = qData.questions;
+          }
         } else {
           throw new Error("Questions API failed");
         }
       } catch (err) {
-        console.warn("⚠️ Fetch questions API failed, using direct Supabase fallback:", err);
-        const { data, error } = await supabase
-          .from('questions')
-          .select('*')
-          .order('part', { ascending: true })
-          .order('id', { ascending: true });
-        if (!error) {
-          qData = data || [];
-        } else {
-          throw error;
-        }
+        console.warn("⚠️ Fetch questions API failed:", err);
       }
 
       if (qData && qData.length > 0) {
@@ -144,7 +138,7 @@ export default function PlacementTest() {
       let submissionSuccess = false;
 
       try {
-        const res = await fetch('/api/leads', {
+        const res = await fetch('/api/leads.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(insertPayload)
@@ -157,48 +151,7 @@ export default function PlacementTest() {
           throw new Error("Leads POST API failed");
         }
       } catch (err) {
-        console.warn("⚠️ Leads API failed, falling back to direct Supabase client submission:", err);
-        // Supabase client fallback
-        const supabasePayload = { ...insertPayload };
-        delete supabasePayload.answers;
-
-        let { data, error: leadError } = await supabase
-          .from('leads')
-          .insert([supabasePayload])
-          .select()
-          .single();
-
-        // Resilient fallback in case column class_format does not exist on remote database yet
-        if (leadError && leadError.code === '42703') {
-          console.warn("class_format column missing in Supabase. Falling back to company override.");
-          const fallbackCompany = leadData.company
-            ? `${leadData.company} (Prefers: ${leadData.format.toUpperCase()})`
-            : `Prefers: ${leadData.format.toUpperCase()}`;
-          
-          delete supabasePayload.class_format;
-          supabasePayload.company = fallbackCompany;
-
-          const fallbackResult = await supabase
-            .from('leads')
-            .insert([supabasePayload])
-            .select()
-            .single();
-          data = fallbackResult.data;
-          leadError = fallbackResult.error;
-        }
-
-        if (!leadError && data) {
-          lead = data;
-          const answersToSave = detailedAnswers.map(ans => ({
-            lead_id: lead.id,
-            student_name: leadData.name,
-            ...ans
-          }));
-          await supabase.from('lead_answers').insert(answersToSave);
-          submissionSuccess = true;
-        } else if (leadError) {
-          throw leadError;
-        }
+        console.warn("⚠️ Leads API failed:", err);
       }
       
       if (submissionSuccess && lead) {

@@ -1,0 +1,26 @@
+Options -Indexes
+RewriteEngine On
+
+# Allow direct access to assets, uploads, api
+RewriteCond %{REQUEST_URI} ^/assets/ [OR]
+RewriteCond %{REQUEST_URI} ^/uploads/ [OR]
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^ - [L]
+
+# Route everything else through index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php.c>
+  php_value upload_max_filesize 10M
+  php_value post_max_size 10M
+</IfModule>
