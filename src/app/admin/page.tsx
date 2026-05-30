@@ -244,8 +244,8 @@ export default function AdminDashboard() {
         'Score': `${l.score}/${l.total_questions}`,
         'Percentage': `${l.total_questions > 0 ? Math.round((l.score / l.total_questions) * 100) : 0}%`,
         'CEFR Level': l.level,
-        'Date': l.created_at.split('T')[0],
-        'Time': l.created_at.split('T')[1].split('.')[0]
+        'Date': l.created_at ? l.created_at.split(/[T ]/)[0] : 'N/A',
+        'Time': l.created_at && l.created_at.includes('T') ? l.created_at.split('T')[1].split('.')[0] : (l.created_at ? l.created_at.split(' ')[1] || 'N/A' : 'N/A')
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
@@ -308,7 +308,16 @@ export default function AdminDashboard() {
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cefrStats), "Level Distribution");
 
-      XLSX.writeFile(workbook, `LINGUAPLANET_FILTERED_EXPORT_${new Date().toISOString().split('T')[0]}.xlsx`);
+      // Use Blob download instead of XLSX.writeFile (not available in edge/CF Workers)
+      const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `LINGUAPLANET_FILTERED_EXPORT_${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 100);
     } catch (error) {
       console.error("Excel export failed:", error);
       alert("Failed to generate Excel file.");
