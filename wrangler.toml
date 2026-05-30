@@ -38,5 +38,9 @@ database_id = "a25c4a81-fe18-42b3-89ad-5c9bf7e4d7b4"
 binding = "BUCKET"
 bucket_name = "linguaplanet-storage"
 
+# Force deploy trigger
+# Timestamp: 2026-05-30T18:52:00
+
+
 
 
