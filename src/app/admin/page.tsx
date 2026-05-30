@@ -670,9 +670,9 @@ export default function AdminDashboard() {
               <button className="btn-master btn-gold" onClick={handleExportExcel}>MASTER EXCEL <i className="fa-solid fa-file-excel" style={{ marginLeft: '1rem' }}></i></button>
             )}
             {activeTab === 'test' && (
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <button className="btn-master" onClick={handleDeleteAllQuestions} style={{ background: 'rgba(255,50,50,0.1)', color: '#ff4d4d', borderColor: 'rgba(255,50,50,0.2)' }}>DELETE ALL <i className="fa-solid fa-trash-can" style={{ marginLeft: '1rem' }}></i></button>
-                <button className="btn-master btn-gold" onClick={handleSyncQuestions} style={{ background: 'rgba(255,255,255,0.05)', color: 'white', borderColor: 'rgba(255,255,255,0.1)' }}>SYNC FROM STATIC <i className="fa-solid fa-rotate" style={{ marginLeft: '1rem' }}></i></button>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <button className="btn-master" onClick={handleDeleteAllQuestions} style={{ background: 'transparent', color: '#ff4d4d', border: '1px solid #ff4d4d' }}>DELETE ALL <i className="fa-solid fa-trash-can" style={{ marginLeft: '1rem' }}></i></button>
+                <button className="btn-master btn-gold" onClick={handleSyncQuestions}>SYNC FROM STATIC <i className="fa-solid fa-rotate" style={{ marginLeft: '1rem' }}></i></button>
                 <button className="btn-master btn-gold" onClick={() => { setCurrentQuestion({ question: '', options: ['', '', '', ''], correct_answer: '', part: 1, level: 'A1' }); setIsEditingQuestion(true); }}>ADD QUESTION <i className="fa-solid fa-plus" style={{ marginLeft: '1rem' }}></i></button>
               </div>
             )}
