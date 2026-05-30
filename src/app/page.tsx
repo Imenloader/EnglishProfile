@@ -436,7 +436,7 @@ export default function Home() {
       </section>
 
       {/* 06: The Mastery Journey (CEFR Path) */}
-      <section id="trajectory" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
+      <section id="trajectory" style={{ padding: '10rem 0', background: 'var(--bg-color-alt)', position: 'relative', overflow: 'hidden', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
         <div className="container">
           {/* Desktop Trajectory */}
           <div className="desktop-trajectory" data-aos="zoom-in" style={{ padding: '6rem 0' }}>
@@ -473,25 +473,26 @@ export default function Home() {
                     <div className="milestone-circle" style={{
                       width: '60px',
                       height: '60px',
-                      background: 'var(--primary-navy)',
-                      border: '2px solid var(--accent-gold)',
+                      background: 'var(--bg-color)',
+                      border: '2.5px solid var(--accent-gold)',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 800,
-                      color: 'white',
+                      color: 'var(--text-color)',
                       cursor: 'pointer',
-                      boxShadow: '0 0 20px rgba(197, 160, 89, 0.2)',
-                      transition: 'all 0.4s ease'
+                      boxShadow: '0 0 25px rgba(197, 160, 89, 0.35), inset 0 0 10px rgba(197, 160, 89, 0.05)',
+                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                      zIndex: 2
                     }}>
                       {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
                     </div>
                     {/* Level Label & Desc below */}
                     <div style={{ marginTop: '1.5rem' }}>
-                      <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem' }}>{m.id}</h4>
-                      <span style={{ color: 'white', fontSize: '0.85rem', opacity: 0.9, display: 'block', fontWeight: 600 }}>{m.label}</span>
-                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginTop: '0.5rem', lineHeight: 1.4 }}>{m.desc}</p>
+                      <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.15rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '1px' }}>{m.id}</h4>
+                      <span style={{ color: 'var(--text-color)', fontSize: '0.85rem', display: 'block', fontWeight: 700 }}>{m.label}</span>
+                      <p style={{ color: 'var(--text-color-muted)', fontSize: '0.75rem', marginTop: '0.5rem', lineHeight: 1.5, opacity: 0.8 }}>{m.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -508,7 +509,7 @@ export default function Home() {
                 top: 0, 
                 bottom: 0, 
                 width: '2px', 
-                background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), var(--accent-gold), rgba(255,255,255,0.1), transparent)',
+                background: 'linear-gradient(to bottom, transparent, rgba(197,160,89,0.1), var(--accent-gold), rgba(197,160,89,0.1), transparent)',
                 transform: 'translateX(-50%)',
                 zIndex: 1
               }}></div>
@@ -550,7 +551,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '2px', textTransform: 'uppercase' }}>{m.label}</h4>
-                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', lineHeight: 1.6, fontWeight: 300 }}>{m.desc}</p>
+                    <p style={{ color: 'var(--text-color)', opacity: 0.8, fontSize: '0.9rem', lineHeight: 1.6, fontWeight: 300 }}>{m.desc}</p>
                   </div>
                 </div>
               ))}
@@ -583,26 +584,11 @@ export default function Home() {
           @keyframes path-reveal {
             to { stroke-dashoffset: 0; }
           }
-          .milestone-circle {
-            width: 60px;
-            height: 60px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: white;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-          }
           .milestone-circle:hover {
-            background: var(--accent-gold);
-            color: var(--primary-navy);
-            transform: scale(1.2);
+            background: var(--accent-gold) !important;
+            color: var(--primary-navy) !important;
+            transform: scale(1.15);
+            box-shadow: 0 0 35px var(--accent-gold), 0 0 15px rgba(197, 160, 89, 0.4) !important;
           }
           .milestone-tooltip {
             position: absolute;

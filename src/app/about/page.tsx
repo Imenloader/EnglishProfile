@@ -5,7 +5,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { db } from '@/data/db';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 
 export default function AboutPage() {
   const { language, t, isRtl } = useLanguage();
@@ -20,15 +19,15 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main data-theme="dark" className="marble-pattern" style={{ background: 'var(--primary-navy)', minHeight: '100vh' }}>
-      <Navbar isDarkPage={true} />
+    <main className="marble-pattern" style={{ background: 'var(--bg-color)', minHeight: '100vh', color: 'var(--text-color)' }}>
+      <Navbar isDarkPage={false} />
       
       {/* 01: Hero / Vision Header */}
       <section style={{ padding: '12rem 0 6rem', textAlign: 'center' }}>
         <div className="container">
           <div data-aos="fade-up">
             <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '5px' }}>{t('institutionalCore')}</span>
-            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', color: 'white', marginTop: '2rem', fontFamily: 'var(--font-serif)' }}>{t('visionMission')}</h1>
+            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', color: 'var(--text-color)', marginTop: '2rem', fontFamily: 'var(--font-serif)' }}>{t('visionMission')}</h1>
           </div>
         </div>
       </section>
@@ -39,24 +38,24 @@ export default function AboutPage() {
           <div className="grid-responsive" style={{ 
             gap: '3rem'
           }}>
-            <div data-aos="fade-right" style={{ background: 'rgba(255,255,255,0.03)', padding: '5rem', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div data-aos="fade-right" style={{ background: 'var(--card-bg)', padding: '5rem', borderRadius: '40px', border: '1px solid var(--border-color)', boxShadow: '0 20px 50px rgba(0,0,0,0.03)' }}>
               <i className="fa-solid fa-eye" style={{ fontSize: '3rem', marginBottom: '2.5rem', color: 'var(--accent-gold)' }}></i>
-              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'white' }}>{t('ourVision')}</span>
-              <h2 style={{ fontSize: '2.8rem', color: 'white' }}>{t('visionTitle')}</h2>
-              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'white' }}>{t('visionDesc')}</p>
+              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'var(--text-color)' }}>{t('ourVision')}</span>
+              <h2 style={{ fontSize: '2.8rem', color: 'var(--text-color)' }}>{t('visionTitle')}</h2>
+              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'var(--text-color-muted)' }}>{t('visionDesc')}</p>
             </div>
-            <div data-aos="fade-left" style={{ background: 'rgba(255,255,255,0.03)', padding: '5rem', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div data-aos="fade-left" style={{ background: 'var(--card-bg)', padding: '5rem', borderRadius: '40px', border: '1px solid var(--border-color)', boxShadow: '0 20px 50px rgba(0,0,0,0.03)' }}>
               <i className="fa-solid fa-bullseye" style={{ fontSize: '3rem', marginBottom: '2.5rem', color: 'var(--accent-gold)' }}></i>
-              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'white' }}>{t('ourMission')}</span>
-              <h2 style={{ fontSize: '2.8rem', color: 'white' }}>{t('missionTitle')}</h2>
-              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'white' }}>{t('missionDesc')}</p>
+              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '3px', opacity: 0.6, marginBottom: '1.5rem', color: 'var(--text-color)' }}>{t('ourMission')}</span>
+              <h2 style={{ fontSize: '2.8rem', color: 'var(--text-color)' }}>{t('missionTitle')}</h2>
+              <p style={{ marginTop: '2rem', fontSize: '1.2rem', opacity: 0.7, lineHeight: 1.8, color: 'var(--text-color-muted)' }}>{t('missionDesc')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 03: The Mastery Journey (CEFR Path) */}
-      <section style={{ padding: '8rem 0', position: 'relative', overflow: 'hidden' }}>
+      <section id="trajectory" style={{ padding: '10rem 0', background: 'var(--bg-color-alt)', position: 'relative', overflow: 'hidden', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
         <div className="container">
 
           {/* Desktop Trajectory */}
@@ -94,25 +93,26 @@ export default function AboutPage() {
                     <div className="milestone-circle" style={{
                       width: '60px',
                       height: '60px',
-                      background: 'var(--primary-navy)',
-                      border: '2px solid var(--accent-gold)',
+                      background: 'var(--bg-color)',
+                      border: '2.5px solid var(--accent-gold)',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 800,
-                      color: 'white',
+                      color: 'var(--text-color)',
                       cursor: 'pointer',
-                      boxShadow: '0 0 20px rgba(197, 160, 89, 0.2)',
-                      transition: 'all 0.4s ease'
+                      boxShadow: '0 0 25px rgba(197, 160, 89, 0.35), inset 0 0 10px rgba(197, 160, 89, 0.05)',
+                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                      zIndex: 2
                     }}>
                       {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
                     </div>
                     {/* Level Label & Desc below */}
                     <div style={{ marginTop: '1.5rem' }}>
-                      <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem' }}>{m.id}</h4>
-                      <span style={{ color: 'white', fontSize: '0.85rem', opacity: 0.9, display: 'block', fontWeight: 600 }}>{m.label}</span>
-                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginTop: '0.5rem', lineHeight: 1.4 }}>{m.desc}</p>
+                      <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.15rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '1px' }}>{m.id}</h4>
+                      <span style={{ color: 'var(--text-color)', fontSize: '0.85rem', display: 'block', fontWeight: 700 }}>{m.label}</span>
+                      <p style={{ color: 'var(--text-color-muted)', fontSize: '0.75rem', marginTop: '0.5rem', lineHeight: 1.5, opacity: 0.8 }}>{m.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -129,7 +129,7 @@ export default function AboutPage() {
                 top: 0, 
                 bottom: 0, 
                 width: '2px', 
-                background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), var(--accent-gold), rgba(255,255,255,0.1), transparent)',
+                background: 'linear-gradient(to bottom, transparent, rgba(197,160,89,0.1), var(--accent-gold), rgba(197,160,89,0.1), transparent)',
                 transform: 'translateX(-50%)',
                 zIndex: 1
               }}></div>
@@ -171,7 +171,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '2px', textTransform: 'uppercase' }}>{m.label}</h4>
-                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', lineHeight: 1.6, fontWeight: 300 }}>{m.desc}</p>
+                    <p style={{ color: 'var(--text-color)', opacity: 0.8, fontSize: '0.9rem', lineHeight: 1.6, fontWeight: 300 }}>{m.desc}</p>
                   </div>
                 </div>
               ))}
@@ -184,7 +184,7 @@ export default function AboutPage() {
       <section id="contact" style={{ padding: '8rem 0 12rem' }}>
         <div className="container">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div className="glass-dark" style={{ padding: '5rem', borderRadius: '40px' }} data-aos="fade-up">
+            <div className="glass-card" style={{ padding: '5rem', borderRadius: '40px' }} data-aos="fade-up">
               <h2 style={{ fontSize: '2.5rem', color: 'var(--text-color)', marginBottom: '3.5rem', textAlign: 'center' }}>{t('sendMessage')}</h2>
               
               <AboutContactForm onSave={db.saveInquiry} t={t} />
@@ -218,25 +218,11 @@ export default function AboutPage() {
         @keyframes path-reveal {
           to { stroke-dashoffset: 0; }
         }
-        .milestone-circle {
-          width: 60px;
-          height: 60px;
-          background: rgba(255,255,255,0.1);
-          backdrop-filter: blur(10px);
-          border: 2px solid rgba(255,255,255,0.2);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 800;
-          cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          position: relative;
-        }
         .milestone-circle:hover {
-          background: var(--accent-gold);
-          color: var(--primary-navy);
-          transform: scale(1.2);
+          background: var(--accent-gold) !important;
+          color: var(--primary-navy) !important;
+          transform: scale(1.15);
+          box-shadow: 0 0 35px var(--accent-gold), 0 0 15px rgba(197, 160, 89, 0.4) !important;
         }
         .milestone-tooltip {
           position: absolute;
@@ -401,4 +387,3 @@ function AboutContactForm({ onSave, t }: { onSave: any, t: any }) {
     </form>
   );
 }
-
