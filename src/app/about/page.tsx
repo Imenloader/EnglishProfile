@@ -20,7 +20,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main className="marble-pattern" style={{ background: 'var(--primary-navy)', minHeight: '100vh' }}>
+    <main data-theme="dark" className="marble-pattern" style={{ background: 'var(--primary-navy)', minHeight: '100vh' }}>
       <Navbar isDarkPage={true} />
       
       {/* 01: Hero / Vision Header */}
@@ -71,9 +71,9 @@ export default function AboutPage() {
                 { id: 'A1', x: '5%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
                 { id: 'A2', x: '25%', y: '87%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
                 { id: 'B1', x: '40%', y: '50%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
-                { id: 'B2', x: '65%', y: '50%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-                { id: 'C1', x: '82%', y: '35%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
-                { id: 'C2', x: '95%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+                { id: 'B1+', x: '65%', y: '50%', label: t('milestoneB1Plus'), desc: t('milestoneB1PlusDesc') },
+                { id: 'B2', x: '82%', y: '35%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+                { id: 'C1', x: '95%', y: '12%', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
               ].map((m) => (
                 <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
                   <div className="milestone-circle">
@@ -105,9 +105,9 @@ export default function AboutPage() {
                 { id: 'A1', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
                 { id: 'A2', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
                 { id: 'B1', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+                { id: 'B1+', label: t('milestoneB1Plus'), desc: t('milestoneB1PlusDesc') },
                 { id: 'B2', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-                { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
-                { id: 'C2', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+                { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
               ].map((m) => (
                 <div key={m.id} style={{ 
                   display: 'flex', 

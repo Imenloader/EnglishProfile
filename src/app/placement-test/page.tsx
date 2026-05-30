@@ -83,11 +83,12 @@ export default function PlacementTest() {
   };
 
   const calculateLevel = (totalScore: number) => {
-    if (totalScore <= 15) return 'A1';
-    if (totalScore <= 30) return 'A2';
-    if (totalScore <= 45) return 'B1';
-    if (totalScore <= 55) return 'B2';
-    return 'C1/C2';
+    if (totalScore <= 12) return 'A1';
+    if (totalScore <= 24) return 'A2';
+    if (totalScore <= 36) return 'B1';
+    if (totalScore <= 45) return 'B1+';
+    if (totalScore <= 54) return 'B2';
+    return 'C1';
   };
 
   const currentLevel = calculateLevel(score);
@@ -165,7 +166,7 @@ export default function PlacementTest() {
 
   if (isFinished) {
     return (
-      <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
+      <main data-theme="dark" className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
         <Navbar isDarkPage={true} />
         <div className="container flex-center" style={{ minHeight: '100vh', flexDirection: 'column', padding: 'clamp(4rem, 10vw, 8rem) 1.5rem' }}>
           <div className="glass-dark animate-reveal" style={{ padding: 'clamp(2rem, 8vw, 5rem)', maxWidth: '800px', width: '100%', textAlign: 'center', borderRadius: '40px' }}>
@@ -201,7 +202,7 @@ export default function PlacementTest() {
   const progress = Math.round((currentStep / totalSteps) * 100);
 
   return (
-    <main className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
+    <main data-theme="dark" className="marble-pattern" style={{ direction: isRtl ? 'rtl' : 'ltr', background: 'var(--primary-navy)', minHeight: '100vh' }}>
       <Navbar isDarkPage={true} />
       
       {/* Progress Orbit */}

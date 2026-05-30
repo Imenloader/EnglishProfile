@@ -9,7 +9,7 @@ export default function PrivacyPage() {
   const { isRtl, t } = useLanguage();
 
   return (
-    <main className="marble-pattern" style={{ background: 'var(--primary-navy)', minHeight: '100vh', direction: isRtl ? 'rtl' : 'ltr' }}>
+    <main data-theme="dark" className="marble-pattern" style={{ background: 'var(--primary-navy)', minHeight: '100vh', direction: isRtl ? 'rtl' : 'ltr' }}>
       <Navbar isDarkPage={true} />
       
       <section style={{ padding: '12rem 0 8rem' }}>

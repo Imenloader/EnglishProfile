@@ -248,7 +248,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 03: Why Choose Us (Why LinguaPlanet?) */}
+      {/* 03: Why Choose Us (Why Linguaplanet?) */}
       <section id="why-us" style={{ padding: '10rem 0', background: 'var(--bg-color)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '6rem' }} data-aos="fade-up">
@@ -340,10 +340,7 @@ export default function Home() {
               <p style={{ opacity: 0.9, fontWeight: 700, color: 'var(--text-color)', lineHeight: 1.8, marginBottom: '2.5rem' }}>
                 {t('safeHandsDesc3')}
               </p>
-              <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '1.5rem 2rem', borderRadius: '15px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <i className="fa-solid fa-shield-halved" style={{ color: 'var(--accent-gold)' }}></i>
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--text-color)' }}>{t('institutionalGuarantee')}</span>
-              </div>
+
             </div>
 
           </div>
@@ -453,9 +450,9 @@ export default function Home() {
                 { id: 'A1', x: '8%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
                 { id: 'A2', x: '24%', y: '78%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
                 { id: 'B1', x: '42%', y: '35%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
-                { id: 'B2', x: '63%', y: '41%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-                { id: 'C1', x: '83%', y: '55%', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
-                { id: 'C2', x: '94%', y: '12%', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+                { id: 'B1+', x: '63%', y: '41%', label: t('milestoneB1Plus'), desc: t('milestoneB1PlusDesc') },
+                { id: 'B2', x: '83%', y: '55%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+                { id: 'C1', x: '94%', y: '12%', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
               ].map((m) => (
                 <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
                   <div className="milestone-circle">
@@ -487,9 +484,9 @@ export default function Home() {
                 { id: 'A1', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
                 { id: 'A2', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
                 { id: 'B1', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+                { id: 'B1+', label: t('milestoneB1Plus'), desc: t('milestoneB1PlusDesc') },
                 { id: 'B2', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-                { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc') },
-                { id: 'C2', label: t('milestoneC2'), desc: t('milestoneC2Desc'), star: true }
+                { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
               ].map((m) => (
                 <div key={m.id} style={{ 
                   display: 'flex', 

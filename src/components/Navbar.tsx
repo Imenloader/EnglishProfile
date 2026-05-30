@@ -179,7 +179,6 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                   fontSize: '0.7rem',
                   fontWeight: 700,
                   letterSpacing: '2px',
-                  textTransform: 'uppercase',
                   transition: 'all 0.4s ease',
                   opacity: scrolled ? 1 : 0.85,
                   position: 'relative',
@@ -322,7 +321,6 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
                   color: (theme === 'dark' || isDarkPage) ? 'white' : 'var(--primary-navy)',
                   fontSize: '1.2rem',
                   fontWeight: 700,
-                  textTransform: 'uppercase',
                   letterSpacing: '3px',
                   borderBottom: '1px solid rgba(0,0,0,0.05)',
                   paddingBottom: '1rem'

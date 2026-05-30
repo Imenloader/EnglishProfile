@@ -213,7 +213,7 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(writingData), "Writing Review Portal");
 
       // 5. LEVEL DISTRIBUTION
-      const levelsList = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+      const levelsList = ['A1', 'A2', 'B1', 'B1+', 'B2', 'C1'];
       const cefrStats = levelsList.map(lvl => {
         const matchingLeads = filteredLeads.filter((l: any) => l.level === lvl);
         return {
@@ -286,7 +286,7 @@ export default function AdminDashboard() {
     let totalQuestions = 0;
 
     const proficiencyCounts: Record<string, number> = {
-      'A1': 0, 'A2': 0, 'B1': 0, 'B2': 0, 'C1': 0, 'C2': 0
+      'A1': 0, 'A2': 0, 'B1': 0, 'B1+': 0, 'B2': 0, 'C1': 0
     };
 
     const dailyCounts: Record<string, number> = {};
@@ -317,8 +317,7 @@ export default function AdminDashboard() {
       if (l.level) {
         if (proficiencyCounts[l.level] !== undefined) {
           proficiencyCounts[l.level]++;
-        } else if (l.level === 'C1/C2') {
-          // Sometimes level is combined in the DB
+        } else if (l.level === 'C1/C2' || l.level === 'C2') {
           proficiencyCounts['C1']++;
         }
       }
@@ -352,7 +351,7 @@ export default function AdminDashboard() {
 
     const avgScorePercent = totalAssessments > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
 
-    const proficiencyData = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => ({
+    const proficiencyData = ['A1', 'A2', 'B1', 'B1+', 'B2', 'C1'].map(lvl => ({
       name: lvl,
       count: proficiencyCounts[lvl] || 0
     }));
@@ -382,8 +381,8 @@ export default function AdminDashboard() {
   if (!isAuthenticated) {
 
     return (
-      <main className="marble-pattern" style={{ minHeight: '100vh', background: 'var(--primary-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <form className="glass-dark" style={{ padding: '4rem', width: '100%', maxWidth: '450px', borderRadius: '32px', textAlign: 'center' }} onSubmit={handleLogin}>
+      <main data-theme="dark" className="marble-pattern" style={{ minHeight: '100vh', background: 'var(--primary-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <form className="glass-dark" style={{ padding: '4rem', width: '100%', maxWidth: '450px', borderRadius: '32px', textAlign: 'center', background: 'rgba(1, 22, 39, 0.95)', border: '1px solid rgba(255,255,255,0.08)' }} onSubmit={handleLogin}>
           <div style={{ width: '60px', height: '60px', background: 'var(--accent-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
             <i className="fa-solid fa-lock" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
           </div>
@@ -719,8 +718,8 @@ export default function AdminDashboard() {
 
       {/* Lead Details Modal */}
       {selectedLead && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-          <div className="glass-dark" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div data-theme="dark" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-dark" style={{ width: '100%', maxWidth: '900px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '40px', padding: '4rem', position: 'relative', border: '1px solid rgba(255,255,255,0.08)', background: 'var(--primary-navy)' }}>
             <button onClick={() => setSelectedLead(null)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
 
             <div style={{ marginBottom: '4rem' }}>
@@ -776,7 +775,7 @@ export default function AdminDashboard() {
       {/* Question Editor Modal */}
       {isEditingQuestion && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(1, 22, 39, 0.9)', backdropFilter: 'blur(10px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-          <div className="glass-dark" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative' }}>
+          <div className="glass-dark" style={{ width: '100%', maxWidth: '700px', borderRadius: '40px', padding: '4rem', position: 'relative', background: 'var(--primary-navy)', border: '1px solid rgba(255,255,255,0.08)' }}>
             <button onClick={() => setIsEditingQuestion(false)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
             <h2 style={{ color: 'white', fontSize: '2rem', marginBottom: '3rem', fontFamily: 'var(--font-serif)' }}>{currentQuestion.id ? 'Edit Question' : 'Add New Question'}</h2>
 
@@ -798,7 +797,7 @@ export default function AdminDashboard() {
                 <div>
                   <label style={{ display: 'block', marginBottom: '1rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 800 }}>CEFR LEVEL</label>
                   <select value={currentQuestion.level} onChange={(e) => setCurrentQuestion({...currentQuestion, level: e.target.value})} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', borderRadius: '12px', color: 'white' }}>
-                    {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
+                    {['A1', 'A2', 'B1', 'B1+', 'B2', 'C1'].map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
                   </select>
                 </div>
               </div>
