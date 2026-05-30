@@ -16,6 +16,7 @@ CREATE TABLE leads (
   score INTEGER NOT NULL,
   total_questions INTEGER NOT NULL,
   level TEXT NOT NULL,
+  class_format TEXT DEFAULT 'online',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

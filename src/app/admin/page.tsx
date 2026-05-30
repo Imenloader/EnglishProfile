@@ -152,13 +152,25 @@ export default function AdminDashboard() {
 
       const workbook = XLSX.utils.book_new();
 
+      // Helper to extract format preference resiliently
+      const getFormatPreference = (lead: any) => {
+        if (lead.class_format) return lead.class_format.toUpperCase();
+        if (lead.company && lead.company.includes('Prefers:')) {
+          try {
+            return lead.company.split('Prefers:')[1].replace(')', '').trim().toUpperCase();
+          } catch (e) {}
+        }
+        return 'ONLINE';
+      };
+
       // 1. MASTER STUDENTS SUMMARY
       const summaryData = filteredLeads.map((l: any) => ({
         'ID': l.id.slice(0, 8),
         'Student Name': l.name,
         'Email': l.email,
         'Phone': l.phone || 'N/A',
-        'Company': l.company || 'N/A',
+        'Company': l.company && l.company.includes('Prefers:') ? l.company.split('Prefers:')[0].replace('(', '').trim() || 'N/A' : l.company || 'N/A',
+        'Preferred Format': getFormatPreference(l),
         'Age': l.age_range || 'N/A',
         'Score': `${l.score}/${l.total_questions}`,
         'Percentage': `${l.total_questions > 0 ? Math.round((l.score / l.total_questions) * 100) : 0}%`,
@@ -175,7 +187,8 @@ export default function AdminDashboard() {
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
-          'Company': l.company || 'N/A',
+          'Company': l.company && l.company.includes('Prefers:') ? l.company.split('Prefers:')[0].replace('(', '').trim() || 'N/A' : l.company || 'N/A',
+          'Preferred Format': getFormatPreference(l),
           'Age': l.age_range || 'N/A',
           'Total Score': l.score,
           'Level': l.level
@@ -204,7 +217,8 @@ export default function AdminDashboard() {
         'Student Name': l.name,
         'Email': l.email,
         'Phone': l.phone || 'N/A',
-        'Company': l.company || 'N/A',
+        'Company': l.company && l.company.includes('Prefers:') ? l.company.split('Prefers:')[0].replace('(', '').trim() || 'N/A' : l.company || 'N/A',
+        'Preferred Format': getFormatPreference(l),
         'Age': l.age_range || 'N/A',
         'CEFR (Predicted)': l.level,
         'Writing Content': l.writing_response,
@@ -625,15 +639,23 @@ export default function AdminDashboard() {
                   {filteredLeads.length === 0 ? (
                     <tr><td colSpan={4} style={{ textAlign: 'center', padding: '5rem', opacity: 0.3 }}>No student data available.</td></tr>
                   ) : (
-                    filteredLeads.map(lead => (
-                      <tr key={lead.id} onClick={async () => {
-                        const { data: ans } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
-                        setSelectedLead({ ...lead, answers: ans });
-                      }} style={{ background: 'rgba(128,128,128,0.05)', transition: 'all 0.3s ease', cursor: 'pointer' }} className="hover-lift">
-                        <td style={{ padding: '1.5rem', borderRadius: '12px 0 0 12px' }}>
-                          <div style={{ fontWeight: 800, color: 'var(--text-color)' }}>{lead.name}</div>
-                          <div style={{ fontSize: '0.8rem', opacity: 0.5 }}>{lead.email}</div>
-                        </td>
+                    filteredLeads.map(lead => {
+                      const prefFormat = lead.class_format || (lead.company && lead.company.includes('Prefers:') ? lead.company.split('Prefers:')[1].replace(')', '').trim() : 'ONLINE');
+                      const displayCompany = lead.company && lead.company.includes('Prefers:') ? lead.company.split('Prefers:')[0].replace('(', '').trim() || 'N/A' : lead.company || 'N/A';
+                      return (
+                        <tr key={lead.id} onClick={async () => {
+                          const { data: ans } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
+                          setSelectedLead({ ...lead, answers: ans });
+                        }} style={{ background: 'rgba(128,128,128,0.05)', transition: 'all 0.3s ease', cursor: 'pointer' }} className="hover-lift">
+                          <td style={{ padding: '1.5rem', borderRadius: '12px 0 0 12px' }}>
+                            <div style={{ fontWeight: 800, color: 'var(--text-color)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                              {lead.name}
+                              <span style={{ padding: '0.2rem 0.6rem', background: 'rgba(197, 160, 89, 0.12)', color: 'var(--accent-gold)', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', boxShadow: '0 0 10px rgba(197, 160, 89, 0.1)' }}>
+                                {prefFormat.toUpperCase()}
+                              </span>
+                            </div>
+                            <div style={{ fontSize: '0.8rem', opacity: 0.5 }}>{lead.email} | {displayCompany !== 'N/A' ? displayCompany : 'No Company'}</div>
+                          </td>
                         <td style={{ padding: '1.5rem', fontWeight: 800 }}>{lead.score}/{lead.total_questions}</td>
                         <td style={{ padding: '1.5rem' }}>
                           <span style={{ padding: '0.4rem 1rem', background: 'var(--primary-navy)', color: 'white', borderRadius: '50px', fontSize: '0.7rem', fontWeight: 800 }}>{lead.level}</span>
@@ -642,7 +664,8 @@ export default function AdminDashboard() {
                           <button style={{ color: 'var(--accent-gold)', border: 'none', background: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.75rem' }}>VIEW DETAILS</button>
                         </td>
                       </tr>
-                    ))
+                      );
+                    })
                   )}
                 </tbody>
               </table>
@@ -782,7 +805,7 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '4rem' }}>
               <div style={{ background: 'var(--bg-color-alt)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
                 <span style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 800, color: 'var(--text-color)' }}>ACADEMIC SCORE</span>
                 <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-gold)', marginTop: '0.5rem' }}>{selectedLead.score}/{selectedLead.total_questions}</div>
@@ -790,6 +813,12 @@ export default function AdminDashboard() {
               <div style={{ background: 'var(--bg-color-alt)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
                 <span style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 800, color: 'var(--text-color)' }}>PREDICTED LEVEL</span>
                 <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-blue)', marginTop: '0.5rem' }}>{selectedLead.level}</div>
+              </div>
+              <div style={{ background: 'var(--bg-color-alt)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 800, color: 'var(--text-color)' }}>CLASS FORMAT</span>
+                <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-gold)', marginTop: '0.5rem', textTransform: 'uppercase' }}>
+                  {selectedLead.class_format || (selectedLead.company && selectedLead.company.includes('Prefers:') ? selectedLead.company.split('Prefers:')[1].replace(')', '').trim() : 'ONLINE')}
+                </div>
               </div>
             </div>
 

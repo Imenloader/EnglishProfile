@@ -20,7 +20,7 @@ export default function PlacementTest() {
   const [level, setLevel] = useState('');
   const [showLeadForm, setShowLeadForm] = useState(true);
   const [testStarted, setTestStarted] = useState(false);
-  const [leadData, setLeadData] = useState({ name: '', email: '', phone: '', company: '' });
+  const [leadData, setLeadData] = useState({ name: '', email: '', phone: '', company: '', format: 'online' });
   const [writingResponse, setWritingResponse] = useState('');
   const [ageRange, setAgeRange] = useState('');
   const [detailedAnswers, setDetailedAnswers] = useState<any[]>([]);
@@ -105,21 +105,43 @@ export default function PlacementTest() {
     const finalLevel = calculateLevel(score);
     
     try {
-      const { data: lead, error: leadError } = await supabase
+      const insertPayload: any = {
+        name: leadData.name,
+        email: leadData.email,
+        phone: leadData.phone,
+        score: score,
+        total_questions: questions.length,
+        level: finalLevel,
+        writing_response: writingResponse,
+        age_range: ageRange,
+        company: leadData.company,
+        class_format: leadData.format
+      };
+
+      let { data: lead, error: leadError } = await supabase
         .from('leads')
-        .insert([{
-          name: leadData.name,
-          email: leadData.email,
-          phone: leadData.phone,
-          score: score,
-          total_questions: questions.length,
-          level: finalLevel,
-          writing_response: writingResponse,
-          age_range: ageRange,
-          company: leadData.company
-        }])
+        .insert([insertPayload])
         .select()
         .single();
+      
+      // Resilient fallback in case column class_format does not exist on remote database yet
+      if (leadError && leadError.code === '42703') {
+        console.warn("class_format column missing. Falling back to appending format to company name.");
+        const fallbackCompany = leadData.company
+          ? `${leadData.company} (Prefers: ${leadData.format.toUpperCase()})`
+          : `Prefers: ${leadData.format.toUpperCase()}`;
+        
+        delete insertPayload.class_format;
+        insertPayload.company = fallbackCompany;
+
+        const fallbackResult = await supabase
+          .from('leads')
+          .insert([insertPayload])
+          .select()
+          .single();
+        lead = fallbackResult.data;
+        leadError = fallbackResult.error;
+      }
       
       if (!leadError && lead) {
         const answersToSave = detailedAnswers.map(ans => ({
@@ -141,7 +163,8 @@ export default function PlacementTest() {
                 name: lead.name,
                 email: lead.email,
                 phone: lead.phone,
-                company: leadData.company,
+                company: lead.company,
+                format: lead.class_format || leadData.format,
                 score: `${score}/${questions.length}`,
                 level: finalLevel,
                 age: ageRange,
@@ -279,6 +302,18 @@ export default function PlacementTest() {
                     value={leadData.company}
                     onChange={(e) => setLeadData({ ...leadData, company: e.target.value })}
                   />
+                </div>
+                <div className="form-group">
+                  <label className="immortal-label">{isRtl ? 'طريقة الدراسة المفضلة' : 'PREFERRED CLASS FORMAT'}</label>
+                  <select 
+                    className="immortal-input" 
+                    style={{ appearance: 'none' }}
+                    value={leadData.format}
+                    onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
+                  >
+                    <option value="online">{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
+                    <option value="offline">{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
+                  </select>
                 </div>
                 <div className="form-group" style={{ position: 'relative' }}>
                   <label className="immortal-label">{t('age').toUpperCase()}</label>

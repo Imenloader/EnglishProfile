@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 
 -- 2. Link Leads to Users
 ALTER TABLE leads ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS class_format TEXT DEFAULT 'online';
 
 -- 3. Enable RLS for Profiles
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
