@@ -507,23 +507,23 @@ export default function AdminDashboard() {
           {activeTab === 'analytics' && (
             <div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '4rem' }}>
-                <div className="card-premium" style={{ textAlign: 'center', background: 'white', border: '1px solid rgba(0,0,0,0.05)', color: 'var(--primary-navy)' }}>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800 }}>TOTAL ASSESSMENTS</span>
-                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0' }}>{analyticsData.totalAssessments}</div>
+                <div className="card-premium" style={{ textAlign: 'center', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.7rem', opacity: 0.5, fontWeight: 800, color: 'var(--text-color)' }}>TOTAL ASSESSMENTS</span>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--text-color)' }}>{analyticsData.totalAssessments}</div>
                 </div>
-                <div className="card-premium" style={{ textAlign: 'center', background: 'white', border: '1px solid rgba(0,0,0,0.05)', color: 'var(--primary-navy)' }}>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800 }}>HIGH ACHIEVERS</span>
+                <div className="card-premium" style={{ textAlign: 'center', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.7rem', opacity: 0.5, fontWeight: 800, color: 'var(--text-color)' }}>HIGH ACHIEVERS</span>
                   <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--accent-gold)' }}>{analyticsData.highAchievers}</div>
                 </div>
-                <div className="card-premium" style={{ textAlign: 'center', background: 'white', border: '1px solid rgba(0,0,0,0.05)', color: 'var(--primary-navy)' }}>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.4, fontWeight: 800 }}>AVG SCORE %</span>
+                <div className="card-premium" style={{ textAlign: 'center', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.7rem', opacity: 0.5, fontWeight: 800, color: 'var(--text-color)' }}>AVG SCORE %</span>
                   <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '1rem 0', color: 'var(--accent-blue)' }}>{analyticsData.avgScorePercent}%</div>
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
-                <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
-                  <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Proficiency Distribution</h3>
+                <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--text-color)' }}>Proficiency Distribution</h3>
                   <div style={{ height: '300px' }}>
                     {mounted && (
                       <ResponsiveContainer width="100%" height="100%">
@@ -539,8 +539,8 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
-                  <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Daily Leads Volume</h3>
+                <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--text-color)' }}>Daily Leads Volume</h3>
                   <div style={{ height: '300px' }}>
                     {mounted && (
                       <ResponsiveContainer width="100%" height="100%">
@@ -563,8 +563,8 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="glass-card" style={{ padding: '3rem', background: 'white', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
-                <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-navy)' }}>Age Distribution</h3>
+              <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem', fontFamily: 'var(--font-serif)', color: 'var(--text-color)' }}>Age Distribution</h3>
                 <div style={{ height: '300px' }}>
                   {mounted && (
                     <ResponsiveContainer width="100%" height="100%">
@@ -591,17 +591,17 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === 'leads' && (
-            <div className="glass-card" style={{ padding: '2rem', borderRadius: '24px', background: 'white' }}>
+            <div className="glass-card" style={{ padding: '2rem', borderRadius: '24px' }}>
               <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.5rem' }}>
                 <thead>
-                  <tr style={{ textAlign: 'left', color: 'var(--primary-navy)' }}>
-                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.4, letterSpacing: '2px' }}>STUDENT</th>
-                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.4, letterSpacing: '2px' }}>SCORE</th>
-                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.4, letterSpacing: '2px' }}>LEVEL</th>
-                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.4, letterSpacing: '2px' }}>ACTIONS</th>
+                  <tr style={{ textAlign: 'left', color: 'var(--text-color)' }}>
+                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.5, letterSpacing: '2px' }}>STUDENT</th>
+                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.5, letterSpacing: '2px' }}>SCORE</th>
+                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.5, letterSpacing: '2px' }}>LEVEL</th>
+                    <th style={{ padding: '1.5rem', fontSize: '0.7rem', opacity: 0.5, letterSpacing: '2px' }}>ACTIONS</th>
                   </tr>
                 </thead>
-                <tbody style={{ color: 'var(--primary-navy)' }}>
+                <tbody style={{ color: 'var(--text-color)' }}>
                   {filteredLeads.length === 0 ? (
                     <tr><td colSpan={4} style={{ textAlign: 'center', padding: '5rem', opacity: 0.3 }}>No student data available.</td></tr>
                   ) : (
@@ -609,9 +609,9 @@ export default function AdminDashboard() {
                       <tr key={lead.id} onClick={async () => {
                         const { data: ans } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
                         setSelectedLead({ ...lead, answers: ans });
-                      }} style={{ background: 'var(--soft-gray)', transition: 'all 0.3s ease', cursor: 'pointer' }} className="hover-lift">
+                      }} style={{ background: 'rgba(128,128,128,0.05)', transition: 'all 0.3s ease', cursor: 'pointer' }} className="hover-lift">
                         <td style={{ padding: '1.5rem', borderRadius: '12px 0 0 12px' }}>
-                          <div style={{ fontWeight: 800, color: 'var(--primary-navy)' }}>{lead.name}</div>
+                          <div style={{ fontWeight: 800, color: 'var(--text-color)' }}>{lead.name}</div>
                           <div style={{ fontSize: '0.8rem', opacity: 0.5 }}>{lead.email}</div>
                         </td>
                         <td style={{ padding: '1.5rem', fontWeight: 800 }}>{lead.score}/{lead.total_questions}</td>
@@ -716,17 +716,17 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === 'test' && (
-            <div className="glass-card" style={{ padding: '2rem', background: 'white', color: 'var(--primary-navy)' }}>
+            <div className="glass-card" style={{ padding: '2rem', borderRadius: '24px' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--soft-gray)' }}>
-                    <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>PART</th>
-                    <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>QUESTION</th>
-                    <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>LEVEL</th>
-                    <th style={{ padding: '1.5rem', opacity: 0.4, fontSize: '0.7rem' }}>ACTIONS</th>
+                  <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--border-color)', color: 'var(--text-color)' }}>
+                    <th style={{ padding: '1.5rem', opacity: 0.5, fontSize: '0.7rem' }}>PART</th>
+                    <th style={{ padding: '1.5rem', opacity: 0.5, fontSize: '0.7rem' }}>QUESTION</th>
+                    <th style={{ padding: '1.5rem', opacity: 0.5, fontSize: '0.7rem' }}>LEVEL</th>
+                    <th style={{ padding: '1.5rem', opacity: 0.5, fontSize: '0.7rem' }}>ACTIONS</th>
                   </tr>
                 </thead>
-                <tbody style={{ color: 'var(--primary-navy)' }}>
+                <tbody style={{ color: 'var(--text-color)' }}>
                   {questions.map(q => (
                     <tr key={q.id} style={{ borderBottom: '1px solid var(--soft-gray)' }}>
                       <td style={{ padding: '1.5rem', fontWeight: 800 }}>P{q.part}</td>
