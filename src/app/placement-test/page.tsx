@@ -363,8 +363,8 @@ export default function PlacementTest() {
                       value={leadData.format}
                       onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
                     >
-                      <option value="online" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
-                      <option value="offline" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
+                      <option value="online">{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
+                      <option value="offline">{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
                     </select>
                     <i 
                       className="fa-solid fa-chevron-down" 
