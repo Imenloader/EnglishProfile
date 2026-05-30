@@ -506,7 +506,8 @@ export default function AdminDashboard() {
 
       // Daily Volume
       if (l.created_at) {
-        const dateStr = l.created_at.split('T')[0];
+        // Handle both ISO 'T' and SQLite ' ' formats
+        const dateStr = l.created_at.split(/[T ]/)[0];
         if (dailyCounts[dateStr] !== undefined) {
           dailyCounts[dateStr]++;
         }
