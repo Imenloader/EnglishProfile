@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { db, SiteSettings } from '@/data/db';
+import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
@@ -12,12 +13,34 @@ function ContactModal({ onClose, t, isRtl }: { onClose: () => void; t: any; isRt
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    const result = await db.saveInquiry({
+    
+    let success = false;
+    const inquiryData = {
       name: formData.name,
       email: formData.email,
-      message: `[Program: ${formData.program}] [Phone: ${formData.phone}] ${formData.message}`
-    });
-    if (result) {
+      score: 0,
+      total_questions: 0,
+      level: `INQUIRY: [Program: ${formData.program}] [Phone: ${formData.phone}] ${formData.message}`
+    };
+
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inquiryData)
+      });
+      if (res.ok) {
+        success = true;
+      } else {
+        throw new Error('API failed');
+      }
+    } catch (err) {
+      console.warn("⚠️ API failed, falling back to direct Supabase call for Inquiry");
+      const { data, error } = await supabase.from('leads').insert([inquiryData]);
+      if (!error) success = true;
+    }
+
+    if (success) {
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', program: 'General English', message: '' });
       setTimeout(() => setStatus('idle'), 5000);
