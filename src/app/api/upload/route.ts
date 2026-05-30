@@ -13,7 +13,7 @@ const getR2Bucket = (): any => {
   }
   try {
     const ctx = getRequestContext();
-    if (ctx?.env?.BUCKET) return ctx.env.BUCKET;
+    if ((ctx as any)?.env?.BUCKET) return (ctx as any).env.BUCKET;
   } catch (e) {}
   return null;
 };

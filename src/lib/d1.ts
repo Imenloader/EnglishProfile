@@ -15,7 +15,7 @@ export const getD1Database = (): any => {
   // next-on-pages context check
   try {
     const ctx = getRequestContext();
-    if (ctx?.env?.DB) return ctx.env.DB;
+    if ((ctx as any)?.env?.DB) return (ctx as any).env.DB;
   } catch (e) {}
   return null;
 };
