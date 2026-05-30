@@ -356,14 +356,29 @@ export default function PlacementTest() {
                 </div>
                 <div className="form-group">
                   <label className="immortal-label">{isRtl ? 'طريقة الدراسة المفضلة' : 'PREFERRED CLASS FORMAT'}</label>
-                  <select 
-                    className="immortal-input" 
-                    value={leadData.format}
-                    onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
-                  >
-                    <option value="online" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
-                    <option value="offline" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
-                  </select>
+                  <div style={{ position: 'relative' }}>
+                    <select 
+                      className="immortal-input" 
+                      style={{ appearance: 'none', cursor: 'pointer' }}
+                      value={leadData.format}
+                      onChange={(e) => setLeadData({ ...leadData, format: e.target.value })}
+                    >
+                      <option value="online" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'أونلاين (عبر الإنترنت)' : 'Online (Virtual)'}</option>
+                      <option value="offline" style={{ background: '#0b162c', color: '#fff' }}>{isRtl ? 'حضوري (أوفلاين)' : 'Offline (On-site)'}</option>
+                    </select>
+                    <i 
+                      className="fa-solid fa-chevron-down" 
+                      style={{ 
+                        position: 'absolute', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        [isRtl ? 'left' : 'right']: '1.5rem',
+                        color: 'var(--text-color-muted)',
+                        pointerEvents: 'none',
+                        opacity: 0.5
+                      }}
+                    ></i>
+                  </div>
                 </div>
                 <div className="form-group" style={{ position: 'relative' }}>
                   <label className="immortal-label">{t('age').toUpperCase()}</label>
