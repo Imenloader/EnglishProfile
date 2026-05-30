@@ -439,31 +439,63 @@ export default function Home() {
       <section id="trajectory" style={{ padding: '10rem 0', background: 'var(--primary-navy)', position: 'relative', overflow: 'hidden' }}>
         <div className="container">
           {/* Desktop Trajectory */}
-          <div className="desktop-trajectory" data-aos="zoom-in">
-            <div style={{ minWidth: '800px', height: '400px', position: 'relative' }}>
-              <svg viewBox="0 0 1000 400" fill="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-                <path d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="rgba(255,255,255,0.05)" strokeWidth="12" strokeLinecap="round" />
-                <path className="journey-path" d="M50,350 Q250,350 350,200 T700,200 T950,50" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" strokeDasharray="1000" strokeDashoffset="1000" />
-              </svg>
+          <div className="desktop-trajectory" data-aos="zoom-in" style={{ padding: '6rem 0' }}>
+            <div style={{ minWidth: '900px', position: 'relative' }}>
+              {/* Connecting Gold Line */}
+              <div style={{
+                position: 'absolute',
+                top: '30px', /* Exactly in the vertical middle of the 60px circles! */
+                left: '8%',
+                right: '8%',
+                height: '4px',
+                background: 'linear-gradient(90deg, var(--accent-gold) 0%, rgba(197, 160, 89, 0.2) 100%)',
+                borderRadius: '2px',
+                zIndex: 1
+              }}></div>
 
-              {[
-                { id: 'A1', x: '8%', y: '87%', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
-                { id: 'A2', x: '24%', y: '78%', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
-                { id: 'B1', x: '42%', y: '35%', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
-                { id: 'B1+', x: '63%', y: '41%', label: t('milestoneB1Plus'), desc: t('milestoneB1PlusDesc') },
-                { id: 'B2', x: '83%', y: '55%', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
-                { id: 'C1', x: '94%', y: '12%', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
-              ].map((m) => (
-                <div key={m.id} className="milestone-node" style={{ position: 'absolute', left: m.x, top: m.y, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
-                  <div className="milestone-circle">
-                    {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
-                    <div className="milestone-tooltip">
-                      <span style={{ fontWeight: 800, color: 'var(--accent-gold)', display: 'block', fontSize: '0.9rem' }}>{m.id} / {m.label}</span>
-                      <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8, color: 'white' }}>{m.desc}</p>
+              {/* Flex Container for Nodes */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                position: 'relative',
+                zIndex: 2,
+                padding: '0 5%'
+              }}>
+                {[
+                  { id: 'A1', label: t('milestoneA1'), desc: t('milestoneA1Desc') },
+                  { id: 'A2', label: t('milestoneA2'), desc: t('milestoneA2Desc') },
+                  { id: 'B1', label: t('milestoneB1'), desc: t('milestoneB1Desc') },
+                  { id: 'B1+', label: t('milestoneB1Plus'), desc: t('milestoneB1PlusDesc') },
+                  { id: 'B2', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
+                  { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
+                ].map((m) => (
+                  <div key={m.id} className="milestone-node" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '140px' }}>
+                    <div className="milestone-circle" style={{
+                      width: '60px',
+                      height: '60px',
+                      background: 'var(--primary-navy)',
+                      border: '2px solid var(--accent-gold)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 800,
+                      color: 'white',
+                      cursor: 'pointer',
+                      boxShadow: '0 0 20px rgba(197, 160, 89, 0.2)',
+                      transition: 'all 0.4s ease'
+                    }}>
+                      {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
+                    </div>
+                    {/* Level Label & Desc below */}
+                    <div style={{ marginTop: '1.5rem' }}>
+                      <h4 style={{ color: 'var(--accent-gold)', fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem' }}>{m.id}</h4>
+                      <span style={{ color: 'white', fontSize: '0.85rem', opacity: 0.9, display: 'block', fontWeight: 600 }}>{m.label}</span>
+                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', marginTop: '0.5rem', lineHeight: 1.4 }}>{m.desc}</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
