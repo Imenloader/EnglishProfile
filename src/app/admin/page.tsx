@@ -278,9 +278,38 @@ export default function AdminDashboard() {
   };
 
 
+  // Dynamically filter leads based on user selection in real-time
+  const filteredLeads = useMemo(() => {
+    let result = leads || [];
+
+    // Filter by Date
+    if (filterStartDate) {
+      result = result.filter((l: any) => l.created_at >= filterStartDate);
+    }
+    if (filterEndDate) {
+      const nextDay = new Date(filterEndDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const nextDayStr = nextDay.toISOString().split('T')[0];
+      result = result.filter((l: any) => l.created_at < nextDayStr);
+    }
+
+    // Filter by Age
+    if (filterMinAge || filterMaxAge) {
+      result = result.filter((l: any) => {
+        const age = parseInt(l.age_range);
+        if (isNaN(age)) return false;
+        const min = filterMinAge ? parseInt(filterMinAge) : 0;
+        const max = filterMaxAge ? parseInt(filterMaxAge) : 999;
+        return age >= min && age <= max;
+      });
+    }
+
+    return result;
+  }, [leads, filterStartDate, filterEndDate, filterMinAge, filterMaxAge]);
+
   // Consolidate analytics calculations to prevent unnecessary re-renders and multiple passes
   const analyticsData = useMemo(() => {
-    let totalAssessments = leads.length;
+    let totalAssessments = filteredLeads.length;
     let highAchievers = 0;
     let totalScore = 0;
     let totalQuestions = 0;
@@ -303,7 +332,7 @@ export default function AdminDashboard() {
     let age30to50 = 0;
     let ageOver50 = 0;
 
-    leads.forEach((l: any) => {
+    filteredLeads.forEach((l: any) => {
       // High Achievers
       if (l.level && l.level.includes('C')) {
         highAchievers++;
@@ -376,7 +405,7 @@ export default function AdminDashboard() {
       dailyVolumeData,
       ageData
     };
-  }, [leads]);
+  }, [filteredLeads]);
 
   if (!isAuthenticated) {
 
@@ -573,10 +602,10 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody style={{ color: 'var(--primary-navy)' }}>
-                  {leads.length === 0 ? (
+                  {filteredLeads.length === 0 ? (
                     <tr><td colSpan={4} style={{ textAlign: 'center', padding: '5rem', opacity: 0.3 }}>No student data available.</td></tr>
                   ) : (
-                    leads.map(lead => (
+                    filteredLeads.map(lead => (
                       <tr key={lead.id} onClick={async () => {
                         const { data: ans } = await supabase.from('lead_answers').select('*').eq('lead_id', lead.id);
                         setSelectedLead({ ...lead, answers: ans });
