@@ -106,7 +106,7 @@ export default function AboutPage() {
                       transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                       zIndex: 2
                     }}>
-                      {m.star ? <i className="fa-solid fa-star" style={{ color: 'var(--accent-gold)' }}></i> : m.id}
+                      {m.star ? <i className="fa-solid fa-star"></i> : m.id}
                     </div>
                     {/* Level Label & Desc below */}
                     <div style={{ marginTop: '1.5rem' }}>
@@ -217,6 +217,13 @@ export default function AboutPage() {
         }
         @keyframes path-reveal {
           to { stroke-dashoffset: 0; }
+        }
+        .milestone-circle i {
+          color: var(--accent-gold);
+          transition: color 0.4s ease;
+        }
+        .milestone-circle:hover i {
+          color: var(--primary-navy) !important;
         }
         .milestone-circle:hover {
           background: var(--accent-gold) !important;
