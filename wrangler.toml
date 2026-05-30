@@ -12,12 +12,22 @@ binding = "DB"
 database_name = "linguaplanet-db"
 database_id = "a25c4a81-fe18-42b3-89ad-5c9bf7e4d7b4"
 
+# Production R2 bucket bindings
+[[env.production.r2_buckets]]
+binding = "BUCKET"
+bucket_name = "linguaplanet-storage"
+
 [env.preview]
 # Preview environment bindings
 [[env.preview.d1_databases]]
 binding = "DB"
 database_name = "linguaplanet-db"
 database_id = "a25c4a81-fe18-42b3-89ad-5c9bf7e4d7b4"
+
+# Preview R2 bucket bindings
+[[env.preview.r2_buckets]]
+binding = "BUCKET"
+bucket_name = "linguaplanet-storage"
 
 [[d1_databases]]
 binding = "DB"
@@ -27,5 +37,6 @@ database_id = "a25c4a81-fe18-42b3-89ad-5c9bf7e4d7b4"
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "linguaplanet-storage"
+
 
 
