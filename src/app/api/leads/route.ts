@@ -89,12 +89,13 @@ export async function POST(request: Request) {
     const result = await executeQuery({
       d1Query: async (db) => {
         const stmtLead = db.prepare(`
-          INSERT INTO leads (id, name, email, score, total_questions, level, writing_response, age_range, company, class_format)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO leads (id, name, email, phone, score, total_questions, level, writing_response, age_range, company, class_format)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
           leadId,
           name,
           email,
+          phone || null,
           score,
           total_questions,
           level,
