@@ -44,12 +44,10 @@ export default function Footer() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <img 
-                  src="/images/logo/logo-text.jpg" 
+                  src="/images/logo/logo-text.png" 
                   alt="Linguaplanet" 
                   style={{ 
                     height: '30px', 
-                    filter: 'invert(1) hue-rotate(180deg)',
-                    mixBlendMode: 'screen',
                     opacity: 1
                   }} 
                 />

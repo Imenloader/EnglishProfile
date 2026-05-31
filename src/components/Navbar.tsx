@@ -130,14 +130,10 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               alignItems: 'center'
             }}>
               <img 
-                src="/images/logo/logo-text.jpg" 
+                src="/images/logo/logo-text.png" 
                 alt="Linguaplanet" 
                 style={{ 
-                  height: '100%', 
-                  filter: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'invert(1) hue-rotate(180deg)' : 'none',
-                  mixBlendMode: (theme === 'dark' || (isDarkPage && !scrolled)) ? 'screen' : 'multiply',
-                  transition: 'all 0.5s ease',
-                  opacity: 1
+                  height: '100%'
                 }} 
               />
             </div>
