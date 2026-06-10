@@ -250,10 +250,24 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // Optimization: Create an O(1) Set of filtered lead IDs to avoid O(N) Array.some lookups
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+
+      // Optimization: Create an O(1) Hash Map of Maps (lead_id -> question_text -> answer)
+      // to replace O(N^2) nested Array.filter and Array.find during matrix generation
+      const answersMapByLead = new Map();
+      (answersData || []).forEach((a: any) => {
+        if (!answersMapByLead.has(a.lead_id)) {
+          answersMapByLead.set(a.lead_id, new Map());
+        }
+        answersMapByLead.get(a.lead_id).set(a.question_text, a);
+      });
+
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        // Optimization: Use O(1) map lookup instead of O(N) array filter
+        const studentAnswersMap = answersMapByLead.get(l.id) || new Map();
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -264,7 +278,8 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          // Optimization: Use O(1) map lookup instead of O(N) array find
+          const ans = studentAnswersMap.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -272,7 +287,8 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // Optimization: Use O(1) Set lookup instead of O(N) array some
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
