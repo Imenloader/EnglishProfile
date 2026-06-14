@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface NavbarProps {
@@ -109,14 +110,16 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
             transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
             boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.1)' : 'none',
             overflow: 'hidden',
-            flexShrink: 0
+            flexShrink: 0,
+            position: 'relative'
           }}>
-            <img 
+            {/* Performance Optimization: Used Next.js Image component for navbar logos to optimize initial load time and caching. */}
+            <Image
               src="/images/logo/logo-icon.jpg" 
               alt="Linguaplanet Logo" 
+              fill
+              sizes="52px"
               style={{ 
-                width: '100%', 
-                height: '100%', 
                 objectFit: 'contain',
                 mixBlendMode: 'multiply'
               }} 
@@ -129,11 +132,15 @@ export default function Navbar({ isDarkPage = false }: NavbarProps) {
               display: 'flex',
               alignItems: 'center'
             }}>
-              <img 
+              {/* Performance Optimization: Used Next.js Image component for navbar logos to optimize initial load time and caching. */}
+              <Image
                 src="/images/logo/logo-text.png" 
                 alt="Linguaplanet" 
+                width={95}
+                height={24}
                 style={{ 
-                  height: '100%'
+                  height: '100%',
+                  width: 'auto'
                 }} 
               />
             </div>

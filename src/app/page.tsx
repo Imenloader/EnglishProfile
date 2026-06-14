@@ -117,15 +117,20 @@ export default function Home() {
                   }}
                   >
                     {partner.logo ? (
-                      <img 
-                        src={partner.logo} 
-                        alt={partner.name} 
-                        style={{ 
-                          maxWidth: '100%', 
-                          maxHeight: '100%', 
-                          objectFit: 'contain'
-                        }} 
-                      />
+                      <>
+                        {/* Performance Optimization: Used Next.js Image component for partner logos to enable lazy loading, automatic sizing, and optimal image formats. */}
+                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                          <Image
+                            src={partner.logo}
+                            alt={partner.name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 220px"
+                            style={{
+                              objectFit: 'contain'
+                            }}
+                          />
+                        </div>
+                      </>
                     ) : (
                       <span style={{ 
                         fontWeight: 800, 
