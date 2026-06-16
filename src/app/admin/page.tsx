@@ -251,9 +251,21 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
       // 2. STUDENT-QUESTION MATRIX
+      // ⚡ Bolt Optimization: Replacing O(N^2) Array.filter and Array.find inside loops
+      // 🎯 Expected Impact: Reduces export processing time and prevents browser freeze for thousands of rows
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+
+      // Pre-compute map: lead_id -> (question_text -> answer) for O(1) lookups
+      const answersMapByLead = new Map<string, Map<string, any>>();
+      (answersData || []).forEach((a: any) => {
+        if (!answersMapByLead.has(a.lead_id)) {
+          answersMapByLead.set(a.lead_id, new Map());
+        }
+        answersMapByLead.get(a.lead_id)!.set(a.question_text, a);
+      });
+
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const leadAnswersMap = answersMapByLead.get(l.id) || new Map();
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -264,15 +276,18 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
-          row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
+          const ans = leadAnswersMap.get(q as string);
+          row[q as string] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // ⚡ Bolt Optimization: Replacing O(N^2) Array.some inside Array.filter with O(1) Set lookup
+      // 🎯 Expected Impact: Significantly speeds up building the detailed answers sheet
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
