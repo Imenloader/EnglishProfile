@@ -9,6 +9,7 @@ import CTASection from '@/components/CTASection';
 import Link from 'next/link';
 import Image from 'next/image';
 import { db } from '@/data/db';
+import ScrollFeatures from '@/components/ScrollFeatures';
 
 export default function Home() {
   const { language, isRtl, t } = useLanguage();
@@ -20,49 +21,19 @@ export default function Home() {
     tiktokLink: "https://tiktok.com/@linguaplanet",
   });
 
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
   useEffect(() => {
     const fetchSettings = async () => {
       const s = await db.getSettings();
       if (s) setSettings(s);
     };
     fetchSettings();
-
-    // Performance Optimization: Throttled Scroll Listener
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-          setScrollProgress(progress);
-          setShowScrollTop(window.scrollY > 500);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <main className="marble-pattern">
       <Navbar isDarkPage={false} />
-      {/* Scroll Progress Bar */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: `${scrollProgress}%`,
-        height: '4px',
-        background: 'var(--accent-gold)',
-        zIndex: 2000,
-        transition: 'width 0.2s ease-out'
-      }}></div>
+      {/* Scroll Features isolated to prevent Home component re-renders */}
+      <ScrollFeatures isRtl={isRtl} />
 
       <Hero />
 
@@ -75,7 +46,7 @@ export default function Home() {
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-color)' }}>{t('companiesTrust')}</h2>
           </div>
-          
+
           <div className="marquee-wrap" style={{ marginTop: '2rem' }}>
             <div className="marquee-track">
               {(() => {
@@ -90,7 +61,7 @@ export default function Home() {
                 ];
                 // Multiply for infinite marquee
                 const triplePartners = [...partners, ...partners, ...partners];
-                
+
                 return triplePartners.map((partner, i) => (
                   <div key={`${partner.name}-${i}`} className="glass-card" style={{
                     display: 'flex',
@@ -117,20 +88,20 @@ export default function Home() {
                   }}
                   >
                     {partner.logo ? (
-                      <img 
-                        src={partner.logo} 
-                        alt={partner.name} 
-                        style={{ 
-                          maxWidth: '100%', 
-                          maxHeight: '100%', 
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100%',
                           objectFit: 'contain'
-                        }} 
+                        }}
                       />
                     ) : (
-                      <span style={{ 
-                        fontWeight: 800, 
-                        fontSize: '0.9rem', 
-                        color: 'var(--text-color)', 
+                      <span style={{
+                        fontWeight: 800,
+                        fontSize: '0.9rem',
+                        color: 'var(--text-color)',
                         textAlign: 'center',
                         fontFamily: 'var(--font-serif)',
                         opacity: 0.8
@@ -154,7 +125,7 @@ export default function Home() {
               <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: 'var(--text-color-muted)', marginBottom: '4rem', maxWidth: '600px' }}>
                 {t('aboutDescription')}
               </p>
-              
+
               <div style={{ display: 'grid', gap: '2.5rem' }}>
                 {[
                   { title: t('pillar1Title'), desc: t('pillar1Desc'), icon: 'fa-star' },
@@ -162,13 +133,13 @@ export default function Home() {
                   { title: t('pillar3Title'), desc: t('pillar3Desc'), icon: 'fa-lightbulb' }
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }} data-aos="fade-up" data-aos-delay={i * 100}>
-                    <div style={{ 
-                      width: '48px', 
-                      height: '48px', 
-                      background: 'rgba(197, 160, 89, 0.1)', 
-                      borderRadius: '12px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'rgba(197, 160, 89, 0.1)',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
@@ -184,12 +155,12 @@ export default function Home() {
             </div>
             <div style={{ position: 'relative' }} data-aos="zoom-in">
               <div style={{ borderRadius: '40px', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.1)' }}>
-                <Image 
-                  src="/images/about-vision.png" 
-                  alt="" 
-                  width={600} 
-                  height={800} 
-                  style={{ width: '100%', height: 'auto', display: 'block' }} 
+                <Image
+                  src="/images/about-vision.png"
+                  alt=""
+                  width={600}
+                  height={800}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
               </div>
               <div style={{
@@ -258,30 +229,30 @@ export default function Home() {
 
           <div className="grid-responsive" style={{ gap: '2.5rem' }}>
             {[
-              { 
-                title: t('qualityTitle'), 
-                bullets: [t('qualityBullet1'), t('qualityBullet2'), t('qualityBullet3')], 
-                icon: 'fa-gem' 
+              {
+                title: t('qualityTitle'),
+                bullets: [t('qualityBullet1'), t('qualityBullet2'), t('qualityBullet3')],
+                icon: 'fa-gem'
               },
-              { 
-                title: t('flexibilityTitle'), 
-                bullets: [t('flexibilityBullet1'), t('flexibilityBullet2')], 
-                icon: 'fa-clock-rotate-left' 
+              {
+                title: t('flexibilityTitle'),
+                bullets: [t('flexibilityBullet1'), t('flexibilityBullet2')],
+                icon: 'fa-clock-rotate-left'
               },
-              { 
-                title: t('pricingTitle'), 
-                bullets: [t('pricingBullet1'), t('pricingBullet2'), t('pricingBullet3')], 
-                icon: 'fa-wallet' 
+              {
+                title: t('pricingTitle'),
+                bullets: [t('pricingBullet1'), t('pricingBullet2'), t('pricingBullet3')],
+                icon: 'fa-wallet'
               },
-              { 
-                title: t('reportingTitle'), 
-                bullets: [t('reportingBullet1'), t('reportingBullet2'), t('reportingBullet3')], 
-                icon: 'fa-chart-line' 
+              {
+                title: t('reportingTitle'),
+                bullets: [t('reportingBullet1'), t('reportingBullet2'), t('reportingBullet3')],
+                icon: 'fa-chart-line'
               },
-              { 
-                title: t('guaranteesTitle'), 
-                bullets: [t('guaranteesBullet1'), t('guaranteesBullet2'), t('guaranteesBullet3')], 
-                icon: 'fa-shield-halved' 
+              {
+                title: t('guaranteesTitle'),
+                bullets: [t('guaranteesBullet1'), t('guaranteesBullet2'), t('guaranteesBullet3')],
+                icon: 'fa-shield-halved'
               }
             ].map((node, i) => (
               <div key={i} className="card-premium" style={{ borderTop: '4px solid var(--accent-gold)' }} data-aos="fade-up" data-aos-delay={i * 50}>
@@ -307,7 +278,7 @@ export default function Home() {
       <section style={{ padding: '8rem 0', background: 'var(--bg-color-alt)' }}>
         <div className="container">
           <div className="grid-responsive" style={{ gap: '3rem' }}>
-            
+
             {/* Facing Challenges Box */}
             <div className="glass" style={{ padding: '4.5rem', borderRadius: '40px', borderLeft: isRtl ? 'none' : '8px solid var(--accent-gold)', borderRight: isRtl ? '8px solid var(--accent-gold)' : 'none' }} data-aos="fade-right">
               <div className="flex items-center gap-4 mb-6">
@@ -354,9 +325,9 @@ export default function Home() {
             <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px' }}>{t('academicTracks')}</span>
             <h2 style={{ fontSize: '3.5rem', marginTop: '1rem', color: 'var(--text-color)' }}>{t('ourPrograms')}</h2>
           </div>
-          
-          <div className="grid-responsive" style={{ 
-            gap: '2.5rem' 
+
+          <div className="grid-responsive" style={{
+            gap: '2.5rem'
           }}>
             {[
               { icon: 'fa-book-open', title: t('program1Title'), text: t('program1Desc') },
@@ -378,12 +349,12 @@ export default function Home() {
                 </div>
                 <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--text-color)' }}>{program.title}</h3>
                 <p style={{ color: 'var(--text-color-muted)', lineHeight: 1.7 }}>{program.text}</p>
-                <Link href="#contact" style={{ 
-                  display: 'inline-block', 
-                  marginTop: '2rem', 
-                  color: 'var(--accent-gold)', 
-                  fontWeight: 800, 
-                  fontSize: '0.8rem', 
+                <Link href="#contact" style={{
+                  display: 'inline-block',
+                  marginTop: '2rem',
+                  color: 'var(--accent-gold)',
+                  fontWeight: 800,
+                  fontSize: '0.8rem',
                   letterSpacing: '1px',
                   textDecoration: 'none'
                 }}>{t('exploreTrack')} <i className={`fa-solid ${isRtl ? 'fa-arrow-left' : 'fa-arrow-right'}`} style={{ [isRtl ? 'marginRight' : 'marginLeft']: '0.5rem' }}></i></Link>
@@ -401,8 +372,8 @@ export default function Home() {
             <h2 style={{ fontSize: '3rem', marginTop: '1rem', color: 'var(--text-color)' }}>{t('mindsBehindSuccess')}</h2>
           </div>
 
-          <div className="grid-responsive" style={{ 
-            gap: '3rem' 
+          <div className="grid-responsive" style={{
+            gap: '3rem'
           }}>
             {[
               { name: t('memberMaged'), role: t('roleGM'), img: '/images/GM-new.png' },
@@ -410,10 +381,10 @@ export default function Home() {
               { name: t('memberIbrahim'), role: t('roleMarketing'), img: '/images/Marketing-new.png' }
             ].map((member, i) => (
               <div key={i} className="team-card" data-aos="fade-up" data-aos-delay={i * 100} style={{ textAlign: 'center' }}>
-                <div style={{ 
-                  width: '180px', 
-                  height: '180px', 
-                  borderRadius: '50%', 
+                <div style={{
+                  width: '180px',
+                  height: '180px',
+                  borderRadius: '50%',
                   margin: '0 auto 2rem',
                   border: '4px solid white',
                   boxShadow: '0 15px 40px rgba(0,0,0,0.1)',
@@ -503,12 +474,12 @@ export default function Home() {
           {/* Mobile Trajectory */}
           <div className="mobile-trajectory" data-aos="fade-up">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem', position: 'relative', alignItems: 'center' }}>
-              <div style={{ 
-                position: 'absolute', 
-                left: '50%', 
-                top: 0, 
-                bottom: 0, 
-                width: '2px', 
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                bottom: 0,
+                width: '2px',
                 background: 'linear-gradient(to bottom, transparent, rgba(197,160,89,0.1), var(--accent-gold), rgba(197,160,89,0.1), transparent)',
                 transform: 'translateX(-50%)',
                 zIndex: 1
@@ -521,8 +492,8 @@ export default function Home() {
                 { id: 'B2', label: t('milestoneB2'), desc: t('milestoneB2Desc') },
                 { id: 'C1', label: t('milestoneC1'), desc: t('milestoneC1Desc'), star: true }
               ].map((m) => (
-                <div key={m.id} style={{ 
-                  display: 'flex', 
+                <div key={m.id} style={{
+                  display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   textAlign: 'center',
@@ -531,16 +502,16 @@ export default function Home() {
                   position: 'relative',
                   zIndex: 2
                 }}>
-                  <div style={{ 
-                    width: '45px', 
-                    height: '45px', 
-                    borderRadius: '50%', 
-                    background: 'var(--accent-gold)', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    fontSize: '0.9rem', 
-                    fontWeight: 800, 
+                  <div style={{
+                    width: '45px',
+                    height: '45px',
+                    borderRadius: '50%',
+                    background: 'var(--accent-gold)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.9rem',
+                    fontWeight: 800,
                     color: 'var(--primary-navy)',
                     marginBottom: '1.2rem',
                     boxShadow: '0 0 30px var(--accent-gold), 0 0 10px rgba(255,255,255,0.5)',
@@ -622,7 +593,7 @@ export default function Home() {
       <CTASection />
 
       {/* WhatsApp Floating Action Button */}
-      <a 
+      <a
         href={`https://wa.me/${settings?.whatsappNumber || '201270068237'}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -669,42 +640,7 @@ export default function Home() {
 
       <Footer />
 
-      {/* Back to Top Button */}
-      <button 
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        style={{
-          position: 'fixed',
-          bottom: '130px',
-          right: isRtl ? 'auto' : '40px',
-          left: isRtl ? '40px' : 'auto',
-          width: '50px',
-          height: '50px',
-          background: 'var(--primary-navy)',
-          color: 'var(--accent-gold)',
-          border: '1px solid var(--accent-gold)',
-          borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '1.2rem',
-          cursor: 'pointer',
-          zIndex: 9998,
-          opacity: showScrollTop ? 1 : 0,
-          visibility: showScrollTop ? 'visible' : 'hidden',
-          transform: showScrollTop ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'var(--accent-gold)';
-          e.currentTarget.style.color = 'var(--primary-navy)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'var(--primary-navy)';
-          e.currentTarget.style.color = 'var(--accent-gold)';
-        }}
-      >
-        <i className="fa-solid fa-arrow-up"></i>
-      </button>
+
     </main>
   );
 }
