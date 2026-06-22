@@ -251,9 +251,18 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
       // 2. STUDENT-QUESTION MATRIX
+      // PERFORMANCE OPTIMIZATION: Pre-compute answers grouped by lead_id and question_text
+      // Impact: Reduces O(N * Q) complexity to O(N + Q)
+      const answersMapByLead = new Map<string, Map<string, any>>();
+      (answersData || []).forEach((a: any) => {
+        if (!answersMapByLead.has(a.lead_id)) {
+          answersMapByLead.set(a.lead_id, new Map());
+        }
+        answersMapByLead.get(a.lead_id)!.set(a.question_text, a);
+      });
+
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -263,8 +272,10 @@ export default function AdminDashboard() {
           'Total Score': l.score,
           'Level': l.level
         };
+
+        const studentAnswers = answersMapByLead.get(l.id) || new Map();
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswers.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -272,7 +283,10 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // PERFORMANCE OPTIMIZATION: Pre-compute filtered lead IDs set
+      // Impact: Reduces O(A * L) nested iterations to O(A)
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
