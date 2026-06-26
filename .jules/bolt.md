@@ -6,3 +6,6 @@
 ## 2024-05-15 - React Performance in AdminDashboard
 **Learning:** Consolidating multiple expensive inline array operations (`.filter`, `.reduce`, `.map`) on the `leads` array into a single `O(N)` pass inside a `useMemo` hook effectively prevents redundant calculations on every render, especially when there are input fields (like date filters) that trigger re-renders on keystrokes.
 **Action:** Always look for multiple inline array iterations in large components and move them into a single `useMemo` block. Also, be careful not to accidentally commit scratchpad scripts or `node_modules` modifications.
+## 2026-06-26 - O(N^2) Bottlenecks in Data Export
+**Learning:** Nested array operations like `Array.filter` inside `Array.map` during bulk data operations (like Excel export generation) caused significant O(N^2) performance degradation, especially as lead and answer datasets scale.
+**Action:** Always pre-compute Hash Maps (like `Map`) for linking related records and `Set` objects for membership checks before iterating over large arrays to guarantee O(1) lookups and significantly reduce CPU cycles in data export/aggregation functions.
