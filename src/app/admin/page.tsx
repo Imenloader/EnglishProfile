@@ -250,10 +250,26 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // O(N) Hash Map grouping answers by lead_id to prevent O(N^2) inner loops
+      const answersByLeadId = new Map();
+      (answersData || []).forEach((a: any) => {
+        if (!answersByLeadId.has(a.lead_id)) {
+          answersByLeadId.set(a.lead_id, []);
+        }
+        answersByLeadId.get(a.lead_id).push(a);
+      });
+
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswers = answersByLeadId.get(l.id) || [];
+
+        // O(1) Map for inner question lookup to prevent O(N) .find() on every question
+        const studentAnswersMap = new Map();
+        studentAnswers.forEach((a: any) => {
+          studentAnswersMap.set(a.question_text, a);
+        });
+
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -264,7 +280,7 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswersMap.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -272,7 +288,9 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // O(1) Hash Set for lead existence check to prevent O(N^2) .some() in .filter()
+      const filteredLeadsSet = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadsSet.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
