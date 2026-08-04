@@ -4,6 +4,8 @@ import "./globals.css";
 import "aos/dist/aos.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { UserProvider } from "@/contexts/UserContext";
+import AOSInitializer from "@/components/AOSInitializer";
+import type { Viewport } from 'next';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,8 +37,6 @@ export const metadata: Metadata = {
     icon: "/images/logo/logo-icon.jpg?v=2",
     apple: "/images/logo/logo-icon.jpg?v=2",
   },
-  themeColor: "#011627",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -44,7 +44,12 @@ export const metadata: Metadata = {
   },
 };
 
-import AOSInitializer from "@/components/AOSInitializer";
+export const viewport: Viewport = {
+  themeColor: "#011627",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export default function RootLayout({
   children,

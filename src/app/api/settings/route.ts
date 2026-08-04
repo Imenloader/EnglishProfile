@@ -95,7 +95,7 @@ export async function POST(request: Request) {
         return { success: true };
       },
       supabaseFallback: async () => {
-        const { error } = await supabase
+        let { error } = await supabase
           .from('site_settings')
           .update({
             hero_headline_en,
@@ -111,6 +111,22 @@ export async function POST(request: Request) {
             webhook_url
           })
           .eq('id', 1);
+
+        if (error && (error.code === '42703' || error.code === 'PGRST204' || (error.message && error.message.includes('schema cache')))) {
+          console.warn("Schema column missing in Supabase site_settings. Falling back to minimal payload.");
+          const fallbackResult = await supabase
+            .from('site_settings')
+            .update({
+              hero_headline_en,
+              hero_headline_ar,
+              hero_subheadline_en,
+              hero_subheadline_ar,
+              whatsapp_number,
+              contact_email
+            })
+            .eq('id', 1);
+          error = fallbackResult.error;
+        }
 
         if (error) throw error;
         return { success: true };

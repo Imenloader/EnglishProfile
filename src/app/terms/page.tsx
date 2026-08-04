@@ -48,7 +48,7 @@ export default function TermsPage() {
 
               <div style={{ marginTop: '4rem', textAlign: 'center' }}>
                 <Link href="/" style={{ color: 'var(--accent-gold)', textDecoration: 'none', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '2px' }}>
-                  {isRtl ? '← ' + t('returnHome') : '← ' + t('returnHome')}
+                  {isRtl ? t('returnHome') + ' →' : '← ' + t('returnHome')}
                 </Link>
               </div>
             </div>

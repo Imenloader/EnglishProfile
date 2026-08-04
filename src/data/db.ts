@@ -149,7 +149,7 @@ export const db = {
 
   saveSettings: async (settings: SiteSettings) => {
     try {
-      const { error } = await supabase
+      let { error } = await supabase
         .from('site_settings')
         .update({
           hero_headline_en: settings.heroHeadlineEn,
@@ -166,6 +166,22 @@ export const db = {
         })
         .eq('id', 1);
       
+      if (error && (error.code === '42703' || error.code === 'PGRST204' || (error.message && error.message.includes('schema cache')))) {
+        console.warn("Schema column missing in Supabase site_settings. Falling back to minimal payload.");
+        const fallbackResult = await supabase
+          .from('site_settings')
+          .update({
+            hero_headline_en: settings.heroHeadlineEn,
+            hero_headline_ar: settings.heroHeadlineAr,
+            hero_subheadline_en: settings.heroSubheadlineEn,
+            hero_subheadline_ar: settings.heroSubheadlineAr,
+            whatsapp_number: settings.whatsappNumber,
+            contact_email: settings.contactEmail
+          })
+          .eq('id', 1);
+        error = fallbackResult.error;
+      }
+
       if (error) throw error;
       
       // Update cache immediately on success
