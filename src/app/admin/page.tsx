@@ -27,13 +27,15 @@ interface Profile {
   created_at: string;
 }
 
+import { supabase as supabaseClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
+
 import { placementQuestions } from '@/data/questions';
 
 export default function AdminDashboard() {
   const { isRtl } = useLanguage();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('analytics');
   const [leads, setLeads] = useState<any[]>([]);
   const [answers, setAnswers] = useState<any[]>([]);
@@ -152,20 +154,17 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchData();
-    }
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, activeTab]);
+  }, [activeTab]);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
-    } else {
-      alert('Invalid password');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/admin/login');
+      router.refresh();
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
   };
 
@@ -590,27 +589,7 @@ export default function AdminDashboard() {
     };
   }, [filteredLeads]);
 
-  if (!isAuthenticated) {
 
-    return (
-      <main data-theme="dark" className="marble-pattern" style={{ minHeight: '100vh', background: 'var(--primary-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <form className="glass-dark" style={{ padding: '4rem', width: '100%', maxWidth: '450px', borderRadius: '32px', textAlign: 'center', background: 'rgba(1, 22, 39, 0.95)', border: '1px solid rgba(255,255,255,0.08)' }} onSubmit={handleLogin}>
-          <div style={{ width: '60px', height: '60px', background: 'var(--accent-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-            <i className="fa-solid fa-lock" style={{ color: 'var(--primary-navy)', fontSize: '1.5rem' }}></i>
-          </div>
-          <h2 style={{ color: 'white', marginBottom: '1rem', fontSize: '2rem', fontFamily: 'var(--font-serif)' }}>Admin Access</h2>
-          <input
-            type="password"
-            placeholder="SECURITY PASSWORD"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.2rem', marginBottom: '2rem', borderRadius: '12px', color: 'white', textAlign: 'center', letterSpacing: '4px' }}
-          />
-          <button type="submit" className="btn-master btn-gold" style={{ width: '100%', justifyContent: 'center' }}>UNLOCK PORTAL</button>
-        </form>
-      </main>
-    );
-  }
 
   return (
     <main className="marble-pattern" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--bg-color)', color: 'var(--text-color)' }}>
@@ -654,6 +633,28 @@ export default function AdminDashboard() {
                 {item.label}
               </button>
             ))}
+            <button 
+              onClick={handleLogout} 
+              style={{ 
+                background: 'rgba(255, 77, 79, 0.1)', 
+                color: '#ff4d4f', 
+                border: '1px solid rgba(255, 77, 79, 0.2)',
+                padding: '0.8rem 1.8rem', 
+                borderRadius: '12px', 
+                cursor: 'pointer', 
+                fontWeight: 800, 
+                fontSize: '0.75rem', 
+                letterSpacing: '1px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.8rem',
+                marginLeft: 'auto',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              <i className="fa-solid fa-arrow-right-from-bracket" style={{ fontSize: '0.9rem' }}></i>
+              LOGOUT
+            </button>
           </nav>
         </div>
       </div>
