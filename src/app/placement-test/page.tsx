@@ -169,7 +169,7 @@ export default function PlacementTest() {
           .single();
 
         // Resilient fallback in case columns like class_format, age_range, etc., do not exist on remote database yet
-        if (leadError && leadError.code === '42703') {
+        if (leadError && (leadError.code === '42703' || leadError.code === 'PGRST204' || (leadError.message && leadError.message.includes('schema cache')))) {
           console.warn("Schema column missing in Supabase. Falling back to minimal payload.");
           
           delete supabasePayload.class_format;
