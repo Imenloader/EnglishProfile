@@ -168,15 +168,15 @@ export default function PlacementTest() {
           .select()
           .single();
 
-        // Resilient fallback in case column class_format does not exist on remote database yet
+        // Resilient fallback in case columns like class_format, age_range, etc., do not exist on remote database yet
         if (leadError && leadError.code === '42703') {
-          console.warn("class_format column missing in Supabase. Falling back to company override.");
-          const fallbackCompany = leadData.company
-            ? `${leadData.company} (Prefers: ${leadData.format.toUpperCase()})`
-            : `Prefers: ${leadData.format.toUpperCase()}`;
+          console.warn("Schema column missing in Supabase. Falling back to minimal payload.");
           
           delete supabasePayload.class_format;
-          supabasePayload.company = fallbackCompany;
+          delete supabasePayload.company;
+          delete supabasePayload.phone;
+          delete supabasePayload.writing_response;
+          delete supabasePayload.age_range;
 
           const fallbackResult = await supabase
             .from('leads')

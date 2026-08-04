@@ -151,15 +151,15 @@ export async function POST(request: Request) {
           .select()
           .single();
 
-        // Resilient fallback in case column class_format does not exist on remote database yet
+        // Resilient fallback in case columns like class_format, age_range, etc., do not exist on remote database yet
         if (leadError && leadError.code === '42703') {
-          console.warn("class_format column missing in Supabase. Falling back to company override.");
-          const fallbackCompany = company
-            ? `${company} (Prefers: ${(class_format || 'online').toUpperCase()})`
-            : `Prefers: ${(class_format || 'online').toUpperCase()}`;
+          console.warn("Schema column missing in Supabase. Falling back to minimal payload.");
           
           delete insertPayload.class_format;
-          insertPayload.company = fallbackCompany;
+          delete insertPayload.company;
+          delete insertPayload.phone;
+          delete insertPayload.writing_response;
+          delete insertPayload.age_range;
 
           const fallbackResult = await supabase
             .from('leads')
