@@ -36,7 +36,7 @@ const MOCK_SETTINGS: SiteSettings = {
   heroSubheadlineAr: "ارتقِ بملفك المهني من خلال تدريب لنجوابلانيت المتميز في اللغة الإنجليزية.",
   whatsappNumber: "+201270068237",
   contactEmail: "hello@linguaplanet.eg",
-  facebookLink: "https://facebook.com/linguaplanet",
+  facebookLink: "https://www.facebook.com/Linguaplane25",
   instagramLink: "https://instagram.com/linguaplanet",
   linkedinLink: "https://linkedin.com/company/linguaplanet",
   tiktokLink: "https://tiktok.com/@linguaplanet",

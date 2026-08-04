@@ -14,7 +14,7 @@ export default function Home() {
   const { language, isRtl, t } = useLanguage();
   const [settings, setSettings] = useState<any>({
     contactEmail: "hello@linguaplanet.eg",
-    facebookLink: "https://facebook.com/linguaplanet",
+    facebookLink: "https://www.facebook.com/Linguaplane25",
     instagramLink: "https://instagram.com/linguaplanet",
     linkedinLink: "https://linkedin.com/company/linkedin/linguaplanet",
     tiktokLink: "https://tiktok.com/@linguaplanet",
