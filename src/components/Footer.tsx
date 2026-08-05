@@ -7,7 +7,13 @@ import { db } from '@/data/db';
 
 export default function Footer() {
   const { t, isRtl, language } = useLanguage();
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<any>({
+    facebookLink: "https://www.facebook.com/Linguaplane25",
+    instagramLink: "https://instagram.com/linguaplanet",
+    linkedinLink: "https://linkedin.com/company/linguaplanet",
+    tiktokLink: "https://tiktok.com/@linguaplanet",
+    contactEmail: "hello@linguaplanet.eg"
+  });
 
   useEffect(() => {
     const fetchSettings = async () => {
