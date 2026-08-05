@@ -102,10 +102,10 @@ export default function Footer() {
               <li>{t('cairoEgypt')}</li>
             </ul>
             <div style={{ display: 'flex', gap: '1.5rem' }}>
-              <a href={settings?.facebookLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-facebook-f" style={{ fontSize: '1.1rem' }}></i></a>
-              <a href={settings?.instagramLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-instagram" style={{ fontSize: '1.1rem' }}></i></a>
-              <a href={settings?.linkedinLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-linkedin-in" style={{ fontSize: '1.1rem' }}></i></a>
-              <a href={settings?.tiktokLink || '#'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-tiktok" style={{ fontSize: '1.1rem' }}></i></a>
+              <a href={settings?.facebookLink || 'https://www.facebook.com/Linguaplane25'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-facebook-f" style={{ fontSize: '1.1rem' }}></i></a>
+              <a href={settings?.instagramLink || 'https://instagram.com/linguaplanet'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-instagram" style={{ fontSize: '1.1rem' }}></i></a>
+              <a href={settings?.linkedinLink || 'https://linkedin.com/company/linguaplanet'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-linkedin-in" style={{ fontSize: '1.1rem' }}></i></a>
+              <a href={settings?.tiktokLink || 'https://tiktok.com/@linguaplanet'} target="_blank" rel="noopener noreferrer" style={{ color: 'white', opacity: 0.4 }}><i className="fa-brands fa-tiktok" style={{ fontSize: '1.1rem' }}></i></a>
             </div>
           </div>
         </div>
