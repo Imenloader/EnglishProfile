@@ -11,7 +11,8 @@ export async function POST(request: Request) {
 
     if (password === adminPassword) {
       // Set a secure HTTP-only cookie
-      cookies().set('admin_token', 'authenticated', {
+      const cookieStore = await cookies();
+      cookieStore.set('admin_token', 'authenticated', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
