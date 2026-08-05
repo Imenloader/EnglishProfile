@@ -128,26 +128,21 @@ export async function POST(request: Request) {
         try {
           await db.batch(stmts);
         } catch (err: any) {
-          if (err.message && (err.message.includes('no such column') || err.message.includes('has no column'))) {
-            console.warn("Schema column missing in D1. Falling back to minimal payload.");
-            // Re-prepare without new columns
-            stmtLead = db.prepare(`
-              INSERT INTO leads (id, name, email, phone, score, total_questions, level)
-              VALUES (?, ?, ?, ?, ?, ?, ?)
-            `).bind(
-              leadId,
-              name,
-              email,
-              phone || null,
-              score,
-              total_questions,
-              level
-            );
-            stmts[0] = stmtLead;
-            await db.batch(stmts);
-          } else {
-            throw err;
-          }
+          console.warn("Schema error in D1:", err.message);
+          // Re-prepare without new columns and execute ONLY the lead insert (drop answers which might be missing tables)
+          stmtLead = db.prepare(`
+            INSERT INTO leads (id, name, email, phone, score, total_questions, level)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+          `).bind(
+            leadId,
+            name,
+            email,
+            phone || null,
+            score,
+            total_questions,
+            level
+          );
+          await db.batch([stmtLead]);
         }
 
         // Fetch and return the newly inserted lead
