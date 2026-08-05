@@ -88,7 +88,7 @@ export async function POST(request: Request) {
 
     const result = await executeQuery({
       d1Query: async (db) => {
-        const stmtLead = db.prepare(`
+        let stmtLead = db.prepare(`
           INSERT INTO leads (id, name, email, phone, score, total_questions, level, writing_response, age_range, company, class_format)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
           class_format || 'online'
         );
 
-        const stmts = [stmtLead];
+        let stmts = [stmtLead];
 
         if (answers && Array.isArray(answers)) {
           for (const ans of answers) {
@@ -125,7 +125,30 @@ export async function POST(request: Request) {
         }
 
         // Execute batch transaction in SQLite/D1
-        await db.batch(stmts);
+        try {
+          await db.batch(stmts);
+        } catch (err: any) {
+          if (err.message && (err.message.includes('no such column') || err.message.includes('has no column'))) {
+            console.warn("Schema column missing in D1. Falling back to minimal payload.");
+            // Re-prepare without new columns
+            stmtLead = db.prepare(`
+              INSERT INTO leads (id, name, email, phone, score, total_questions, level)
+              VALUES (?, ?, ?, ?, ?, ?, ?)
+            `).bind(
+              leadId,
+              name,
+              email,
+              phone || null,
+              score,
+              total_questions,
+              level
+            );
+            stmts[0] = stmtLead;
+            await db.batch(stmts);
+          } else {
+            throw err;
+          }
+        }
 
         // Fetch and return the newly inserted lead
         const lead = await db.prepare("SELECT * FROM leads WHERE id = ?").bind(leadId).first();
