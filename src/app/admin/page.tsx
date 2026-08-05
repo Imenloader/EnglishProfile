@@ -27,7 +27,6 @@ interface Profile {
   created_at: string;
 }
 
-import { supabase as supabaseClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 import { placementQuestions } from '@/data/questions';
