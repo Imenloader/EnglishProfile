@@ -124,10 +124,10 @@ export const db = {
           heroSubheadlineAr: data.hero_subheadline_ar,
           whatsappNumber: data.whatsapp_number,
           contactEmail: data.contact_email,
-          facebookLink: data.facebook_link,
-          instagramLink: data.instagram_link,
-          linkedinLink: data.linkedin_link,
-          tiktokLink: data.tiktok_link,
+          facebookLink: data.facebook_link || MOCK_SETTINGS.facebookLink,
+          instagramLink: data.instagram_link || MOCK_SETTINGS.instagramLink,
+          linkedinLink: data.linkedin_link || MOCK_SETTINGS.linkedinLink,
+          tiktokLink: data.tiktok_link || MOCK_SETTINGS.tiktokLink,
           updatedAt: new Date(data.updated_at || Date.now()),
           webhookUrl: data.webhook_url || ""
         };
