@@ -248,10 +248,25 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // ⚡ Bolt Optimization: Pre-compute Hash Maps and Sets for O(1) lookups
+      // Replaces nested arrays iterations reducing time complexity from O(N^2) to O(N)
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+
+      const answersByLeadId = new Map<string, any[]>();
+      (answersData || []).forEach((a: any) => {
+        if (!answersByLeadId.has(a.lead_id)) {
+          answersByLeadId.set(a.lead_id, []);
+        }
+        answersByLeadId.get(a.lead_id)!.push(a);
+      });
+
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswers = answersByLeadId.get(l.id) || [];
+        // Map question text to answer object for O(1) lookups
+        const studentAnswersMap = new Map(studentAnswers.map((a: any) => [a.question_text, a]));
+
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -261,8 +276,9 @@ export default function AdminDashboard() {
           'Total Score': l.score,
           'Level': l.level
         };
+
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswersMap.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -270,7 +286,8 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // ⚡ Bolt Optimization: Use Set.has() for O(1) lookup instead of Array.some() O(N)
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
