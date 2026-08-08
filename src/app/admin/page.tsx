@@ -249,9 +249,21 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
       // 2. STUDENT-QUESTION MATRIX
+      // OPTIMIZATION: Pre-compute answers grouped by lead_id into a hash map to avoid O(N^2) complexity
+      // from nested Array.filter() and Array.find() inside the map loop.
+      // This changes lookup from O(N) per student per question to O(1).
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+
+      const answersByLeadId = new Map();
+      (answersData || []).forEach((a: any) => {
+        if (!answersByLeadId.has(a.lead_id)) {
+          answersByLeadId.set(a.lead_id, new Map());
+        }
+        answersByLeadId.get(a.lead_id).set(a.question_text, a);
+      });
+
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswersMap = answersByLeadId.get(l.id) || new Map();
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -262,7 +274,7 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswersMap.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -270,7 +282,11 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // OPTIMIZATION: Use a Set for filteredLeads IDs for O(1) lookup instead of Array.some() which is O(N).
+      // This prevents O(N^2) complexity when filtering a large list of answers against a large list of leads.
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
