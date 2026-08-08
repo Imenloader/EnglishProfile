@@ -249,9 +249,17 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
       // 2. STUDENT-QUESTION MATRIX
+      // ⚡ Bolt Optimization: Pre-compute answers hash map to reduce O(N^2) complexity to O(N)
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+
+      const answersByLead: Record<string, Record<string, any>> = {};
+      (answersData || []).forEach((a: any) => {
+        if (!answersByLead[a.lead_id]) answersByLead[a.lead_id] = {};
+        answersByLead[a.lead_id][a.question_text] = a;
+      });
+
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswersMap = answersByLead[l.id] || {};
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -262,15 +270,17 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
-          row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
+          const ans = studentAnswersMap[q as string];
+          row[q as string] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // ⚡ Bolt Optimization: Use Set for O(1) lead inclusion check instead of O(N^2) Array.some
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
