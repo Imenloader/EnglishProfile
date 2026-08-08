@@ -248,10 +248,21 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // Pre-compute lookup maps for O(1) access to improve export performance
+      const answersMap: Record<string, Record<string, boolean>> = {};
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+
+      (answersData || []).forEach((a: any) => {
+        if (!answersMap[a.lead_id]) {
+          answersMap[a.lead_id] = {};
+        }
+        answersMap[a.lead_id][a.question_text] = a.is_correct;
+      });
+
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswers = answersMap[l.id] || {};
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -262,15 +273,15 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
-          row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
+          const isCorrect = studentAnswers[q];
+          row[q] = isCorrect !== undefined ? (isCorrect ? 1 : 0) : 'N/A';
         });
         return row;
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
