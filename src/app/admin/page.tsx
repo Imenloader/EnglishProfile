@@ -250,8 +250,18 @@ export default function AdminDashboard() {
 
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+
+      // ⚡ Bolt: Optimize matrix generation from O(L*A + L*Q*A) to O(A + L*Q)
+      const studentAnswersMap = new Map();
+      (answersData || []).forEach((a: any) => {
+        if (!studentAnswersMap.has(a.lead_id)) {
+          studentAnswersMap.set(a.lead_id, new Map());
+        }
+        studentAnswersMap.get(a.lead_id).set(a.question_text, a);
+      });
+
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentMap = studentAnswersMap.get(l.id);
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -262,15 +272,21 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
-          row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
+          if (studentMap && studentMap.has(q)) {
+            const ans = studentMap.get(q);
+            row[q] = ans.is_correct ? 1 : 0;
+          } else {
+            row[q] = 'N/A';
+          }
         });
         return row;
       });
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // ⚡ Bolt: Optimize detailed answers generation from O(A*L) to O(A+L)
+      const filteredLeadsSet = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadsSet.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
