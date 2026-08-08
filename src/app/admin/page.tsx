@@ -248,10 +248,38 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // Pre-compute lookup maps for O(1) performance instead of O(N^2)
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const answersByLeadIdAndQuestion = new Map();
+      const detailedAnswers: any[] = [];
+      const uniqueQuestionsSet = new Set();
+
+      for (const a of (answersData || [])) {
+        uniqueQuestionsSet.add(a.question_text);
+
+        // Populate nested dictionary for Matrix
+        if (!answersByLeadIdAndQuestion.has(a.lead_id)) {
+          answersByLeadIdAndQuestion.set(a.lead_id, new Map());
+        }
+        answersByLeadIdAndQuestion.get(a.lead_id).set(a.question_text, a);
+
+        // Collect detailed answers O(1) using Set
+        if (filteredLeadIds.has(a.lead_id)) {
+          detailedAnswers.push({
+            'Student': a.student_name,
+            'Question': a.question_text,
+            'Answer': a.student_answer,
+            'Correct': a.correct_answer,
+            'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
+            'Date': a.created_at
+          });
+        }
+      }
+
       // 2. STUDENT-QUESTION MATRIX
-      const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+      const uniqueQuestions = Array.from(uniqueQuestionsSet);
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswersMap = answersByLeadIdAndQuestion.get(l.id) || new Map();
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -262,7 +290,7 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswersMap.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -270,14 +298,6 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
-        'Student': a.student_name,
-        'Question': a.question_text,
-        'Answer': a.student_answer,
-        'Correct': a.correct_answer,
-        'Result': a.is_correct ? 'CORRECT' : 'INCORRECT',
-        'Date': a.created_at
-      }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(detailedAnswers), "Detailed Answers");
 
       // 4. WRITING PORTAL
