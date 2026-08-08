@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useEffect, useState } from 'react';
 import { db } from '@/data/db';
@@ -40,20 +41,28 @@ export default function Footer() {
                 alignItems: 'center', 
                 justifyContent: 'center',
                 overflow: 'hidden',
-                padding: '5px'
+                padding: '5px',
+                position: 'relative'
               }}>
-                <img 
+                {/* Performance Optimization: Next.js Image to replace unoptimized img tags. */}
+                <Image
                   src="/images/logo/logo-icon.jpg" 
                   alt="Linguaplanet" 
-                  style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                  fill
+                  sizes="60px"
+                  style={{ objectFit: 'contain' }}
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <img 
+                {/* Performance Optimization: Next.js Image to replace unoptimized img tags. */}
+                <Image
                   src="/images/logo/logo-text.png" 
                   alt="Linguaplanet" 
+                  width={118}
+                  height={30}
                   style={{ 
-                    height: '30px', 
+                    height: '30px',
+                    width: 'auto',
                     opacity: 1
                   }} 
                 />
