@@ -248,10 +248,24 @@ export default function AdminDashboard() {
       }));
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
+      // ⚡ Bolt: Pre-compute answers by lead_id for O(1) lookups instead of O(n) array filtering per lead
+      const answersByLeadId: Record<string, any[]> = {};
+      (answersData || []).forEach((a: any) => {
+        if (!answersByLeadId[a.lead_id]) answersByLeadId[a.lead_id] = [];
+        answersByLeadId[a.lead_id].push(a);
+      });
+
+      // ⚡ Bolt: Create a Set of filtered lead IDs for O(1) lookups
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+
       // 2. STUDENT-QUESTION MATRIX
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
+        const studentAnswers = answersByLeadId[l.id] || [];
+
+        // ⚡ Bolt: Create a hash map for student answers to prevent O(N) lookup inside the loop
+        const studentAnswersMap = new Map(studentAnswers.map((a: any) => [a.question_text, a]));
+
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -261,8 +275,9 @@ export default function AdminDashboard() {
           'Total Score': l.score,
           'Level': l.level
         };
+
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const ans = studentAnswersMap.get(q);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -270,7 +285,8 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // ⚡ Bolt: Use the O(1) Set lookup instead of O(N) Array.some()
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
