@@ -249,9 +249,16 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summaryData), "Master Summary");
 
       // 2. STUDENT-QUESTION MATRIX
+      // Optimization: Replace O(N^2) nested array operations (.filter and .find inside .map) with O(1) hash map lookups
       const uniqueQuestions = Array.from(new Set((answersData || []).map((a: any) => a.question_text)));
+
+      const answersMap = new Map();
+      (answersData || []).forEach((a: any) => {
+        const key = `${a.lead_id}_${a.question_text}`;
+        answersMap.set(key, a);
+      });
+
       const matrixData = filteredLeads.map((l: any) => {
-        const studentAnswers = (answersData || []).filter((a: any) => a.lead_id === l.id);
         const row: any = {
           'Student Name': l.name,
           'Phone': l.phone || 'N/A',
@@ -262,7 +269,8 @@ export default function AdminDashboard() {
           'Level': l.level
         };
         uniqueQuestions.forEach((q: any) => {
-          const ans = studentAnswers.find((a: any) => a.question_text === q);
+          const key = `${l.id}_${q}`;
+          const ans = answersMap.get(key);
           row[q] = ans ? (ans.is_correct ? 1 : 0) : 'N/A';
         });
         return row;
@@ -270,7 +278,9 @@ export default function AdminDashboard() {
       XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(matrixData), "Question Matrix");
 
       // 3. DETAILED ANSWERS
-      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeads.some((l: any) => l.id === a.lead_id)).map((a: any) => ({
+      // Optimization: Replace O(N) Array.some() with O(1) Set.has() for filtering
+      const filteredLeadIds = new Set(filteredLeads.map((l: any) => l.id));
+      const detailedAnswers = (answersData || []).filter((a: any) => filteredLeadIds.has(a.lead_id)).map((a: any) => ({
         'Student': a.student_name,
         'Question': a.question_text,
         'Answer': a.student_answer,
