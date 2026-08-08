@@ -459,32 +459,46 @@ export default function AdminDashboard() {
 
 
   // Dynamically filter leads based on user selection in real-time
+  // Optimized: Consolidate chained filters into a single pass to improve performance O(N)
   const filteredLeads = useMemo(() => {
-    let result = leads || [];
+    const data = leads || [];
 
-    // Filter by Date
-    if (filterStartDate) {
-      result = result.filter((l: any) => l.created_at >= filterStartDate);
+    // If no filters are active, return original data quickly
+    if (!filterStartDate && !filterEndDate && !filterMinAge && !filterMaxAge) {
+      return data;
     }
+
+    let nextDayStr = "";
     if (filterEndDate) {
       const nextDay = new Date(filterEndDate);
       nextDay.setDate(nextDay.getDate() + 1);
-      const nextDayStr = nextDay.toISOString().split('T')[0];
-      result = result.filter((l: any) => l.created_at < nextDayStr);
+      nextDayStr = nextDay.toISOString().split('T')[0];
     }
 
-    // Filter by Age
-    if (filterMinAge || filterMaxAge) {
-      result = result.filter((l: any) => {
+    const minAge = filterMinAge ? parseInt(filterMinAge) : 0;
+    const maxAge = filterMaxAge ? parseInt(filterMaxAge) : 999;
+
+    return data.filter((l: any) => {
+      // 1. Check Start Date
+      if (filterStartDate && l.created_at < filterStartDate) {
+        return false;
+      }
+
+      // 2. Check End Date
+      if (filterEndDate && l.created_at >= nextDayStr) {
+        return false;
+      }
+
+      // 3. Check Age Range
+      if (filterMinAge || filterMaxAge) {
         const age = parseInt(l.age_range);
-        if (isNaN(age)) return false;
-        const min = filterMinAge ? parseInt(filterMinAge) : 0;
-        const max = filterMaxAge ? parseInt(filterMaxAge) : 999;
-        return age >= min && age <= max;
-      });
-    }
+        if (isNaN(age) || age < minAge || age > maxAge) {
+          return false;
+        }
+      }
 
-    return result;
+      return true;
+    });
   }, [leads, filterStartDate, filterEndDate, filterMinAge, filterMaxAge]);
 
   // Consolidate analytics calculations to prevent unnecessary re-renders and multiple passes
